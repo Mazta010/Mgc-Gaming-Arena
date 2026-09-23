@@ -2,166 +2,161 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC Block Blast FIXED</title>
+<title>MGC Blast - Hulog Version</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
-body{background:#324e92;color:white;font-family:Arial;text-align:center}
-#top{padding:12px;display:flex;justify-content:space-between;font-weight:900}
-#score{font-size:60px;font-weight:900}
-#msg{color:#ffeb3b;font-weight:bold;padding:6px;font-size:14px}
-#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#1a2744;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
-.bar{position:absolute;height:42px;border-radius:8px;cursor:grab;box-shadow:inset 0 4px 0 rgba(255,255,255,0.5), inset 0 -4px 0 rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.5);border:2px solid rgba(0,0,0,0.2)}
-.bar.drag{transform:scale(1.1);z-index:99;box-shadow:0 10px 20px #000}
-.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#d1a8ff,#8a5cf6)}.c4{background:linear-gradient(180deg,#ffe58a,#f59e0b)}.c5{background:linear-gradient(180deg,#ff9a9a,#e11d48)}.c6{background:linear-gradient(180deg,#86efac,#16a34a)}
-.boom{animation:boom 0.4s forwards}@keyframes boom{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(0)}}
-.plus{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);font-size:32px;font-weight:900;background:rgba(0,0,0,0.7);padding:8px 16px;border-radius:20px;animation:pop 0.9s forwards;z-index:50}
-@keyframes pop{0%{transform:translate(-50%,-50%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
-button{background:#22d3ee;color:#000;border:none;padding:10px 18px;border-radius:20px;font-weight:900;margin:5px}
-#nameBox{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:100}
-.inner{background:#1e2f5a;padding:20px;border-radius:14px;width:90%;max-width:320px;border:3px solid #22d3ee}
-.inner input{width:100%;padding:12px;border-radius:8px;border:none;font-size:16px;text-align:center;font-weight:bold;margin:10px 0}
-.lb{margin-top:10px;text-align:left;max-height:200px;overflow:auto}
-.lb div{padding:5px;background:#23365f;margin:2px 0;border-radius:5px;display:flex;justify-content:space-between;font-size:13px}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
+body{background:#2a437c;color:white;font-family:Arial;text-align:center}
+#top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a}
+#score{font-size:58px;font-weight:900;margin:4px 0}
+#msg{color:#ffeb3b;font-size:13px;font-weight:bold;height:18px}
+#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative}
+.bar{position:absolute;height:44px;border-radius:7px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,0.6), inset 0 -3px 0 rgba(0,0,0,0.4),0 2px 5px rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.2);transition:background 0.2s}
+.bar.drag{z-index:50;transform:scale(1.08);box-shadow:0 10px 20px #000}
+.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}
+.fall{transition:top 0.25s cubic-bezier(0.25,0.46,0.45,0.94), left 0.15s}
+.boom{animation:boom 0.4s forwards}@keyframes boom{50%{transform:scale(1.3);filter:brightness(1.8)}100%{transform:scale(0);opacity:0}}
+.pop{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);font-size:30px;font-weight:900;background:rgba(0,0,0,0.75);padding:8px 18px;border-radius:20px;animation:up 0.9s forwards;z-index:100}
+@keyframes up{0%{transform:translate(-50%,-20%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-120%) scale(1);opacity:0}}
+button{background:#22d3ee;color:#000;border:none;padding:9px 16px;border-radius:18px;font-weight:900;margin:4px}
+#box{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:flex;align-items:center;justify-content:center}
+.inner{background:#1e2f5a;padding:18px;border-radius:14px;width:90%;max-width:330px;border:3px solid #22d3ee}
+.inner input{width:100%;padding:11px;border-radius:8px;border:none;text-align:center;font-weight:bold;margin:8px 0}
+.rowL{display:flex;justify-content:space-between;background:#23365f;margin:3px 0;padding:6px 8px;border-radius:6px;font-size:13px}
 </style>
 </head>
 <body>
-<div id="top"><div>🏆 <span id="best">3400</span> </div><div id="pName">Guest</div><div onclick="showLB()">🏆 LB</div></div>
-<div id="score">90</div>
-<div id="msg">👆 HILAIN left/right! Buuin 8 para BOOM! +30</div>
+<div id="top"><div>🏆 <span id="best">0</span></div><div id="pName">Mazta</div><div onclick="openLB()">🏆 LB</div></div>
+<div id="score">0</div>
+<div id="msg">Hilain hanggang dulo → Pag bakante baba, huhulog!</div>
 <div id="grid"></div>
-<div><button onclick="initGame()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button></div>
+<div><button onclick="start()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button><button onclick="openLB()" style="background:#ffbf2e">LEADERBOARD</button></div>
 
-<div id="nameBox">
-<div class="inner" id="askName">
-<h3 style="color:#ffeb3b">🎮 ANO PANGALAN MO BOSS?</h3>
-<input id="nameIn" placeholder="Ex: MAZTA" maxlength="10">
-<button onclick="saveName()" style="width:100%;margin-top:8px;background:#22d3ee;padding:12px">▶️ PLAY!</button>
+<div id="box">
+<div class="inner" id="ask">
+<h3 style="color:#ffeb3b">🎮 ANO PANGALAN MO?</h3>
+<input id="nameIn" placeholder="Ex: Mazta" maxlength="12">
+<button onclick="save()" style="width:100%;background:#22d3ee;padding:12px;margin-top:6px">▶️ PLAY!</button>
 </div>
-<div class="inner" id="showLB" style="display:none">
-<h3>🏆 TOP 10 LEADERBOARD</h3>
-<div id="lbList" class="lb"></div>
+<div class="inner" id="lb" style="display:none">
+<h3>🏆 TOP 10</h3>
+<div id="list"></div>
 <button onclick="closeLB()" style="width:100%;margin-top:10px">❌ CLOSE</button>
 </div>
 </div>
 
 <script>
-let W=8, H=10, cellW, cellH, blocks=[], score=90, player='', best=3400;
-const colors=['c1','c2','c3','c4','c5','c6'];
-function saveName(){
- let v=document.getElementById('nameIn').value.trim();
- if(!v){alert('Lagay pangalan boss!');return;}
- player=v; localStorage.setItem('mgcName',v);
- document.getElementById('pName').innerText=v;
- document.getElementById('nameBox').style.display='none';
- initGame();
+let W=8,H=10,cellW,cellH=52,blocks=[],score=0,player='',best=0;
+const cols=['c1','c2','c3','c4','c5','c6'];
+function save(){
+ let v=document.getElementById('nameIn').value.trim(); if(!v){alert('Lagay pangalan boss!');return;}
+ player=v; localStorage.setItem('mgcName',v); document.getElementById('pName').innerText=v;
+ document.getElementById('box').style.display='none'; start();
 }
-function showLB(){
- document.getElementById('nameBox').style.display='flex';
- document.getElementById('askName').style.display='none';
- document.getElementById('showLB').style.display='block';
- let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
- let h=''; if(lb.length==0) h='<div>Wala pa boss! Laro ka muna!</div>';
- else lb.forEach((e,i)=>{ h+=`<div><span>#${i+1} ${i==0?'👑':''} ${e.name}</span><span>${e.score}</span></div>`; });
- document.getElementById('lbList').innerHTML=h;
+function openLB(){
+ document.getElementById('box').style.display='flex'; document.getElementById('ask').style.display='none'; document.getElementById('lb').style.display='block';
+ let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); let h=''; if(lb.length==0) h='<div style="color:#aaa">Wala pa scores!</div>';
+ else lb.forEach((e,i)=>h+=`<div class="rowL"><span>#${i+1} ${i==0?'👑':''} ${e.name}</span><span>${e.score}</span></div>`);
+ document.getElementById('list').innerHTML=h;
 }
-function closeLB(){
- document.getElementById('nameBox').style.display='none';
- document.getElementById('askName').style.display='block';
- document.getElementById('showLB').style.display='none';
-}
-function initGame(){
- let g=document.getElementById('grid');
- cellW=g.clientWidth/W; cellH=52;
- blocks=[]; score=90;
- // SIGURADO MAY LAMAN BOSS! Bottom 6 rows punuin natin!
- for(let y=4;y<H;y++){
-  let x=0;
-  while(x<W){
-   if(Math.random()<0.8){
-    let len=Math.floor(Math.random()*4)+1; // 1-4 ONLY!
-    if(x+len>W) len=W-x;
-    blocks.push({x,y,len,c:colors[Math.floor(Math.random()*colors.length)],id:Math.random()});
-    x+=len;
-    if(Math.random()<0.3) x+=1; // gap
-   } else x++;
+function closeLB(){ document.getElementById('box').style.display='none'; document.getElementById('ask').style.display='block'; document.getElementById('lb').style.display='none'; }
+
+function start(){
+ let g=document.getElementById('grid'); cellW=g.clientWidth/W; blocks=[]; score=0;
+ for(let y=5;y<H;y++){
+  let x=0; while(x<W){
+   if(Math.random()<0.75){ let len=Math.floor(Math.random()*4)+1; if(x+len>W) len=W-x;
+   blocks.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''}); x+=len; if(Math.random()<0.35) x++; } else x++;
   }
  }
- document.getElementById('score').innerText=score;
- let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
- if(lb[0]) best=lb[0].score;
- document.getElementById('best').innerText=best;
- render();
+ render(); document.getElementById('score').innerText=score;
+ let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); if(lb[0]) best=lb[0].score; document.getElementById('best').innerText=best;
 }
 function render(){
  let g=document.getElementById('grid'); g.innerHTML='';
  blocks.forEach(b=>{
-  let el=document.createElement('div');
-  el.className='bar '+b.c; el.dataset.id=b.id;
-  el.style.left=(b.x*cellW+2)+'px';
-  el.style.top=(b.y*cellH+4)+'px';
-  el.style.width=(b.len*cellW-6)+'px';
-  el.addEventListener('touchstart',startDrag,{passive:false});
-  el.addEventListener('mousedown',startDrag);
-  g.appendChild(el);
+  let d=document.createElement('div'); d.className='bar '+b.c; d.dataset.id=b.id;
+  d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+2)+'px'; d.style.width=(b.len*cellW-6)+'px';
+  d.addEventListener('touchstart',sDrag,{passive:false}); d.addEventListener('mousedown',sDrag);
+  g.appendChild(d);
  });
- document.getElementById('score').innerText=score;
 }
 let drag=null;
-function startDrag(e){
- e.preventDefault(); let id=e.currentTarget.dataset.id; let b=blocks.find(o=>o.id==id); if(!b) return;
- let t=e.touches?e.touches[0]:e; drag={b,sx:t.clientX,startX:b.x,el:e.currentTarget};
- e.currentTarget.classList.add('drag');
- window.addEventListener('touchmove',onMove,{passive:false});
- window.addEventListener('mousemove',onMove);
- window.addEventListener('touchend',onEnd); window.addEventListener('mouseup',onEnd);
+function sDrag(e){
+ e.preventDefault(); let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
+ let t=e.touches?e.touches[0]:e; drag={b,sx:t.clientX,startX:b.x,el:e.currentTarget}; e.currentTarget.classList.add('drag');
+ window.addEventListener('touchmove',mDrag,{passive:false}); window.addEventListener('mousemove',mDrag);
+ window.addEventListener('touchend',eDrag); window.addEventListener('mouseup',eDrag);
 }
-function onMove(e){
+function mDrag(e){
  if(!drag) return; e.preventDefault(); let t=e.touches?e.touches[0]:e;
- let dx=Math.round((t.clientX-drag.sx)/cellW);
- let nx=drag.startX+dx; if(nx<0) nx=0; if(nx+drag.b.len>W) nx=W-drag.b.len;
+ let nx=drag.startX+Math.round((t.clientX-drag.sx)/cellW); if(nx<0) nx=0; if(nx+drag.b.len>W) nx=W-drag.b.len;
  if(nx==drag.b.x) return;
+ // check kung may tatamaan sa paghila (kahit malayo)
  let others=blocks.filter(o=>o.y==drag.b.y && o.id!=drag.b.id);
- if(others.some(o=>!(nx+drag.b.len<=o.x || nx>=o.x+o.len))) return;
- drag.b.x=nx; render();
- let newEl=document.querySelector(`[data-id="${drag.b.id}"]`); if(newEl) newEl.classList.add('drag'); drag.el=newEl;
+ let hit=others.some(o=>!(nx+drag.b.len<=o.x || nx>=o.x+o.len));
+ if(hit) return; // bawal may tama
+ drag.b.x=nx; render(); let ne=document.querySelector(`[data-id="${drag.b.id}"]`); if(ne) ne.classList.add('drag');
 }
-function onEnd(){
- if(!drag) return; drag.el?.classList.remove('drag');
- let y=drag.b.y; drag=null;
- window.removeEventListener('touchmove',onMove); window.removeEventListener('mousemove',onMove);
- window.removeEventListener('touchend',onEnd); window.removeEventListener('mouseup',onEnd);
- checkLine(y);
+function eDrag(){
+ if(!drag) return; drag.el?.classList.remove('drag'); let y=drag.b.y, x=drag.b.x, b=drag.b; drag=null;
+ window.removeEventListener('touchmove',mDrag); window.removeEventListener('mousemove',mDrag);
+ window.removeEventListener('touchend',eDrag); window.removeEventListener('mouseup',eDrag);
+ // HULOG CHECK - pag bakante baba!
+ doFall(b, ()=>checkLine(b.y));
+}
+function doFall(b,cb){
+ // hanap pinakababa na bakante
+ let ny=b.y;
+ while(true){
+  let next=ny+1; if(next>=H) break;
+  let others=blocks.filter(o=>o.id!=b.id && o.y==next);
+  let hit=others.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len));
+  if(hit) break;
+  // check kung may block mismo sa baba na same x overlap
+  ny=next;
+ }
+ if(ny!=b.y){
+  b.y=ny; render(); document.querySelectorAll('.bar').forEach(el=>{ if(el.dataset.id==b.id) el.classList.add('fall'); });
+  setTimeout(()=>{ checkLine(ny); if(cb) cb(); },260);
+ } else { checkLine(b.y); }
 }
 function checkLine(y){
- let row=blocks.filter(b=>b.y==y);
- let cov=Array(W).fill(0); row.forEach(b=>{ for(let i=0;i<b.len;i++) cov[b.x+i]=1; });
+ let row=blocks.filter(b=>b.y==y); let cov=Array(W).fill(0); row.forEach(b=>{for(let i=0;i<b.len;i++) if(b.x+i<W) cov[b.x+i]=1;});
  if(cov.every(v=>v)){
-  // BOOM!
   document.querySelectorAll('.bar').forEach(el=>{
    let b=blocks.find(o=>o.id==el.dataset.id); if(b&&b.y==y) el.classList.add('boom');
   });
   setTimeout(()=>{
    blocks=blocks.filter(b=>b.y!=y);
+   // lahat sa taas huhulog pababa ng 1
    blocks.forEach(b=>{ if(b.y<y) b.y++; });
-   // add new row at top
-   let x=0; while(x<W){
-    if(Math.random()<0.7){ let len=Math.floor(Math.random()*4)+1; if(x+len>W) len=W-x; blocks.push({x,y:0,len,c:colors[Math.floor(Math.random()*colors.length)],id:Math.random()}); x+=len; } x+=Math.random()<0.3?1:0;
-   }
-   score+=30;
-   // LEADERBOARD SAVE!
-   let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
-   lb.push({name:player,score:score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
-   if(score>best){ best=score; document.getElementById('best').innerText=best; }
-   let pop=document.createElement('div'); pop.className='plus'; pop.innerText='+30 BOOM! 💥'; document.body.appendChild(pop); setTimeout(()=>pop.remove(),900);
-   render();
+   score+=30; document.getElementById('score').innerText=score;
+   let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); lb.push({name:player,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
+   if(score>best){best=score; document.getElementById('best').innerText=best;}
+   let p=document.createElement('div'); p.className='pop'; p.innerText='+30 BOOM! 💥'; document.body.appendChild(p); setTimeout(()=>p.remove(),900);
+   // gravity sa lahat after clear
+   gravityAll(); render();
   },350);
  }
 }
-// auto
-let saved=localStorage.getItem('mgcName');
-if(saved){ player=saved; document.getElementById('pName').innerText=saved; document.getElementById('nameBox').style.display='none'; initGame(); }
-else { document.getElementById('nameBox').style.display='flex'; }
-window.addEventListener('resize',()=>{ let g=document.getElementById('grid'); cellW=g.clientWidth/W; render(); });
+function gravityAll(){
+ // paulit ulit hulog lahat hanggang wala na bakante
+ let moved=true;
+ while(moved){
+  moved=false;
+  for(let b of blocks){
+   let ny=b.y;
+   while(ny+1<H){
+    let others=blocks.filter(o=>o.id!=b.id && o.y==ny+1);
+    if(others.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len))) break;
+    ny++;
+   }
+   if(ny!=b.y){ b.y=ny; moved=true; }
+  }
+ }
+}
+let sv=localStorage.getItem('mgcName'); if(sv){player=sv; document.getElementById('pName').innerText=sv; document.getElementById('box').style.display='none'; start();} else document.getElementById('box').style.display='flex';
+window.addEventListener('resize',()=>{ cellW=document.getElementById('grid').clientWidth/W; render(); });
 </script>
 </body>
 </html>
