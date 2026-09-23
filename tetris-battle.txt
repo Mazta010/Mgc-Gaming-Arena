@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<title>MGC TETRIS BATTLE - LINE ATTACK!</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
+body{background:radial-gradient(120% at 50% 0%,#1e1b4b 0%,#020617 70%);color:#fff;font-family:system-ui;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+#header{width:100%;max-width:820px;padding:10px 14px;display:flex;justify-content:space-between;font-weight:900;letter-spacing:1px}
+.logo{background:linear-gradient(90deg,#22d3ee,#f472b6,#facc15);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:18px}
+#battle{width:98%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.boardCard{background:rgba(15,23,42,.9);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:8px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.boardCard.active{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee,0 20px 60px rgba(0,0,0,.6)}
+canvas{width:100%;border-radius:12px;background:#020617;display:block}
+.pName{font-size:12px;font-weight:900;display:flex;justify-content:space-between;padding:4px 2px}
+.stat{font-size:11px;opacity:.7}
+.attack{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:900;z-index:10;pointer-events:none;animation:atk.9s forwards;display:none}
+@keyframes atk{0%{transform:translate(-50%,-30%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.4)}100%{transform:translate(-50%,-80%) scale(1);opacity:0}}
+#controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:98%;max-width:820px;margin:10px auto}
+.ctrlGroup{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.cbtn{height:50px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:18px;font-weight:900}
+.cbtn:active{transform:scale(.93);background:#22d3ee;color:#000}
+.ctrlLabel{grid-column:span 3;text-align:center;font-size:10px;letter-spacing:2px;opacity:.5;font-weight:900}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.box{background:#0f172a;border:2px solid #22d3ee;border-radius:16px;padding:20px;width:100%;max-width:360px;text-align:center}
+input{width:100%;padding:12px;border-radius:10px;border:2px solid #334155;background:#020617;color:#fff;text-align:center;font-weight:800;margin:6px 0}
+button.pri{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:900;color:#000;margin-top:8px}
+#lb{width:98%;max-width:820px;margin:10px auto;background:rgba(15,23,42,.7);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px}
+.lb-row{display:flex;justify-content:space-between;padding:5px 8px;border-radius:8px;font-size:12px}
+.lb-row:nth-child(odd){background:rgba(255,255,255,.04)}
+</style>
+</head>
+<body>
+<div id="header"><div class="logo">⚔️ MGC BATTLE TETRIS</div><div style="font-size:11px;opacity:.6">Clear = Attack +1 Line to Enemy!</div></div>
+
+<div id="battle">
+  <div class="boardCard active" id="cardA">
+    <div class="pName"><span id="nameA">Player A</span><span id="scoreA">0</span></div>
+    <canvas id="boardA"></canvas><div class="attack" id="atkA"></div>
+    <div class="stat">Lines: <span id="linesA">0</span> | WASD + Q/E + F(Hold) + G(Drop)</div>
+  </div>
+  <div class="boardCard" id="cardB">
+    <div class="pName"><span id="nameB">Player B</span><span id="scoreB">0</span></div>
+    <canvas id="boardB"></canvas><div class="attack" id="atkB"></div>
+    <div class="stat">Lines: <span id="linesB">0</span> | Arrows + X/Z + C(Hold) + Space</div>
+  </div>
+</div>
+
+<div id="controls">
+  <div><div class="ctrlLabel">PLAYER A - LEFT</div><div class="ctrlGroup"><button class="cbtn" onclick="moveP(0,-1)">◀</button><button class="cbtn" onclick="rotateP(0)">↻</button><button class="cbtn" onclick="moveP(0,1)">▶</button><button class="cbtn" onclick="softP(0)">▼</button><button class="cbtn" onclick="hardP(0)">DROP</button><button class="cbtn" onclick="holdP(0)">HOLD</button></div></div>
+  <div><div class="ctrlLabel">PLAYER B - RIGHT</div><div class="ctrlGroup"><button class="cbtn" onclick="moveP(1,-1)">◀</button><button class="cbtn" onclick="rotateP(1)">↻</button><button class="cbtn" onclick="moveP(1,1)">▶</button><button class="cbtn" onclick="softP(1)">▼</button><button class="cbtn" onclick="hardP(1)">DROP</button><button class="cbtn" onclick="holdP(1)">HOLD</button></div></div>
+</div>
+
+<div id="lb"><b>🏆 TOP 100 BATTLE WINNERS</b><div id="lbList" style="margin-top:8px"></div></div>
+
+<div id="modal">
+  <div class="box">
+    <h2>⚔️ BATTLE MODE</h2><p style="font-size:12px;opacity:.6;margin:6px 0">Kapag nag-clear ka ng line, madadagdagan ng 1 line kalaban mo!</p>
+    <input id="inA" placeholder="Player A name" value="Mazta" maxlength="10">
+    <input id="inB" placeholder="Player B name" value="Kalaban" maxlength="10">
+    <button class="pri" onclick="startBattle()">START BATTLE 🔥</button>
+    <p style="font-size:10px;opacity:.4;margin-top:8px">PC: A=WASD Q/E F G | B=Arrows X/Z C Space</p>
+  </div>
+</div>
+
+<script>
+const COLS=10,ROWS=20;
+const SHAPES={I:[[1,1,1,1]],J:[[1,0,0],[1,1,1]],L:[[0,0,1],[1,1,1]],O:[[1,1],[1,1]],S:[[0,1,1],[1,1,0]],T:[[0,1,0],[1,1,1]],Z:[[1,1,0],[0,1,1]]};
+const COLORS={I:'#22d3ee',J:'#3b82f6',L:'#f97316',O:'#facc15',S:'#22c55e',T:'#a78bfa',Z:'#ef4444'};
+const KEYS=Object.keys(SHAPES);
+let dpr=window.devicePixelRatio||1;
+let players=[];
+let actx=null;
+function beep(f,d,v,t='sine'){try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();let o=actx.createOscillator(),g=actx.createGain();o.type=t;o.frequency.value=f;o.connect(g);g.connect(actx.destination);g.gain.setValueAtTime(v,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}catch{}}
+function sndAtk(){beep(180,0.2,0.4,'sawtooth');setTimeout(()=>beep(600,0.3,0.4),100)}
+
+function makePlayer(canvas, name){
+  let ctx=canvas.getContext('2d');
+  function resizeC(){ let r=canvas.getBoundingClientRect(); canvas.width=r.width*dpr; canvas.height=r.width*2*dpr; canvas.style.height=r.width*2+'px'; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  resizeC();
+  return {canvas,ctx,grid:Array.from({length:ROWS},()=>Array(COLS).fill(0)),cur:null,next:null,hold:null,canHold:true,score:0,lines:0,name,over:false,dropT:0,interval:700, resizeC};
+}
+function randPiece(){ let k=KEYS[Math.floor(Math.random()*KEYS.length)]; return {k,shape:SHAPES[k].map(r=>[...r]),x:3,y:0,color:COLORS[k]}; }
+function rotateM(m){return m[0].map((_,i)=>m.map(r=>r[i]).reverse())}
+function collide(g,p,dx=0,dy=0,sh=null){ let s=sh||p.shape; for(let y=0;y<s.length;y++) for(let x=0;x<s[y].length;x++) if(s[y][x]){ let nx=p.x+x+dx, ny=p.y+y+dy; if(nx<0||nx>=COLS||ny>=ROWS|| (ny>=0&&g[ny][nx])) return true; } return false; }
+
+function addGarbage(toPlayer, count){
+  if(count<=0) return;
+  for(let i=0;i<count;i++){
+    let hole=Math.floor(Math.random()*COLS);
+    let garbage=Array(COLS).fill('#475569'); garbage[hole]=0;
+    toPlayer.grid.shift();
+    toPlayer.grid.push(garbage);
+  }
+  // check if blocked
+  if(toPlayer.cur && collide(toPlayer.grid,toPlayer.cur)) toPlayer.over=true;
+  showAtk(toPlayer==players[0]?1:0, count);
+  sndAtk();
+}
+function showAtk(pIdx, n){
+  let el=document.getElementById(pIdx==0?'atkA':'atkB');
+  el.innerText='+'+n+' GARBAGE!';
+  el.style.display='block'; el.style.color='#ef4444';
+  el.style.animation='none'; el.offsetHeight; el.style.animation='atk.9s forwards';
+  setTimeout(()=>el.style.display='none',900);
+}
+
+function lock(p, otherIdx){
+  p.cur.shape.forEach((r,y)=>r.forEach((v,x)=>{ if(v){ let gy=p.cur.y+y, gx=p.cur.x+x; if(gy>=0) p.grid[gy][gx]=p.cur.color; }}));
+  let cleared=0;
+  for(let y=ROWS-1;y>=0;y--) if(p.grid[y].every(c=>c)){ p.grid.splice(y,1); p.grid.unshift(Array(COLS).fill(0)); cleared++; y++; }
+  if(cleared){
+    p.lines+=cleared; p.score+= [0,100,300,600,1000][cleared];
+    // BATTLE RULE BOSS: every line cleared = +1 line to enemy!
+    let atkCount=cleared; // 1 clear = 1 garbage, kung gusto mo mas brutal gawin cleared*1
+    addGarbage(players[otherIdx], atkCount);
+  }
+  spawn(p);
+}
+function spawn(p){ p.cur=p.next||randPiece(); p.next=randPiece(); p.canHold=true; if(collide(p.grid,p.cur)){ p.over=true; }}
+function drawPlayer(p){
+  let sW=p.canvas.getBoundingClientRect().width/COLS;
+  let ctx=p.ctx;
+  ctx.clearRect(0,0,p.canvas.width,p.canvas.height);
+  ctx.strokeStyle='rgba(255,255,255,.04)'; for(let i=0;i<=COLS;i++){ ctx.beginPath(); ctx.moveTo(i*sW,0); ctx.lineTo(i*sW,ROWS*sW); ctx.stroke(); } for(let i=0;i<=ROWS;i++){ ctx.beginPath(); ctx.moveTo(0,i*sW); ctx.lineTo(COLS*sW,i*sW); ctx.stroke(); }
+  p.grid.forEach((row,y)=>row.forEach((c,x)=>{ if(c){ ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=10; ctx.fillRect(x*sW+1,y*sW+1,sW-2,sW-2); ctx.shadowBlur=0; ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillRect(x*sW+1,y*sW+1,sW-2,3); }}));
+  if(p.cur){ let gy=p.cur.y; while(!collide(p.grid,p.cur,0,gy-p.cur.y+1)) gy++; if(gy!=p.cur.y){ ctx.globalAlpha=0.18; p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{ if(v){ ctx.fillStyle=p.cur.color; ctx.fillRect((p.cur.x+xx)*sW+1,(gy+yy)*sW+1,sW-2,sW-2); }})); ctx.globalAlpha=1; } p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{ if(v){ ctx.fillStyle=p.cur.color; ctx.shadowColor=p.cur.color; ctx.shadowBlur=10; ctx.fillRect((p.cur.x+xx)*sW+1,(p.cur.y+yy)*sW+1,sW-2,sW-2); ctx.shadowBlur=0; }})); }
+}
+function loop(t){
+  if(players.length!=2) return;
+  players.forEach((p,i)=>{
+    if(p.over) return;
+    p.dropT+=16;
+    if(p.dropT>p.interval){ if(!collide(p.grid,p.cur,0,1)) p.cur.y++; else lock(p,i==0?1:0); p.dropT=0; }
+    drawPlayer(p);
+    document.getElementById(i==0?'scoreA':'scoreB').innerText=p.score;
+    document.getElementById(i==0?'linesA':'linesB').innerText=p.lines;
+  });
+  let over=players.filter(p=>p.over);
+  if(over.length){
+    let winner=players.find(p=>!p.over);
+    if(winner || over.length==2){
+      let lb=JSON.parse(localStorage.getItem('mgcBattleLB')||'[]');
+      if(winner){ lb.push({name:winner.name,score:winner.score,vs:players.find(p=>p!=winner).name,date:Date.now()}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,100); localStorage.setItem('mgcBattleLB',JSON.stringify(lb)); alert('🏆 WINNER: '+winner.name+'! Score '+winner.score); }
+      else alert('DRAW!');
+      renderLB(); document.getElementById('modal').style.display='flex';
+      return;
+    }
+  }
+  requestAnimationFrame(loop);
+}
+function moveP(idx,d){ let p=players[idx]; if(p.over||!p.cur) return; if(!collide(p.grid,p.cur,d,0)) p.cur.x+=d; }
+function rotateP(idx){ let p=players[idx]; if(!p.cur) return; let r=rotateM(p.cur.shape); if(!collide(p.grid,p.cur,0,0,r)) p.cur.shape=r; else if(!collide(p.grid,p.cur,-1,0,r)){p.cur.x--;p.cur.shape=r;} else if(!collide(p.grid,p.cur,1,0,r)){p.cur.x++;p.cur.shape=r;} }
+function softP(idx){ let p=players[idx]; if(!collide(p.grid,p.cur,0,1)) p.cur.y++; }
+function hardP(idx){ let p=players[idx]; let d=0; while(!collide(p.grid,p.cur,0,d+1)) d++; p.cur.y+=d; lock(p, idx==0?1:0); }
+function holdP(idx){ let p=players[idx]; if(!p.canHold) return; if(!p.hold){ p.hold=p.cur; spawn(p);} else { let tmp=p.hold; p.hold=p.cur; p.cur=tmp; p.cur.x=3; p.cur.y=0; } p.canHold=false; }
+
+function startBattle(){
+  let a=document.getElementById('inA').value||'Mazta'; let b=document.getElementById('inB').value||'Kalaban';
+  localStorage.setItem('mgcBattleA',a); localStorage.setItem('mgcBattleB',b);
+  document.getElementById('nameA').innerText=a; document.getElementById('nameB').innerText=b;
+  let ca=document.getElementById('boardA'), cb=document.getElementById('boardB');
+  players=[makePlayer(ca,a), makePlayer(cb,b)];
+  players.forEach(p=>{ p.next=randPiece(); spawn(p); });
+  document.getElementById('modal').style.display='none';
+  actx=new (window.AudioContext||window.webkitAudioContext)();
+  window.addEventListener('resize',()=>players.forEach(p=>p.resizeC()));
+  requestAnimationFrame(loop);
+}
+function renderLB(){ let lb=JSON.parse(localStorage.getItem('mgcBattleLB')||'[]'); let h=''; lb.forEach((e,i)=>{ h+=`<div class="lb-row"><span>${i+1}. ${e.name} vs ${e.vs}</span><span>${e.score}</span></div>`}); if(!lb.length) h='<div style="opacity:.5;font-size:11px">Wala pa battle winner - ikaw una boss!</div>'; document.getElementById('lbList').innerHTML=h; }
+renderLB();
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('modal').style.display!='none') return;
+  if(e.key=='a'||e.key=='A') moveP(0,-1);
+  if(e.key=='d'||e.key=='D') moveP(0,1);
+  if(e.key=='s'||e.key=='S') softP(0);
+  if(e.key=='q'||e.key=='Q'||e.key=='e'||e.key=='E') rotateP(0);
+  if(e.key=='f'||e.key=='F') holdP(0);
+  if(e.key=='g'||e.key=='G') hardP(0);
+  if(e.key=='ArrowLeft') { e.preventDefault(); moveP(1,-1); }
+  if(e.key=='ArrowRight') { e.preventDefault(); moveP(1,1); }
+  if(e.key=='ArrowDown') { e.preventDefault(); softP(1); }
+  if(e.key=='ArrowUp'||e.key=='x'||e.key=='X') rotateP(1);
+  if(e.code=='Space') { e.preventDefault(); hardP(1); }
+  if(e.key=='c'||e.key=='C') holdP(1);
+});
+document.getElementById('inA').value=localStorage.getItem('mgcBattleA')||'Mazta';
+document.getElementById('inB').value=localStorage.getItem('mgcBattleB')||'Kalaban';
+</script>
+</body>
+</html>
