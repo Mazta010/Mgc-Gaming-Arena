@@ -2,50 +2,52 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC FIX FALL + AUTO BOOM</title>
+<title>MGC GANTO AKYAT FIXED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
 body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 #top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a;font-size:13px}
-#score{font-size:56px;font-weight:900}
+#score{font-size:58px;font-weight:900;line-height:1}
 #msg{color:#ffeb3b;font-size:11px;font-weight:bold;height:18px}
 #grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
-.bar{position:absolute;height:44px;border-radius:8px;box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 3px 6px rgba(0,0,0,.6);border:2px solid rgba(0,0,0,.25);transition:top.26s cubic-bezier(.2,.8,.2,1), left.12s}
-.bar.drag{transition:none!important;z-index:99;transform:scale(1.12)}
+.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 3px 6px rgba(0,0,0,.6);border:2px solid rgba(0,0,0,.25);transition:top.28s cubic-bezier(.2,.8,.2,1), left.12s ease}
+.bar.drag{transition:none!important;z-index:99;transform:scale(1.12) rotate(1deg)}
 .c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
-.full{box-shadow:0 0 18px #ffeb3b!important;border-color:#ffeb3b!important;animation:glow.5s infinite alternate}
-@keyframes glow{to{box-shadow:0 0 28px #ffeb3b}}
-.boom{animation:boom.38s forwards}@keyframes boom{50%{transform:scale(1.5);filter:brightness(2)}100%{transform:scale(0);opacity:0}}
-.pop{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-size:32px;font-weight:900;background:rgba(0,0,0,.85);padding:8px 18px;border-radius:18px;animation:popUp.9s forwards;z-index:200;color:#ffeb3b}
-@keyframes popUp{0%{transform:translate(-50%,0) scale(0)}100%{transform:translate(-50%,-120%) scale(1);opacity:0}}
+.full{box-shadow:0 0 20px #ffeb3b!important;border-color:#ffeb3b!important}
+.boom{animation:boom.36s forwards}@keyframes boom{50%{transform:scale(1.5);filter:brightness(2.5)}100%{transform:scale(0);opacity:0}}
+.pop{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-size:34px;font-weight:900;background:rgba(0,0,0,.88);padding:8px 20px;border-radius:20px;animation:popUp.9s forwards;z-index:200;color:#ffeb3b;border:2px solid #ffeb3b}
+@keyframes popUp{0%{transform:translate(-50%,0) scale(0)}60%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-130%) scale(1);opacity:0}}
 button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px}
 #over{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:500}
-.inner{background:#1e2f5a;padding:20px;border-radius:14px;width:90%;max-width:320px;border:3px solid #ff3b3b}
+.inner{background:#1e2f5a;padding:22px;border-radius:16px;width:90%;max-width:320px;border:3px solid #ff3b3b;text-align:center}
+.up{animation:upA.26s ease}@keyframes upA{from{transform:translateY(52px)}to{transform:translateY(0)}}
 </style>
 </head>
 <body>
 <div id="top"><div>🏆 <span id="best">0</span></div><div id="pName">Mazta</div><div id="moves">Moves: 0</div></div>
 <div id="score">0</div>
-<div id="msg">FIXED: AUTO HULOG + AUTO BOOM AGAD!</div>
+<div id="msg">GANTO: Akyat every move! Bumuo ng 8 para mag-Boom!</div>
 <div id="grid"></div>
-<div><button onclick="start()">🔄 NEW</button></div>
-<div id="over"><div class="inner"><h2 style="color:#ff3b3b">💀 GAME OVER!</h2><p>Score: <b id="finalS">0</b></p><button onclick="start()" style="width:100%;background:#22d3ee;margin-top:12px">🔄 ULIT</button></div></div>
+<div style="margin-top:6px"><button onclick="start()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button></div>
+
+<div id="over"><div class="inner"><h2 style="color:#ff3b3b">💀 PUNO NA BOSS!</h2><p style="margin:8px 0;font-size:13px">Umabot na sa taas!</p><p>Score: <b id="finalS">0</b><br>Moves: <b id="finalM">0</b><br>Best: <b id="finalB">0</b></p><button onclick="start()" style="width:100%;background:#22d3ee;margin-top:14px">🔄 ULIT BOSS</button></div></div>
+
 <script>
-let W=8,H=10,cellW,cellH=52,blocks=[],score=0,moves=0,lock=false,best=0;
+let W=8,H=10,cellW=0,cellH=52,blocks=[],score=0,moves=0,lock=false,best=0;
 const cols=['c1','c2','c3','c4','c5','c6','c7'];
 let player=localStorage.getItem('mgcName')||'Mazta';
-best=JSON.parse(localStorage.getItem('mgcLB')||'[]')[0]?.score||0;
+let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); best=lb[0]?.score||0;
 
 function newRow(y){
  let arr=[],x=0;
  while(x<W){
-  if(Math.random()<0.78){
-   let len=Math.min(Math.floor(Math.random()*3)+1,W-x);
-   arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''});
-   x+=len; if(Math.random()<0.35) x++;
+  if(Math.random()<0.82){
+   let len=Math.min(Math.floor(Math.random()*3)+1, W-x); // 1-3 para siksik tulad sa pic
+   arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random().toString(36).slice(2)+Date.now()});
+   x+=len; if(Math.random()<0.32) x++; // konting space
   } else x++;
  }
- if(arr.length==0) arr.push({x:0,y,len:W,c:cols[0],id:Math.random()+''});
+ if(arr.length==0) arr.push({x:Math.floor(Math.random()*3),y,len:2,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''});
  return arr;
 }
 function start(){
@@ -54,37 +56,39 @@ function start(){
  for(let y=H-3;y<H;y++) blocks=blocks.concat(newRow(y));
  render();
 }
-function canFall(b){
+function canFall(b, all){
  if(b.y+1>=H) return false;
- let below=blocks.filter(o=>o.id!=b.id && o.y==b.y+1);
- return!below.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len));
+ return!all.some(o=>o.id!=b.id && o.y==b.y+1 &&!(b.x+b.len<=o.x || b.x>=o.x+o.len));
 }
 function gravityAll(){
  let moved=true;
  while(moved){
   moved=false;
+  // from bottom to top - dikit-dikit tulad sa pic mo boss!
   for(let y=H-2;y>=0;y--){
-   blocks.filter(b=>b.y==y).forEach(b=>{
-    while(canFall(b)){ b.y++; moved=true; }
+   let row=blocks.filter(b=>b.y==y);
+   row.forEach(b=>{
+    while(canFall(b,blocks)){ b.y++; moved=true; }
    });
   }
  }
 }
-function getFullRows(){
+function getFull(){
  let full=[];
  for(let y=0;y<H;y++){
   let row=blocks.filter(b=>b.y==y); if(!row.length) continue;
-  let cov=Array(W).fill(0); row.forEach(b=>{for(let i=0;i<b.len;i++) if(b.x+i<W) cov[b.x+i]=1;});
+  let cov=Array(W).fill(0);
+  row.forEach(o=>{for(let i=0;i<o.len;i++) if(o.x+i<W) cov[o.x+i]=1;});
   if(cov.every(v=>v)) full.push(y);
  }
  return full;
 }
 function render(){
  let g=document.getElementById('grid'); g.innerHTML=''; cellW=g.clientWidth/W;
- let fullYs=new Set(getFullRows());
+ let fullSet=new Set(getFull());
  blocks.forEach(b=>{
   if(b.y<0||b.y>=H) return;
-  let d=document.createElement('div'); d.className='bar '+b.c+(fullYs.has(b.y)?' full':''); d.dataset.id=b.id;
+  let d=document.createElement('div'); d.className='bar '+b.c+(fullSet.has(b.y)?' full':''); d.dataset.id=b.id;
   d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+2)+'px'; d.style.width=(b.len*cellW-6)+'px';
   d.addEventListener('touchstart',s,{passive:false}); d.addEventListener('mousedown',s);
   g.appendChild(d);
@@ -96,13 +100,19 @@ function render(){
 }
 let drag=null;
 function s(e){
- if(lock) return; e.preventDefault(); let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
- let t=e.touches?e.touches[0]:e; drag={b,el:e.currentTarget,sx:t.clientX,startX:b.x,startLeft:b.x*cellW}; e.currentTarget.classList.add('drag');
- window.addEventListener('touchmove',m,{passive:false}); window.addEventListener('mousemove',m);
- window.addEventListener('touchend',eD); window.addEventListener('mouseup',eD);
+ if(lock) return; e.preventDefault();
+ let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
+ let t=e.touches?e.touches[0]:e;
+ drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*cellW,startX:b.x,_last:null};
+ e.currentTarget.classList.add('drag');
+ window.addEventListener('touchmove',m,{passive:false});
+ window.addEventListener('mousemove',m);
+ window.addEventListener('touchend',eD);
+ window.addEventListener('mouseup',eD);
 }
 function m(e){
- if(!drag||lock) return; e.preventDefault(); let t=e.touches?e.touches[0]:e;
+ if(!drag||lock) return; e.preventDefault();
+ let t=e.touches?e.touches[0]:e;
  let dx=t.clientX-drag.sx; let newL=drag.startLeft+dx;
  let min=0,max=(W-drag.b.len)*cellW; if(newL<min) newL=min; if(newL>max) newL=max;
  let projX=Math.round(newL/cellW);
@@ -112,23 +122,22 @@ function m(e){
 }
 function eD(){
  if(!drag) return;
- let b=drag.b; let finalL=drag._last!==undefined?drag._last:drag.startLeft;
+ let b=drag.b; let finalL=drag._last!==null?drag._last:drag.startLeft;
  let nx=Math.round(finalL/cellW); if(nx<0) nx=0; if(nx+b.len>W) nx=W-b.len;
  let others=blocks.filter(o=>o.y==b.y && o.id!=b.id);
  if(!others.some(o=>!(nx+b.len<=o.x || nx>=o.x+o.len))) b.x=nx;
  drag.el.classList.remove('drag'); drag=null;
  window.removeEventListener('touchmove',m); window.removeEventListener('mousemove',m);
  window.removeEventListener('touchend',eD); window.removeEventListener('mouseup',eD);
- // --- BOSS FIX 1: AUTO HULOG AGAD PAG BITAW ---
- while(canFall(b)) b.y++;
- // --- BOSS FIX 2: AUTO HULOG LAHAT NG NASA TAAS ---
- gravityAll();
+ // FIX BOSS: hulog agad pababa hanggang pinaka-baba na bakante!
+ while(canFall(b,blocks)) b.y++;
+ gravityAll(); // lahat ng nasa taas hulog dikit-dikit!
  moves++; render();
- setTimeout(afterMove,60);
+ setTimeout(afterMove,70);
 }
 function afterMove(){
  if(lock) return;
- let full=getFullRows();
+ let full=getFull();
  if(full.length){
   lock=true;
   document.querySelectorAll('.bar').forEach(el=>{
@@ -136,22 +145,27 @@ function afterMove(){
   });
   setTimeout(()=>{
    blocks=blocks.filter(b=>!full.includes(b.y));
-   gravityAll(); // HULOG LAHAT AFTER BOOM!
+   gravityAll(); // GANTO BOSS - dikit-dikit lahat baba!
    let add=full.length*30*full.length; score+=add; if(score>best) best=score;
-   let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); lb.push({name:player,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
+   lb.push({name:player,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
    let p=document.createElement('div'); p.className='pop'; p.innerText='+'+add+' BOOM!'; document.body.appendChild(p); setTimeout(()=>p.remove(),900);
-   lock=false; render();
-   setTimeout(afterMove,200); // chain boom!
-  },350);
+   lock=false; render(); setTimeout(afterMove,220);
+  },340);
  } else {
-  // AKYAT MODE - pag walang boom, aakyat
-  if(blocks.some(b=>b.y<=0)){ document.getElementById('finalS').innerText=score; document.getElementById('over').style.display='flex'; return; }
+  // WALANG BOOM = AKYAT!
+  if(blocks.some(b=>b.y<=0)){
+   document.getElementById('finalS').innerText=score; document.getElementById('finalM').innerText=moves; document.getElementById('finalB').innerText=best;
+   document.getElementById('over').style.display='flex'; return;
+  }
   blocks.forEach(b=>b.y--);
-  blocks=blocks.concat(newRow(H-1));
-  render();
+  let newR=newRow(H-1); newR.forEach(r=>r.up=true); blocks=blocks.concat(newR);
+  render(); setTimeout(()=>document.querySelectorAll('.bar').forEach(el=>{ if(blocks.find(b=>b.id==el.dataset.id)?.up) el.classList.add('up'); }),10);
+  document.getElementById('msg').innerText='⬆️ UMAKYAT! +1 ROW SA BABA!';
+  setTimeout(()=>document.getElementById('msg').innerText='Bumuo ng 8 para hindi mapuno!',900);
  }
 }
 start();
+window.addEventListener('resize',()=>{cellW=document.getElementById('grid').clientWidth/W; render();});
 </script>
 </body>
 </html>
