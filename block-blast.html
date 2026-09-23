@@ -2,161 +2,133 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC Blast - Hulog Version</title>
+<title>MGC SMOOTH</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:white;font-family:Arial;text-align:center}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 #top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a}
-#score{font-size:58px;font-weight:900;margin:4px 0}
-#msg{color:#ffeb3b;font-size:13px;font-weight:bold;height:18px}
-#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative}
-.bar{position:absolute;height:44px;border-radius:7px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,0.6), inset 0 -3px 0 rgba(0,0,0,0.4),0 2px 5px rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.2);transition:background 0.2s}
-.bar.drag{z-index:50;transform:scale(1.08);box-shadow:0 10px 20px #000}
-.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}
-.fall{transition:top 0.25s cubic-bezier(0.25,0.46,0.45,0.94), left 0.15s}
-.boom{animation:boom 0.4s forwards}@keyframes boom{50%{transform:scale(1.3);filter:brightness(1.8)}100%{transform:scale(0);opacity:0}}
-.pop{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);font-size:30px;font-weight:900;background:rgba(0,0,0,0.75);padding:8px 18px;border-radius:20px;animation:up 0.9s forwards;z-index:100}
-@keyframes up{0%{transform:translate(-50%,-20%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-120%) scale(1);opacity:0}}
-button{background:#22d3ee;color:#000;border:none;padding:9px 16px;border-radius:18px;font-weight:900;margin:4px}
-#box{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:flex;align-items:center;justify-content:center}
-.inner{background:#1e2f5a;padding:18px;border-radius:14px;width:90%;max-width:330px;border:3px solid #22d3ee}
-.inner input{width:100%;padding:11px;border-radius:8px;border:none;text-align:center;font-weight:bold;margin:8px 0}
-.rowL{display:flex;justify-content:space-between;background:#23365f;margin:3px 0;padding:6px 8px;border-radius:6px;font-size:13px}
+#score{font-size:58px;font-weight:900}
+#grid{width:96%;max-width:360px;height:540px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative}
+.bar{position:absolute;height:46px;border-radius:8px;will-change:transform,left,top;box-shadow:inset 0 4px 0 rgba(255,255,255,0.6),0 3px 6px rgba(0,0,0,0.6);border:2px solid rgba(0,0,0,0.3);transition:top 0.28s cubic-bezier(.2,.8,.2,1)}
+.bar.dragging{transition:none!important;z-index:99;transform:scale(1.1);box-shadow:0 14px 28px #000}
+.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
+.boom{animation:boom.45s forwards}@keyframes boom{50%{transform:scale(1.4);filter:brightness(2)}100%{transform:scale(0)}}
+.pop{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);font-size:34px;font-weight:900;background:rgba(0,0,0,.8);padding:10px 22px;border-radius:22px;animation:up 1s forwards;z-index:100;color:#ffeb3b}
+@keyframes up{0%{transform:translate(-50%,-20%) scale(0)}100%{transform:translate(-50%,-120%) scale(1);opacity:0}}
+button{background:#22d3ee;color:#000;border:none;padding:10px 18px;border-radius:20px;font-weight:900;margin:4px}
 </style>
 </head>
 <body>
-<div id="top"><div>🏆 <span id="best">0</span></div><div id="pName">Mazta</div><div onclick="openLB()">🏆 LB</div></div>
-<div id="score">0</div>
-<div id="msg">Hilain hanggang dulo → Pag bakante baba, huhulog!</div>
+<div id="top"><div>🏆 <span id="best">0</span></div><div>Mazta</div><div>🏆 LB</div></div>
+<div id="score">120</div>
 <div id="grid"></div>
-<div><button onclick="start()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button><button onclick="openLB()" style="background:#ffbf2e">LEADERBOARD</button></div>
-
-<div id="box">
-<div class="inner" id="ask">
-<h3 style="color:#ffeb3b">🎮 ANO PANGALAN MO?</h3>
-<input id="nameIn" placeholder="Ex: Mazta" maxlength="12">
-<button onclick="save()" style="width:100%;background:#22d3ee;padding:12px;margin-top:6px">▶️ PLAY!</button>
-</div>
-<div class="inner" id="lb" style="display:none">
-<h3>🏆 TOP 10</h3>
-<div id="list"></div>
-<button onclick="closeLB()" style="width:100%;margin-top:10px">❌ CLOSE</button>
-</div>
-</div>
-
+<div><button onclick="start()">🔄 NEW</button></div>
 <script>
-let W=8,H=10,cellW,cellH=52,blocks=[],score=0,player='',best=0;
-const cols=['c1','c2','c3','c4','c5','c6'];
-function save(){
- let v=document.getElementById('nameIn').value.trim(); if(!v){alert('Lagay pangalan boss!');return;}
- player=v; localStorage.setItem('mgcName',v); document.getElementById('pName').innerText=v;
- document.getElementById('box').style.display='none'; start();
-}
-function openLB(){
- document.getElementById('box').style.display='flex'; document.getElementById('ask').style.display='none'; document.getElementById('lb').style.display='block';
- let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); let h=''; if(lb.length==0) h='<div style="color:#aaa">Wala pa scores!</div>';
- else lb.forEach((e,i)=>h+=`<div class="rowL"><span>#${i+1} ${i==0?'👑':''} ${e.name}</span><span>${e.score}</span></div>`);
- document.getElementById('list').innerHTML=h;
-}
-function closeLB(){ document.getElementById('box').style.display='none'; document.getElementById('ask').style.display='block'; document.getElementById('lb').style.display='none'; }
-
+let W=8,H=10,blocks=[],score=120,cellW,cellH=52;
+const cols=['c1','c2','c3','c4','c5','c6','c7'];
 function start(){
- let g=document.getElementById('grid'); cellW=g.clientWidth/W; blocks=[]; score=0;
- for(let y=5;y<H;y++){
-  let x=0; while(x<W){
-   if(Math.random()<0.75){ let len=Math.floor(Math.random()*4)+1; if(x+len>W) len=W-x;
-   blocks.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''}); x+=len; if(Math.random()<0.35) x++; } else x++;
-  }
- }
- render(); document.getElementById('score').innerText=score;
- let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); if(lb[0]) best=lb[0].score; document.getElementById('best').innerText=best;
+ let g=document.getElementById('grid'); cellW=g.clientWidth/W;
+ blocks=[
+  {x:0,y:0,len:1,c:'c4',id:'1'},{x:2,y:0,len:4,c:'c7',id:'2'},
+  {x:0,y:4,len:2,c:'c7',id:'3'},{x:3,y:4,len:1,c:'c2',id:'4'},{x:4,y:4,len:2,c:'c2',id:'5'},{x:7,y:4,len:1,c:'c3',id:'6'},
+  {x:1,y:5,len:1,c:'c1',id:'7'},{x:3,y:5,len:2,c:'c3',id:'8'},{x:6,y:5,len:2,c:'c3',id:'9'},
+  {x:0,y:6,len:3,c:'c4',id:'10'},{x:4,y:6,len:2,c:'c2',id:'11'},
+  {x:0,y:7,len:1,c:'c7',id:'12'},{x:2,y:7,len:2,c:'c3',id:'13'},{x:5,y:7,len:1,c:'c5',id:'14'},
+  {x:0,y:8,len:4,c:'c7',id:'15'},{x:7,y:8,len:1,c:'c7',id:'16'},
+ ];
+ render();
 }
 function render(){
  let g=document.getElementById('grid'); g.innerHTML='';
+ cellW=g.clientWidth/W;
  blocks.forEach(b=>{
-  let d=document.createElement('div'); d.className='bar '+b.c; d.dataset.id=b.id;
-  d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+2)+'px'; d.style.width=(b.len*cellW-6)+'px';
-  d.addEventListener('touchstart',sDrag,{passive:false}); d.addEventListener('mousedown',sDrag);
+  let d=document.createElement('div'); d.className='bar '+b.c; d.id=b.id;
+  d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+3)+'px'; d.style.width=(b.len*cellW-6)+'px';
+  d.addEventListener('touchstart',s,{passive:false}); d.addEventListener('mousedown',s);
   g.appendChild(d);
  });
+ document.getElementById('score').innerText=score;
 }
 let drag=null;
-function sDrag(e){
- e.preventDefault(); let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
- let t=e.touches?e.touches[0]:e; drag={b,sx:t.clientX,startX:b.x,el:e.currentTarget}; e.currentTarget.classList.add('drag');
- window.addEventListener('touchmove',mDrag,{passive:false}); window.addEventListener('mousemove',mDrag);
- window.addEventListener('touchend',eDrag); window.addEventListener('mouseup',eDrag);
+function s(e){
+ e.preventDefault(); let id=e.currentTarget.id; let b=blocks.find(o=>o.id==id); if(!b) return;
+ let t=e.touches?e.touches[0]:e;
+ drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*cellW,startX:b.x};
+ drag.el.classList.add('dragging');
+ window.addEventListener('touchmove',m,{passive:false}); window.addEventListener('mousemove',m);
+ window.addEventListener('touchend',end); window.addEventListener('mouseup',end);
 }
-function mDrag(e){
+function m(e){
  if(!drag) return; e.preventDefault(); let t=e.touches?e.touches[0]:e;
- let nx=drag.startX+Math.round((t.clientX-drag.sx)/cellW); if(nx<0) nx=0; if(nx+drag.b.len>W) nx=W-drag.b.len;
- if(nx==drag.b.x) return;
- // check kung may tatamaan sa paghila (kahit malayo)
+ let dx=t.clientX-drag.sx;
+ let newLeft=drag.startLeft+dx;
+ let minL=0, maxL=(W-drag.b.len)*cellW;
+ if(newLeft<minL) newLeft=minL; if(newLeft>maxL) newLeft=maxL;
+ // collision check - smooth pa rin pero bawal tumagos
+ let projX=Math.round(newLeft/cellW);
  let others=blocks.filter(o=>o.y==drag.b.y && o.id!=drag.b.id);
- let hit=others.some(o=>!(nx+drag.b.len<=o.x || nx>=o.x+o.len));
- if(hit) return; // bawal may tama
- drag.b.x=nx; render(); let ne=document.querySelector(`[data-id="${drag.b.id}"]`); if(ne) ne.classList.add('drag');
-}
-function eDrag(){
- if(!drag) return; drag.el?.classList.remove('drag'); let y=drag.b.y, x=drag.b.x, b=drag.b; drag=null;
- window.removeEventListener('touchmove',mDrag); window.removeEventListener('mousemove',mDrag);
- window.removeEventListener('touchend',eDrag); window.removeEventListener('mouseup',eDrag);
- // HULOG CHECK - pag bakante baba!
- doFall(b, ()=>checkLine(b.y));
-}
-function doFall(b,cb){
- // hanap pinakababa na bakante
- let ny=b.y;
- while(true){
-  let next=ny+1; if(next>=H) break;
-  let others=blocks.filter(o=>o.id!=b.id && o.y==next);
-  let hit=others.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len));
-  if(hit) break;
-  // check kung may block mismo sa baba na same x overlap
-  ny=next;
- }
- if(ny!=b.y){
-  b.y=ny; render(); document.querySelectorAll('.bar').forEach(el=>{ if(el.dataset.id==b.id) el.classList.add('fall'); });
-  setTimeout(()=>{ checkLine(ny); if(cb) cb(); },260);
- } else { checkLine(b.y); }
-}
-function checkLine(y){
- let row=blocks.filter(b=>b.y==y); let cov=Array(W).fill(0); row.forEach(b=>{for(let i=0;i<b.len;i++) if(b.x+i<W) cov[b.x+i]=1;});
- if(cov.every(v=>v)){
-  document.querySelectorAll('.bar').forEach(el=>{
-   let b=blocks.find(o=>o.id==el.dataset.id); if(b&&b.y==y) el.classList.add('boom');
-  });
-  setTimeout(()=>{
-   blocks=blocks.filter(b=>b.y!=y);
-   // lahat sa taas huhulog pababa ng 1
-   blocks.forEach(b=>{ if(b.y<y) b.y++; });
-   score+=30; document.getElementById('score').innerText=score;
-   let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); lb.push({name:player,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
-   if(score>best){best=score; document.getElementById('best').innerText=best;}
-   let p=document.createElement('div'); p.className='pop'; p.innerText='+30 BOOM! 💥'; document.body.appendChild(p); setTimeout(()=>p.remove(),900);
-   // gravity sa lahat after clear
-   gravityAll(); render();
-  },350);
- }
-}
-function gravityAll(){
- // paulit ulit hulog lahat hanggang wala na bakante
- let moved=true;
- while(moved){
-  moved=false;
-  for(let b of blocks){
-   let ny=b.y;
-   while(ny+1<H){
-    let others=blocks.filter(o=>o.id!=b.id && o.y==ny+1);
-    if(others.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len))) break;
-    ny++;
-   }
-   if(ny!=b.y){ b.y=ny; moved=true; }
+ // hanap harang
+ for(let o of others){
+  if(projX+drag.b.len>o.x && projX<o.x+o.len){
+   // harang! stop before
+   if(dx>0) newLeft=(o.x-drag.b.len)*cellW-1;
+   else newLeft=(o.x+o.len)*cellW+1;
   }
  }
+ drag.el.style.left=newLeft+'px';
+ drag._lastLeft=newLeft;
 }
-let sv=localStorage.getItem('mgcName'); if(sv){player=sv; document.getElementById('pName').innerText=sv; document.getElementById('box').style.display='none'; start();} else document.getElementById('box').style.display='flex';
-window.addEventListener('resize',()=>{ cellW=document.getElementById('grid').clientWidth/W; render(); });
+function end(){
+ if(!drag) return;
+ let b=drag.b;
+ let finalLeft=drag._lastLeft!==undefined?drag._lastLeft:drag.startLeft;
+ let nx=Math.round(finalLeft/cellW); if(nx<0) nx=0; if(nx+b.len>W) nx=W-b.len;
+ // final collision fix
+ let others=blocks.filter(o=>o.y==b.y && o.id!=b.id);
+ for(let o of others){ if(!(nx+b.len<=o.x || nx>=o.x+o.len)){ nx=b.x; break; } }
+ b.x=nx;
+ drag.el.classList.remove('dragging');
+ // HULOG BOSS - hanap pinakababa bakante!
+ let ny=b.y;
+ while(ny+1<H){
+  let below=blocks.filter(o=>o.id!=b.id && o.y==ny+1);
+  if(below.some(o=>!(b.x+b.len<=o.x || b.x>=o.x+o.len))) break;
+  ny++;
+ }
+ if(ny!=b.y){
+  b.y=ny; drag.el.style.top=(ny*cellH+3)+'px'; drag.el.style.left=(b.x*cellW+2)+'px';
+  setTimeout(()=>check(),300);
+ } else {
+  check();
+ }
+ drag=null;
+ window.removeEventListener('touchmove',m); window.removeEventListener('mousemove',m);
+ window.removeEventListener('touchend',end); window.removeEventListener('mouseup',end);
+}
+function check(){
+ let full=[];
+ for(let y=0;y<H;y++){
+  let row=blocks.filter(o=>o.y==y); if(!row.length) continue;
+  let cov=Array(W).fill(0); row.forEach(o=>{for(let i=0;i<o.len;i++) cov[o.x+i]=1;});
+  if(cov.every(v=>v)) full.push(y);
+ }
+ if(full.length){
+  full.forEach(y=>{ blocks.filter(o=>o.y==y).forEach(o=>{ document.getElementById(o.id)?.classList.add('boom'); }); });
+  setTimeout(()=>{
+   blocks=blocks.filter(o=>!full.includes(o.y));
+   // gravity lahat!
+   for(let iter=0;iter<H;iter++){
+    for(let b of blocks){
+     while(b.y+1<H &&!blocks.some(o=>o.id!=b.id && o.y==b.y+1 &&!(b.x+b.len<=o.x || b.x>=o.x+o.len))){ b.y++; }
+    }
+   }
+   score+=full.length*30*full.length;
+   let p=document.createElement('div'); p.className='pop'; p.innerText='+'+(full.length*30*full.length)+' BOOM!'; document.body.appendChild(p); setTimeout(()=>p.remove(),1000);
+   render();
+  },400);
+ } else render();
+}
+start();
 </script>
 </body>
 </html>
