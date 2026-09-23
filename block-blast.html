@@ -2,179 +2,166 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC Block Blast - Leaderboard</title>
+<title>MGC Block Blast FIXED</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#324e92;color:white;font-family:Arial;text-align:center;overflow:hidden}
-#top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#1a2a5a}
-#trophy{color:#ffbf2e;font-weight:900;font-size:18px}
-#player{font-size:13px;color:#7af0ff;font-weight:bold}
-#score{font-size:52px;font-weight:900;margin:6px 0}
-#grid{width:94%;max-width:380px;margin:8px auto;background:#1e2f5a;border:3px solid #152040;border-radius:10px;display:flex;flex-direction:column;aspect-ratio:1/1.15;padding:0;overflow:hidden}
-.row{flex:1;display:flex;position:relative;background:#1e2f5a;border-bottom:1px solid rgba(0,0,0,0.15)}
-.cellBg{flex:1;background:#23365f;border-right:1px solid rgba(0,0,0,0.1)}
-.bar{position:absolute;top:3px;bottom:3px;border-radius:6px;cursor:grab;z-index:2;box-shadow:inset 0 3px 0 rgba(255,255,255,0.5),inset 0 -3px 0 rgba(0,0,0,0.35),0 2px 4px rgba(0,0,0,0.4);border:1px solid rgba(0,0,0,0.2)}
-.bar.drag{z-index:20;transform:scale(1.06);box-shadow:0 8px 16px #000}
-.cGreen{background:linear-gradient(180deg,#6ddf7f,#1e8e3e)}.cBlueS{background:linear-gradient(180deg,#7fb8ff,#2d5dcc)}.cYellow{background:linear-gradient(180deg,#ffe07a,#d69e00)}.cCyan{background:linear-gradient(180deg,#7af0ff,#0eb9cc)}.cRed{background:linear-gradient(180deg,#ff7a7a,#c81e1e)}.cOrange{background:linear-gradient(180deg,#ffb36a,#e05a0a)}.cPurple{background:linear-gradient(180deg,#c89aff,#7c3aed)}.cLightBlue{background:linear-gradient(180deg,#9ad8ff,#3a8bd6)}
-.boom{animation:boom 0.4s forwards}@keyframes boom{0%{transform:scale(1)}50%{transform:scale(1.2);filter:brightness(1.8)}100%{transform:scale(0);opacity:0}}
-#progWrap{width:94%;max-width:380px;height:12px;background:#0f1b33;border-radius:6px;margin:6px auto;padding:2px;display:flex;gap:2px}
-.pSeg{height:100%;background:#22d3ee;border-radius:4px}
-.plus{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-size:28px;font-weight:900;animation:up 0.8s forwards;pointer-events:none;z-index:25}
-@keyframes up{0%{opacity:1;transform:translate(-50%,-20%)}100%{opacity:0;transform:translate(-50%,-120%)}}
-button{background:#22d3ee;color:#000;border:none;padding:8px 14px;border-radius:18px;font-weight:900;margin:3px;font-size:13px}
-#lbBtn{background:#ffbf2e}
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center}
-.box{background:#1e2f5a;border:3px solid #22d3ee;border-radius:14px;padding:18px;width:90%;max-width:360px}
-.box h2{color:#ffbf2e;margin-bottom:10px}
-.box input{width:100%;padding:10px;border-radius:8px;border:none;font-size:16px;font-weight:bold;text-align:center;margin:8px 0}
-.lbRow{display:flex;justify-content:space-between;padding:6px 8px;background:#23365f;margin:3px 0;border-radius:6px;font-size:14px}
-.lbRow.me{background:linear-gradient(90deg,#ffbf2e,#e05a0a);color:#000;font-weight:900}
-#ad{width:94%;max-width:380px;margin:6px auto;background:#fff;color:#000;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;font-size:11px;font-weight:bold}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+body{background:#324e92;color:white;font-family:Arial;text-align:center}
+#top{padding:12px;display:flex;justify-content:space-between;font-weight:900}
+#score{font-size:60px;font-weight:900}
+#msg{color:#ffeb3b;font-weight:bold;padding:6px;font-size:14px}
+#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#1a2744;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
+.bar{position:absolute;height:42px;border-radius:8px;cursor:grab;box-shadow:inset 0 4px 0 rgba(255,255,255,0.5), inset 0 -4px 0 rgba(0,0,0,0.4), 0 3px 6px rgba(0,0,0,0.5);border:2px solid rgba(0,0,0,0.2)}
+.bar.drag{transform:scale(1.1);z-index:99;box-shadow:0 10px 20px #000}
+.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#d1a8ff,#8a5cf6)}.c4{background:linear-gradient(180deg,#ffe58a,#f59e0b)}.c5{background:linear-gradient(180deg,#ff9a9a,#e11d48)}.c6{background:linear-gradient(180deg,#86efac,#16a34a)}
+.boom{animation:boom 0.4s forwards}@keyframes boom{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(0)}}
+.plus{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);font-size:32px;font-weight:900;background:rgba(0,0,0,0.7);padding:8px 16px;border-radius:20px;animation:pop 0.9s forwards;z-index:50}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+button{background:#22d3ee;color:#000;border:none;padding:10px 18px;border-radius:20px;font-weight:900;margin:5px}
+#nameBox{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:100}
+.inner{background:#1e2f5a;padding:20px;border-radius:14px;width:90%;max-width:320px;border:3px solid #22d3ee}
+.inner input{width:100%;padding:12px;border-radius:8px;border:none;font-size:16px;text-align:center;font-weight:bold;margin:10px 0}
+.lb{margin-top:10px;text-align:left;max-height:200px;overflow:auto}
+.lb div{padding:5px;background:#23365f;margin:2px 0;border-radius:5px;display:flex;justify-content:space-between;font-size:13px}
 </style>
 </head>
 <body>
-<div id="top"><div id="trophy">🏆 <span id="bestScore">74520</span></div><div id="player">Player: Guest</div><div onclick="showLB()">📊 LB</div></div>
-<div id="score">0</div>
+<div id="top"><div>🏆 <span id="best">3400</span> </div><div id="pName">Guest</div><div onclick="showLB()">🏆 LB</div></div>
+<div id="score">90</div>
+<div id="msg">👆 HILAIN left/right! Buuin 8 para BOOM! +30</div>
 <div id="grid"></div>
-<div id="progWrap"><div class="pSeg" style="width:35%"></div><div class="pSeg" style="width:15%"></div><div class="pSeg" style="width:35%"></div></div>
-<div><button onclick="init()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button><button id="lbBtn" onclick="showLB()">🏆 LEADERBOARD</button></div>
-<div id="ad"><span>USE CODE <b style="color:red">TARAMOVEIT</b> FREE RIDE!</span><span>MOVEIT</span></div>
+<div><button onclick="initGame()">🔄 NEW</button><button onclick="location.href='index.html'">🏠 ARENA</button></div>
 
-<!-- Name Modal -->
-<div id="overlay">
-<div class="box" id="nameBox">
-<h2>🎮 MGC BLOCK BLAST</h2>
-<p style="font-size:14px;color:#7af0ff">Ilagay pangalan mo boss para sa Leaderboard!</p>
-<input id="nameInput" placeholder="Pangalan mo boss..." maxlength="12" value="">
-<button onclick="saveName()" style="width:100%;padding:12px;background:#22d3ee;margin-top:8px">▶️ PLAY NA!</button>
-<div style="margin-top:12px;font-size:12px;color:#aaa">Top 10 players nakasave sa phone mo</div>
+<div id="nameBox">
+<div class="inner" id="askName">
+<h3 style="color:#ffeb3b">🎮 ANO PANGALAN MO BOSS?</h3>
+<input id="nameIn" placeholder="Ex: MAZTA" maxlength="10">
+<button onclick="saveName()" style="width:100%;margin-top:8px;background:#22d3ee;padding:12px">▶️ PLAY!</button>
 </div>
-
-<div class="box" id="lbBox" style="display:none;max-height:85vh;overflow:auto">
-<h2>🏆 LEADERBOARD TOP 10</h2>
-<div id="lbList"></div>
-<button onclick="hideLB()" style="width:100%;margin-top:10px">❌ CLOSE</button>
-<button onclick="clearLB()" style="width:100%;background:#ff4d4d;color:#fff;margin-top:5px">🗑️ CLEAR BOARD</button>
+<div class="inner" id="showLB" style="display:none">
+<h3>🏆 TOP 10 LEADERBOARD</h3>
+<div id="lbList" class="lb"></div>
+<button onclick="closeLB()" style="width:100%;margin-top:10px">❌ CLOSE</button>
 </div>
 </div>
 
 <script>
-let W=8,H=9,rows=[],score=0,playerName=localStorage.getItem('mgcPlayer')||'',best=0;
-const colors=['cGreen','cBlueS','cYellow','cCyan','cRed','cOrange','cPurple','cLightBlue'];
-
+let W=8, H=10, cellW, cellH, blocks=[], score=90, player='', best=3400;
+const colors=['c1','c2','c3','c4','c5','c6'];
 function saveName(){
- let v=document.getElementById('nameInput').value.trim();
- if(!v){ alert('Lagay ka pangalan boss!'); return; }
- playerName=v; localStorage.setItem('mgcPlayer',v);
- document.getElementById('player').innerText='Player: '+v;
- document.getElementById('overlay').style.display='none';
- init();
+ let v=document.getElementById('nameIn').value.trim();
+ if(!v){alert('Lagay pangalan boss!');return;}
+ player=v; localStorage.setItem('mgcName',v);
+ document.getElementById('pName').innerText=v;
+ document.getElementById('nameBox').style.display='none';
+ initGame();
 }
 function showLB(){
- document.getElementById('overlay').style.display='flex';
+ document.getElementById('nameBox').style.display='flex';
+ document.getElementById('askName').style.display='none';
+ document.getElementById('showLB').style.display='block';
+ let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
+ let h=''; if(lb.length==0) h='<div>Wala pa boss! Laro ka muna!</div>';
+ else lb.forEach((e,i)=>{ h+=`<div><span>#${i+1} ${i==0?'👑':''} ${e.name}</span><span>${e.score}</span></div>`; });
+ document.getElementById('lbList').innerHTML=h;
+}
+function closeLB(){
  document.getElementById('nameBox').style.display='none';
- document.getElementById('lbBox').style.display='block';
- renderLB();
+ document.getElementById('askName').style.display='block';
+ document.getElementById('showLB').style.display='none';
 }
-function hideLB(){
- if(!playerName){ document.getElementById('lbBox').style.display='none'; document.getElementById('nameBox').style.display='block'; return; }
- document.getElementById('overlay').style.display='none';
-}
-function getLB(){ return JSON.parse(localStorage.getItem('mgcLeaderboard')||'[]'); }
-function saveLB(list){ localStorage.setItem('mgcLeaderboard',JSON.stringify(list)); }
-function addScore(name,sc){
- let lb=getLB(); lb.push({name,score:sc,date:new Date().toLocaleDateString()});
- lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); saveLB(lb);
-}
-function renderLB(){
- let lb=getLB(); best=lb[0]?.score||74520; document.getElementById('bestScore').innerText=best;
- let html=''; if(lb.length==0) html='<div style="color:#aaa;padding:10px">Wala pa scores boss! Maglaro ka na!</div>';
- lb.forEach((p,i)=>{
-  let isMe=p.name==playerName && p.score==score? ' me' : '';
-  html+=`<div class="lbRow${isMe}"><span>#${i+1} ${i==0?'👑':''} ${p.name}</span><span>${p.score} pts</span></div>`;
- });
- document.getElementById('lbList').innerHTML=html;
-}
-function clearLB(){ if(confirm('Burahin lahat ng leaderboard?')){ localStorage.removeItem('mgcLeaderboard'); renderLB(); } }
-
-function init(){
- if(!playerName){ document.getElementById('overlay').style.display='flex'; document.getElementById('nameInput').focus(); return; }
- document.getElementById('player').innerText='Player: '+playerName;
- rows=[]; score=0;
- for(let y=0;y<H;y++){ rows.push([]); }
- rows[H-2]=[{x:0,len:1,c:'cGreen',id:'a1'},{x:1,len:3,c:'cGreen',id:'a2'},{x:5,len:1,c:'cBlueS',id:'a3'},{x:7,len:1,c:'cBlueS',id:'a4'}];
- rows[H-1]=[{x:0,len:1,c:'cBlueS',id:'b1'},{x:2,len:3,c:'cYellow',id:'b2'},{x:6,len:1,c:'cBlueS',id:'b3'},{x:7,len:1,c:'cRed',id:'b4'}];
+function initGame(){
+ let g=document.getElementById('grid');
+ cellW=g.clientWidth/W; cellH=52;
+ blocks=[]; score=90;
+ // SIGURADO MAY LAMAN BOSS! Bottom 6 rows punuin natin!
+ for(let y=4;y<H;y++){
+  let x=0;
+  while(x<W){
+   if(Math.random()<0.8){
+    let len=Math.floor(Math.random()*4)+1; // 1-4 ONLY!
+    if(x+len>W) len=W-x;
+    blocks.push({x,y,len,c:colors[Math.floor(Math.random()*colors.length)],id:Math.random()});
+    x+=len;
+    if(Math.random()<0.3) x+=1; // gap
+   } else x++;
+  }
+ }
+ document.getElementById('score').innerText=score;
+ let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
+ if(lb[0]) best=lb[0].score;
+ document.getElementById('best').innerText=best;
  render();
 }
 function render(){
- const g=document.getElementById('grid'); g.innerHTML='';
- rows.forEach((r,y)=>{
-  let row=document.createElement('div'); row.className='row';
-  for(let i=0;i<W;i++){ let bg=document.createElement('div'); bg.className='cellBg'; row.appendChild(bg); }
-  r.forEach(b=>{
-   let el=document.createElement('div'); el.className='bar '+b.c; el.dataset.y=y; el.dataset.id=b.id;
-   el.style.left=(b.x/W*100)+'%'; el.style.width=(b.len/W*100-0.8)+'%';
-   el.addEventListener('touchstart',sd,{passive:false}); el.addEventListener('mousedown',sd);
-   row.appendChild(el);
-  });
-  g.appendChild(row);
+ let g=document.getElementById('grid'); g.innerHTML='';
+ blocks.forEach(b=>{
+  let el=document.createElement('div');
+  el.className='bar '+b.c; el.dataset.id=b.id;
+  el.style.left=(b.x*cellW+2)+'px';
+  el.style.top=(b.y*cellH+4)+'px';
+  el.style.width=(b.len*cellW-6)+'px';
+  el.addEventListener('touchstart',startDrag,{passive:false});
+  el.addEventListener('mousedown',startDrag);
+  g.appendChild(el);
  });
  document.getElementById('score').innerText=score;
- let lb=getLB(); document.getElementById('bestScore').innerText=lb[0]?.score||74520;
 }
 let drag=null;
-function sd(e){
- e.preventDefault(); const y=+e.currentTarget.dataset.y, id=e.currentTarget.dataset.id;
- const b=rows[y].find(o=>o.id==id); if(!b) return;
- const t=e.touches?e.touches[0]:e; drag={y,b,sx:t.clientX,startX:b.x}; e.currentTarget.classList.add('drag');
- window.addEventListener('touchmove',mv,{passive:false}); window.addEventListener('mousemove',mv);
- window.addEventListener('touchend',ed); window.addEventListener('mouseup',ed);
+function startDrag(e){
+ e.preventDefault(); let id=e.currentTarget.dataset.id; let b=blocks.find(o=>o.id==id); if(!b) return;
+ let t=e.touches?e.touches[0]:e; drag={b,sx:t.clientX,startX:b.x,el:e.currentTarget};
+ e.currentTarget.classList.add('drag');
+ window.addEventListener('touchmove',onMove,{passive:false});
+ window.addEventListener('mousemove',onMove);
+ window.addEventListener('touchend',onEnd); window.addEventListener('mouseup',onEnd);
 }
-function mv(e){
- if(!drag) return; e.preventDefault(); const t=e.touches?e.touches[0]:e;
- let gridW=document.getElementById('grid').clientWidth; let cellW=gridW/W;
+function onMove(e){
+ if(!drag) return; e.preventDefault(); let t=e.touches?e.touches[0]:e;
  let dx=Math.round((t.clientX-drag.sx)/cellW);
  let nx=drag.startX+dx; if(nx<0) nx=0; if(nx+drag.b.len>W) nx=W-drag.b.len;
  if(nx==drag.b.x) return;
- let others=rows[drag.y].filter(o=>o.id!=drag.b.id);
+ let others=blocks.filter(o=>o.y==drag.b.y && o.id!=drag.b.id);
  if(others.some(o=>!(nx+drag.b.len<=o.x || nx>=o.x+o.len))) return;
- drag.b.x=nx; render(); document.querySelector(`[data-id="${drag.b.id}"]`)?.classList.add('drag');
+ drag.b.x=nx; render();
+ let newEl=document.querySelector(`[data-id="${drag.b.id}"]`); if(newEl) newEl.classList.add('drag'); drag.el=newEl;
 }
-function ed(){
- if(!drag) return; document.querySelector(`[data-id="${drag.b.id}"]`)?.classList.remove('drag');
- let y=drag.y; drag=null;
- window.removeEventListener('touchmove',mv); window.removeEventListener('mousemove',mv);
- window.removeEventListener('touchend',ed); window.removeEventListener('mouseup',ed);
- checkRow(y);
+function onEnd(){
+ if(!drag) return; drag.el?.classList.remove('drag');
+ let y=drag.b.y; drag=null;
+ window.removeEventListener('touchmove',onMove); window.removeEventListener('mousemove',onMove);
+ window.removeEventListener('touchend',onEnd); window.removeEventListener('mouseup',onEnd);
+ checkLine(y);
 }
-function checkRow(y){
- let r=rows[y]; let covered=Array(W).fill(0);
- r.forEach(b=>{ for(let i=0;i<b.len;i++) covered[b.x+i]=1; });
- if(covered.every(v=>v)){
-  document.querySelectorAll(`[data-y="${y}"]`).forEach(el=>el.classList.add('boom'));
-  let extra=[]; rows.forEach((rr,yy)=>{ if(yy!=y){ let c=Array(W).fill(0); rr.forEach(b=>{for(let i=0;i<b.len;i++) c[b.x+i]=1}); if(c.every(v=>v)) extra.push(yy); }});
-  let total=1+extra.length; let pts=total==1?30:total==2?80:total>=3?180:30;
+function checkLine(y){
+ let row=blocks.filter(b=>b.y==y);
+ let cov=Array(W).fill(0); row.forEach(b=>{ for(let i=0;i<b.len;i++) cov[b.x+i]=1; });
+ if(cov.every(v=>v)){
+  // BOOM!
+  document.querySelectorAll('.bar').forEach(el=>{
+   let b=blocks.find(o=>o.id==el.dataset.id); if(b&&b.y==y) el.classList.add('boom');
+  });
   setTimeout(()=>{
-   let toClear=[y,...extra].sort((a,b)=>b-a); toClear.forEach(cy=>{ rows.splice(cy,1); rows.unshift([]); });
-   score+=pts;
-   let plus=document.createElement('div'); plus.className='plus'; plus.innerText='+'+pts; if(total>=3) plus.innerText+=' Great!'; plus.style.color=total>=3?'#ff4d4d':'#fff'; document.body.appendChild(plus); setTimeout(()=>plus.remove(),800);
-   // save to leaderboard if high
-   if(score>0){ addScore(playerName,score); }
-   spawnNew(); render();
-  },300);
+   blocks=blocks.filter(b=>b.y!=y);
+   blocks.forEach(b=>{ if(b.y<y) b.y++; });
+   // add new row at top
+   let x=0; while(x<W){
+    if(Math.random()<0.7){ let len=Math.floor(Math.random()*4)+1; if(x+len>W) len=W-x; blocks.push({x,y:0,len,c:colors[Math.floor(Math.random()*colors.length)],id:Math.random()}); x+=len; } x+=Math.random()<0.3?1:0;
+   }
+   score+=30;
+   // LEADERBOARD SAVE!
+   let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
+   lb.push({name:player,score:score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
+   if(score>best){ best=score; document.getElementById('best').innerText=best; }
+   let pop=document.createElement('div'); pop.className='plus'; pop.innerText='+30 BOOM! 💥'; document.body.appendChild(pop); setTimeout(()=>pop.remove(),900);
+   render();
+  },350);
  }
 }
-function spawnNew(){
- for(let k=0;k<2;k++){
-  let y=Math.floor(Math.random()*3); if(rows[y].length>=3) continue;
-  let len=Math.floor(Math.random()*4)+1; let x=Math.floor(Math.random()*(W-len+1));
-  if(rows[y].some(o=>!(x+len<=o.x || x>=o.x+o.len))) continue;
-  rows[y].push({x,len,c:colors[Math.floor(Math.random()*colors.length)],id:Math.random()+''});
- }
-}
-// auto load
-if(playerName){ document.getElementById('nameInput').value=playerName; document.getElementById('overlay').style.display='none'; document.getElementById('player').innerText='Player: '+playerName; init(); }
-renderLB();
+// auto
+let saved=localStorage.getItem('mgcName');
+if(saved){ player=saved; document.getElementById('pName').innerText=saved; document.getElementById('nameBox').style.display='none'; initGame(); }
+else { document.getElementById('nameBox').style.display='flex'; }
+window.addEventListener('resize',()=>{ let g=document.getElementById('grid'); cellW=g.clientWidth/W; render(); });
 </script>
 </body>
 </html>
