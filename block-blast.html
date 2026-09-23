@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MGC Block Blast - Top 100</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:white;font-family:Arial;padding:10px;text-align:center}
+h1{color:#38bdf8;margin:8px 0;font-size:20px}
+#top{display:flex;gap:10px;max-width:900px;margin:auto;flex-wrap:wrap;justify-content:center}
+#game{flex:1;min-width:300px}
+#board{background:#1e293b;padding:10px;border-radius:10px;display:flex;justify-content:space-around;margin:5px 0}
+#grid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;background:#1e293b;padding:8px;border-radius:12px;max-width:400px;margin:10px auto;aspect-ratio:1}
+.cell{background:#334155;border-radius:5px;aspect-ratio:1}
+.cell.filled{border:1px solid rgba(255,255,255,0.3)}
+#pieces{display:flex;justify-content:space-around;gap:8px;max-width:400px;margin:10px auto;min-height:90px}
+.pieceWrap{background:#1e293b;padding:6px;border-radius:10px;flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid transparent}
+.piece{display:grid;gap:2px}
+.piece div{width:14px;height:14px;border-radius:3px}
+button{background:#38bdf8;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;margin:4px;cursor:pointer}
+#leader{flex:0 0 280px;background:#1e293b;border-radius:12px;padding:10px;max-height:600px;overflow-y:auto;text-align:left;min-width:280px}
+#leader h3{color:#fbbf24;text-align:center;margin-bottom:8px}
+.rank{display:flex;justify-content:space-between;padding:6px 8px;background:#0f172a;margin:3px 0;border-radius:6px;font-size:13px}
+.rank.top3{background:#fbbf24;color:#000;font-weight:bold}
+input{padding:8px;border-radius:8px;border:none;width:140px;margin:4px}
+#msg{height:18px;color:#fbbf24;font-weight:bold;margin:5px}
+</style>
+</head>
+<body>
+<h1>🏍️ MGC BLOCK BLAST 💥</h1>
+<div id="top">
+<div id="game">
+<div id="board">
+<div>SCORE<br><b id="score">0</b></div>
+<div>BEST<br><b id="best">0</b></div>
+<div>COMBO<br><b id="combo">x1</b></div>
+</div>
+<div id="msg">Tap block below then tap grid! 👇</div>
+<div id="grid"></div>
+<div id="pieces"></div>
+<button onclick="initGame()">🔄 NEW GAME</button>
+<button onclick="saveScore()">💾 SAVE SCORE</button>
+<div style="margin-top:8px">
+<input id="pname" placeholder="Name mo boss" maxlength="12" value="Boss">
+<br><a href="index.html" style="color:#38bdf8">← Back to Arena</a>
+</div>
+</div>
+<div id="leader">
+<h3>🏆 TOP 100 PLAYERS</h3>
+<div id="list"></div>
+</div>
+</div>
+<script>
+const colors=['#f472b6','#fb923c','#facc15','#4ade80','#22d3ee','#a78bfa','#f87171'];
+let grid=[], score=0, best=+(localStorage.getItem('mgcBest')||0), combo=1, selected=null, selIdx=-1;
+const SHAPES=[[[1]],[[1,1]],[[1],[1]],[[1,1,1]],[[1],[1],[1]],[[1,1],[1,0]],[[1,1],[0,1]],[[1,0],[1,1]],[[0,1],[1,1]],[[1,1],[1,1]],[[1,1,1,1]],[[1],[1],[1],[1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,0],[0,1,1]]];
+function initGame(){
+ grid=Array(8).fill().map(()=>Array(8).fill(0)); score=0; combo=1;
+ document.getElementById('score').innerText=0;
+ document.getElementById('combo').innerText='x1';
+ document.getElementById('msg').innerText='Chill lang boss! 🏖️';
+ renderGrid(); genPieces(); renderLeader();
+ document.getElementById('best').innerText=best;
+}
+function renderGrid(){
+ const g=document.getElementById('grid'); g.innerHTML='';
+ for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+  const d=document.createElement('div'); d.className='cell'+(grid[r][c]?' filled':'');
+  if(grid[r][c]) d.style.background=grid[r][c];
+  d.onclick=()=>{if(selected) place(r,c)};
+  g.appendChild(d);
+ }
+}
+function genPieces(){
+ const cont=document.getElementById('pieces'); cont.innerHTML='';
+ for(let i=0;i<3;i++){
+  let shape=SHAPES[Math.floor(Math.random()*SHAPES.length)];
+  let color=colors[Math.floor(Math.random()*colors.length)];
+  let wrap=document.createElement('div'); wrap.className='pieceWrap';
+  let pd=document.createElement('div'); pd.className='piece';
+  pd.style.gridTemplateColumns=`repeat(${shape[0].length},14px)`;
+  shape.forEach(row=>row.forEach(v=>{
+   let b=document.createElement('div');
+   if(v){ b.style.background=color; b.style.border='1px solid rgba(255,255,255,0.3)'; } else b.style.background='transparent';
+   pd.appendChild(b);
+  }));
+  wrap.appendChild(pd);
+  wrap._shape=shape; wrap._color=color;
+  wrap.onclick=()=>select({shape,color},i,wrap);
+  cont.appendChild(wrap);
+ }
+}
+function select(p,idx,el){
+ document.querySelectorAll('.pieceWrap').forEach(e=>e.style.borderColor='transparent');
+ el.style.borderColor='#38bdf8'; selected=p; selIdx=idx;
+}
+function place(r,c){
+ if(!selected) return;
+ let sh=selected.shape;
+ for(let i=0;i<sh.length;i++) for(let j=0;j<sh[0].length;j++) if(sh[i][j]){
+  if(r+i>=8||c+j>=8||grid[r+i][c+j]){ document.getElementById('msg').innerText='Bawal dyan boss! ❌'; return; }
+ }
+ for(let i=0;i<sh.length;i++) for(let j=0;j<sh[0].length;j++) if(sh[i][j]) grid[r+i][c+j]=selected.color;
+ document.getElementById('pieces').children[selIdx].style.visibility='hidden';
+ selected=null;
+ document.querySelectorAll('.pieceWrap').forEach(e=>e.style.borderColor='transparent');
+ let cleared=0;
+ for(let i=0;i<8;i++) if(grid[i].every(v=>v)){ grid[i]=Array(8).fill(0); cleared++; }
+ for(let j=0;j<8;j++){ if(grid.every(row=>row[j])){ for(let k=0;k<8;k++) grid[k][j]=0; cleared++; } }
+ if(cleared>0){ score+=cleared*100*combo; combo++; document.getElementById('msg').innerText=`BOOM! ${cleared} LINE! +${cleared*100*combo} 💥`; if(navigator.vibrate) navigator.vibrate(80); }
+ else combo=1;
+ document.getElementById('score').innerText=score; document.getElementById('combo').innerText='x'+combo;
+ if(score>best){ best=score; localStorage.setItem('mgcBest',best); document.getElementById('best').innerText=best; }
+ renderGrid();
+ let hidden=[...document.getElementById('pieces').children].filter(ch=>ch.style.visibility=='hidden').length;
+ if(hidden==3) genPieces();
+}
+function saveScore(){
+ let name=document.getElementById('pname').value||'Boss';
+ let leaders=JSON.parse(localStorage.getItem('mgcLeaders')||'[]');
+ leaders.push({name:name.substring(0,12),score:score,date:new Date().toLocaleDateString()});
+ leaders.sort((a,b)=>b.score-a.score); leaders=leaders.slice(0,100);
+ localStorage.setItem('mgcLeaders',JSON.stringify(leaders));
+ let rank=leaders.findIndex(l=>l.score==score&&l.name==name)+1;
+ document.getElementById('msg').innerText=`Saved! Rank #${rank} 🏆`;
+ renderLeader();
+}
+function renderLeader(){
+ let leaders=JSON.parse(localStorage.getItem('mgcLeaders')||'[]');
+ if(leaders.length==0){ leaders=[{name:'MGC Boss',score:2500},{name:'Beach King',score:1800},{name:'Rider',score:1200}]; }
+ const list=document.getElementById('list'); list.innerHTML='';
+ leaders.forEach((p,i)=>{
+  const d=document.createElement('div'); d.className='rank'+(i<3?' top3':'');
+  let medal=i==0?'🥇':i==1?'🥈':i==2?'🥉':`#${i+1}`;
+  d.innerHTML=`<span>${medal} ${p.name}</span><b>${p.score}</b>`;
+  list.appendChild(d);
+ });
+}
+initGame();
+</script>
+</body>
+</html>
