@@ -5,84 +5,72 @@
 <title>MGC TETRIS ALL-IN-ONE + HISTORY</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:manipulation;user-select:none}
-body{background:radial-gradient(120% at 50% 0%,#1e1b4b,#020617 70%);color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-.topbar{width:100%;max-width:820px;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(255,255,255,.1)}
+html,body{height:100dvh;overflow:hidden}
+body{background:radial-gradient(120% at 50% 0%,#1e1b4b,#020617 70%);color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;height:100dvh}
+.topbar{width:100%;max-width:820px;display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(255,255,255,.1);height:44px;flex-shrink:0}
 .logo{background:linear-gradient(90deg,#22d3ee,#f472b6,#facc15);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:16px;letter-spacing:2px}
 .tbtn{padding:8px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:11px}
-.tbtn:active{transform:scale(.92)}
-.modeSel{display:flex;gap:8px;margin:8px;width:98%;max-width:820px}
 .mbtn{flex:1;padding:10px;border-radius:14px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-weight:900;font-size:11px}
 .mbtn.active{background:#22d3ee;color:#000;border-color:#22d3ee;box-shadow:0 0 20px #22d3ee}
-#battle{width:98%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.boardCard{background:rgba(15,23,42,.95);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:8px;position:relative}
+.modeSel{display:flex;gap:8px;margin:6px;width:98%;max-width:820px;flex-shrink:0}
+#battle{width:98%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;overflow:hidden;max-height:calc(100dvh - 44px - 46px - 125px);align-items:start}
+.boardCard{background:rgba(15,23,42,.95);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:6px;position:relative;display:flex;flex-direction:column}
 .boardCard.me{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee}
-canvas{width:100%;border-radius:12px;background:#020617;display:block}
+canvas{width:100%;border-radius:12px;background:#020617;display:block;max-height:52vh;object-fit:contain;flex:1}
+#battle.solo-mode{grid-template-columns:1fr;max-width:400px;margin:0 auto}
+#battle.solo-mode canvas{max-height:58vh}
 .pName{display:flex;justify-content:space-between;font-weight:900;font-size:12px;padding:4px}
 .stat{font-size:10px;opacity:.6}
 .attack{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);font-size:18px;font-weight:900;background:rgba(239,68,68,.95);padding:6px 12px;border-radius:20px;animation:atk.8s forwards;display:none;z-index:10;border:2px solid #fff}
 @keyframes atk{0%{transform:translate(-50%,-20%) scale(0)}60%{transform:translate(-50%,-50%) scale(1.3)}100%{transform:translate(-50%,-90%) scale(1);opacity:0}}
-#controlsWrap{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,#020617 90%,transparent);padding:10px;z-index:50;border-top:1px solid rgba(255,255,255,.1)}
-.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:820px;margin:0 auto}
-.ctrlBox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:6px}
+#controlsWrap{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,#020617 95%,rgba(2,6,23,.8));padding:6px 8px;z-index:50;border-top:1px solid rgba(255,255,255,.1);max-height:125px}
+.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:820px;margin:0 auto}
+.ctrlBox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:5px}
 .lbl{text-align:center;font-size:9px;letter-spacing:2px;opacity:.5;font-weight:900;margin-bottom:4px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.cbtn{height:48px;border-radius:12px;border:none;background:#1e293b;color:#fff;font-size:18px;font-weight:900}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.cbtn{height:40px;border-radius:10px;border:none;background:#1e293b;color:#fff;font-size:16px;font-weight:900;touch-action:manipulation}
 .cbtn:active{transform:scale(.92);background:#22d3ee;color:#000}
 .cbtn.drop{background:linear-gradient(180deg,#22d3ee,#0e7490);color:#000}
 .cbtn.hold{background:linear-gradient(180deg,#a78bfa,#6d28d9)}
-#spacer{height:150px}
+#spacer{height:130px;flex-shrink:0}
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
 .box{background:#0f172a;border:2px solid #22d3ee;border-radius:18px;padding:20px;width:100%;max-width:380px;text-align:center;box-shadow:0 0 40px rgba(34,211,238,.3)}
 input{width:100%;padding:12px;border-radius:10px;border:2px solid #334155;background:#020617;color:#fff;text-align:center;font-weight:800;margin:6px 0;outline:none}
 button.pri{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:900;color:#000;margin-top:8px}
 .onlineBox{display:none;margin-top:10px;background:rgba(255,255,255,.05);padding:10px;border-radius:12px;border:1px dashed #22d3ee}
 .roomId{font-size:20px;font-weight:900;color:#22d3ee;letter-spacing:3px;background:#020617;padding:6px;border-radius:8px;margin:6px 0;border:1px solid #22d3ee}
-.logCard{width:98%;max-width:820px;margin:10px auto;background:rgba(15,23,42,.7);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px}
+.logCard{width:98%;max-width:820px;margin:10px auto;background:rgba(15,23,42,.7);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;display:none}
 .logRow{display:grid;grid-template-columns:50px 1fr 60px 70px;gap:6px;padding:6px 8px;border-radius:8px;font-size:11px;align-items:center}
 .logRow:nth-child(odd){background:rgba(255,255,255,.04)}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div class="logo">⚔️ MGC TETRIS</div>
-  <div style="display:flex;gap:6px">
-    <button class="tbtn" onclick="openEdit()">✏️ EDIT GAME</button>
-    <button class="tbtn" onclick="location.href='index.html'">⬅️ BACK TO ARENA</button>
-  </div>
-</div>
-
+<div class="topbar"><div class="logo">⚔️ MGC TETRIS</div><div style="display:flex;gap:6px"><button class="tbtn" onclick="openEdit()">✏️ EDIT GAME</button><button class="tbtn" onclick="location.href='index.html'">⬅️ BACK</button></div></div>
 <div class="modeSel">
-  <button class="mbtn active" id="btnSolo" onclick="setMode('solo')">🎮 SOLO</button>
-  <button class="mbtn" id="btnLocal" onclick="setMode('local')">⚔️ LOCAL 2P</button>
-  <button class="mbtn" id="btnOnline" onclick="setMode('online')">🌐 ONLINE</button>
+<button class="mbtn active" id="btnSolo" onclick="setMode('solo')">🎮 SOLO</button>
+<button class="mbtn" id="btnLocal" onclick="setMode('local')">⚔️ LOCAL 2P</button>
+<button class="mbtn" id="btnOnline" onclick="setMode('online')">🌐 ONLINE</button>
 </div>
-
 <div id="battle">
-  <div class="boardCard me" id="cardA"><div class="pName"><span id="nameA">You</span><span id="scoreA">0</span></div><canvas id="boardA"></canvas><div class="attack" id="atkA"></div><div class="stat">L:<span id="linesA">0</span> Lv:<span id="lvA">1</span></div></div>
-  <div class="boardCard" id="cardB"><div class="pName"><span id="nameB">P2</span><span id="scoreB">0</span></div><canvas id="boardB"></canvas><div class="attack" id="atkB"></div><div class="stat">L:<span id="linesB">0</span> Lv:<span id="lvB">1</span></div></div>
+<div class="boardCard me" id="cardA"><div class="pName"><span id="nameA">You</span><span id="scoreA">0</span></div><canvas id="boardA"></canvas><div class="attack" id="atkA"></div><div class="stat">L:<span id="linesA">0</span> Lv:<span id="lvA">1</span></div></div>
+<div class="boardCard" id="cardB"><div class="pName"><span id="nameB">P2</span><span id="scoreB">0</span></div><canvas id="boardB"></canvas><div class="attack" id="atkB"></div><div class="stat">L:<span id="linesB">0</span> Lv:<span id="lvB">1</span></div></div>
 </div>
-
 <div id="spacer"></div>
-<div id="controlsWrap">
-  <div class="ctrls">
-    <div class="ctrlBox"><div class="lbl" id="lblA">YOU</div><div class="grid3"><button class="cbtn" ontouchstart="moveP(0,-1)" onmousedown="moveP(0,-1)">◀</button><button class="cbtn" ontouchstart="rotateP(0)" onmousedown="rotateP(0)">↻</button><button class="cbtn" ontouchstart="moveP(0,1)" onmousedown="moveP(0,1)">▶</button><button class="cbtn" ontouchstart="softP(0)" onmousedown="softP(0)">▼</button><button class="cbtn drop" ontouchstart="hardP(0)" onmousedown="hardP(0)">DROP</button><button class="cbtn hold" ontouchstart="holdP(0)" onmousedown="holdP(0)">HOLD</button></div></div>
-    <div class="ctrlBox" id="boxB"><div class="lbl" id="lblB">ENEMY</div><div class="grid3"><button class="cbtn" ontouchstart="moveP(1,-1)" onmousedown="moveP(1,-1)">◀</button><button class="cbtn" ontouchstart="rotateP(1)" onmousedown="rotateP(1)">↻</button><button class="cbtn" ontouchstart="moveP(1,1)" onmousedown="moveP(1,1)">▶</button><button class="cbtn" ontouchstart="softP(1)" onmousedown="softP(1)">▼</button><button class="cbtn drop" ontouchstart="hardP(1)" onmousedown="hardP(1)">DROP</button><button class="cbtn hold" ontouchstart="holdP(1)" onmousedown="holdP(1)">HOLD</button></div></div>
-  </div>
-</div>
-
-<div class="logCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>📜 HISTORY LOG - Time/Date/Minutes/Location</b><button class="tbtn" onclick="location.href='history.html'">VIEW FULL HISTORY 📜</button></div><div id="historyList" style="margin-top:8px"></div></div>
-<div class="logCard"><b>🏆 TOP 100</b><div id="lbList" style="margin-top:8px"></div></div>
-
-<div id="modal"><div class="box">
-  <h2 id="modalTitle">🎮 CHOOSE MODE</h2>
-  <p style="font-size:11px;opacity:.6">Sounds ON 🔊 Clear = +1 garbage sa kalaban!</p>
-  <input id="inA" placeholder="Your Name" value="Mazta" maxlength="12">
-  <input id="inB" placeholder="Enemy Name (local)" value="Kalaban" maxlength="12" style="display:none">
-  <button class="pri" onclick="startGame()">START GAME 🚀</button>
-  <div class="onlineBox" id="onlineBox"><div style="font-size:11px;opacity:.7">ONLINE ROOM</div><div class="roomId" id="myRoom">----</div><input id="joinId" placeholder="Enter Enemy Room ID"><button class="pri" style="background:linear-gradient(90deg,#f472b6,#facc15)" onclick="joinRoom()">JOIN ENEMY 🌐</button></div>
-  <div style="margin-top:10px;display:flex;gap:6px"><button onclick="toggleSound()" id="sBtn" style="flex:1;padding:8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155">🔊 ON</button><button onclick="location.href='index.html'" style="flex:1;padding:8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155">🏠 ARENA</button></div>
+<div id="controlsWrap"><div class="ctrls">
+<div class="ctrlBox"><div class="lbl" id="lblA">YOU</div><div class="grid3"><button class="cbtn" ontouchstart="moveP(0,-1)" onmousedown="moveP(0,-1)">◀</button><button class="cbtn" ontouchstart="rotateP(0)" onmousedown="rotateP(0)">↻</button><button class="cbtn" ontouchstart="moveP(0,1)" onmousedown="moveP(0,1)">▶</button><button class="cbtn" ontouchstart="softP(0)" onmousedown="softP(0)">▼</button><button class="cbtn drop" ontouchstart="hardP(0)" onmousedown="hardP(0)">DROP</button><button class="cbtn hold" ontouchstart="holdP(0)" onmousedown="holdP(0)">HOLD</button></div></div>
+<div class="ctrlBox" id="boxB"><div class="lbl" id="lblB">ENEMY</div><div class="grid3"><button class="cbtn" ontouchstart="moveP(1,-1)" onmousedown="moveP(1,-1)">◀</button><button class="cbtn" ontouchstart="rotateP(1)" onmousedown="rotateP(1)">↻</button><button class="cbtn" ontouchstart="moveP(1,1)" onmousedown="moveP(1,1)">▶</button><button class="cbtn" ontouchstart="softP(1)" onmousedown="softP(1)">▼</button><button class="cbtn drop" ontouchstart="hardP(1)" onmousedown="hardP(1)">DROP</button><button class="cbtn hold" ontouchstart="holdP(1)" onmousedown="holdP(1)">HOLD</button></div></div>
 </div></div>
-
+<div class="logCard" id="historyCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>📜 HISTORY LOG</b><button class="tbtn" onclick="location.href='history.html'">VIEW FULL 📜</button></div><div id="historyList" style="margin-top:8px"></div></div>
+<div class="logCard" id="lbCard"><b>🏆 TOP 100</b><div id="lbList" style="margin-top:8px"></div></div>
+<div id="modal"><div class="box">
+<h2 id="modalTitle">🎮 CHOOSE MODE</h2>
+<p style="font-size:11px;opacity:.6">Sounds ON 🔊 Clear = +1 garbage sa kalaban!</p>
+<input id="inA" placeholder="Your Name" value="Mazta" maxlength="12">
+<input id="inB" placeholder="Enemy Name (local)" value="Kalaban" maxlength="12" style="display:none">
+<button class="pri" onclick="startGame()">START GAME 🚀</button>
+<div class="onlineBox" id="onlineBox"><div style="font-size:11px;opacity:.7">ONLINE ROOM</div><div class="roomId" id="myRoom">----</div><input id="joinId" placeholder="Enter Enemy Room ID"><button class="pri" style="background:linear-gradient(90deg,#f472b6,#facc15)" onclick="joinRoom()">JOIN ENEMY 🌐</button></div>
+<div style="margin-top:10px;display:flex;gap:6px"><button onclick="toggleSound()" id="sBtn" style="flex:1;padding:8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155">🔊 ON</button><button onclick="location.href='index.html'" style="flex:1;padding:8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155">🏠 ARENA</button></div>
+</div></div>
 <script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
 <script>
 const COLS=10,ROWS=20;
@@ -91,86 +79,37 @@ const COLORS={I:'#22d3ee',J:'#3b82f6',L:'#f97316',O:'#facc15',S:'#22c55e',T:'#a7
 const KEYS=Object.keys(SHAPES);
 let mode='solo',players=[],actx=null,soundOn=true,peer=null,conn=null;
 let sessionStart=0,currentLocation='Getting location...';
-
-function getLocation(){
-  if(!navigator.geolocation){currentLocation='Location not supported';return;}
-  navigator.geolocation.getCurrentPosition(pos=>{
-    let lat=pos.coords.latitude.toFixed(4),lng=pos.coords.longitude.toFixed(4);
-    currentLocation=`${lat},${lng}`;
-    // Try to get city name via reverse geocode (optional)
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`).then(r=>r.json()).then(d=>{ if(d.address){ let city=d.address.city||d.address.town||d.address.municipality||''; currentLocation=city?`${city} (${lat},${lng})`:currentLocation; }}).catch(()=>{});
-  },()=>{currentLocation='Location denied';});
-}
-getLocation();
-
+let lastMoveTime=0;
+function getLocation(){if(!navigator.geolocation){currentLocation='Location not supported';return;}navigator.geolocation.getCurrentPosition(pos=>{let lat=pos.coords.latitude.toFixed(4),lng=pos.coords.longitude.toFixed(4);currentLocation=`${lat},${lng}`;fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`).then(r=>r.json()).then(d=>{if(d.address){let city=d.address.city||d.address.town||d.address.municipality||'';currentLocation=city?`${city} (${lat},${lng})`:currentLocation;}}).catch(()=>{});},()=>{currentLocation='Location denied';});}getLocation();
 function beep(f,d,v,t='sine'){if(!soundOn)return;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();let o=actx.createOscillator(),g=actx.createGain();o.type=t;o.frequency.value=f;o.connect(g);g.connect(actx.destination);g.gain.setValueAtTime(v,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}catch{}}
 function sndMove(){beep(420,0.06,0.12)}function sndRot(){beep(650,0.07,0.12)}function sndLock(){beep(160,0.1,0.2,'square')}function sndLine(n){beep(200+n*150,0.25,0.4,'sawtooth');setTimeout(()=>beep(900,0.25,0.35),100)}function sndAtk(){beep(120,0.25,0.4,'sawtooth');setTimeout(()=>beep(700,0.35,0.4),120)}
 function toggleSound(){soundOn=!soundOn;document.getElementById('sBtn').innerText=soundOn?'🔊 ON':'🔇 OFF';if(soundOn){actx=new(window.AudioContext||window.webkitAudioContext)();beep(500,0.15,0.3)}}
 function openEdit(){document.getElementById('modal').style.display='flex';}
-
-function setMode(m){mode=m;document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('active'));document.getElementById('btn'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');document.getElementById('inB').style.display=m=='local'?'block':'none';document.getElementById('onlineBox').style.display=m=='online'?'block':'none';document.getElementById('modalTitle').innerText=m=='solo'?'🎮 SOLO TOP 100':m=='local'?'⚔️ LOCAL 2P BATTLE':'🌐 ONLINE BATTLE';if(m=='online')initPeer();if(m=='solo'){document.getElementById('battle').style.gridTemplateColumns='1fr';document.getElementById('cardB').style.display='none';document.getElementById('boxB').style.display='none';}else{document.getElementById('battle').style.gridTemplateColumns='1fr 1fr';document.getElementById('cardB').style.display='block';document.getElementById('boxB').style.display='block';}}
+function setMode(m){mode=m;document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('active'));document.getElementById('btn'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');document.getElementById('inB').style.display=m=='local'?'block':'none';document.getElementById('onlineBox').style.display=m=='online'?'block':'none';document.getElementById('modalTitle').innerText=m=='solo'?'🎮 SOLO TOP 100':m=='local'?'⚔️ LOCAL 2P BATTLE':'🌐 ONLINE BATTLE';if(m=='online')initPeer();let battle=document.getElementById('battle');if(m=='solo'){battle.style.gridTemplateColumns='1fr';battle.classList.add('solo-mode');document.getElementById('cardB').style.display='none';document.getElementById('boxB').style.display='none';}else{battle.style.gridTemplateColumns='1fr 1fr';battle.classList.remove('solo-mode');document.getElementById('cardB').style.display='block';document.getElementById('boxB').style.display='block';}}
 function initPeer(){if(peer)return;peer=new Peer(Math.floor(1000+Math.random()*9000).toString());peer.on('open',id=>{document.getElementById('myRoom').innerText=id});peer.on('connection',c=>{conn=c;setupConn();});}
 function joinRoom(){let id=document.getElementById('joinId').value.trim();if(!id)return alert('Enter Room ID boss!');if(!peer)initPeer();conn=peer.connect(id);conn.on('open',()=>{setupConn();conn.send({type:'join',name:document.getElementById('inA').value});});}
 function setupConn(){conn.on('data',d=>{if(d.type=='garbage')addGarbage(players[0],d.count);if(d.type=='join'){document.getElementById('nameB').innerText=d.name;}});}
-
-function makePlayer(canvas,name){let ctx=canvas.getContext('2d');let dpr=window.devicePixelRatio||1;function resize(){let r=canvas.getBoundingClientRect();canvas.width=r.width*dpr;canvas.height=r.width*2*dpr;canvas.style.height=r.width*2+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}resize();return{canvas,ctx,grid:Array.from({length:ROWS},()=>Array(COLS).fill(0)),cur:null,next:null,hold:null,canHold:true,score:0,lines:0,lv:1,name,over:false,dropT:0,interval:700,resize}}
+function makePlayer(canvas,name){let ctx=canvas.getContext('2d');let dpr=window.devicePixelRatio||1;function resize(){let r=canvas.getBoundingClientRect();canvas.width=r.width*dpr;canvas.height=r.width*2*dpr;canvas.style.height=r.width*2+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}resize();return{canvas,ctx,grid:Array.from({length:ROWS},()=>Array(COLS).fill(0)),cur:null,next:null,hold:null,canHold:true,score:0,lines:0,lv:1,name,over:false,dropT:0,interval:1000,resize}}
 function randPiece(){let k=KEYS[Math.floor(Math.random()*KEYS.length)];return{k,shape:SHAPES[k].map(r=>[...r]),x:3,y:0,color:COLORS[k]}}
 function rotM(m){return m[0].map((_,i)=>m.map(r=>r[i]).reverse())}
 function collide(g,p,dx=0,dy=0,sh=null){let s=sh||p.shape;for(let y=0;y<s.length;y++)for(let x=0;x<s[y].length;x++)if(s[y][x]){let nx=p.x+x+dx,ny=p.y+y+dy;if(nx<0||nx>=COLS||ny>=ROWS||(ny>=0&&g[ny][nx]))return true}return false}
 function addGarbage(toP,c){if(c<=0)return;for(let i=0;i<c;i++){let hole=Math.floor(Math.random()*COLS);let row=Array(COLS).fill('#475569');row[hole]=0;toP.grid.shift();toP.grid.push(row);}showAtk(toP==players[0]?0:1,c);sndAtk();if(toP.cur&&collide(toP.grid,toP.cur))toP.over=true;if(mode=='online'&&toP!=players[0]&&conn)conn.send({type:'garbage',count:c});}
 function showAtk(idx,c){let el=document.getElementById(idx==0?'atkA':'atkB');el.innerText='+'+c+' GARBAGE!';el.style.display='block';el.style.animation='none';el.offsetHeight;el.style.animation='atk.8s forwards';setTimeout(()=>el.style.display='none',800)}
-function lock(p,otherIdx){p.cur.shape.forEach((r,y)=>r.forEach((v,x)=>{if(v){let gy=p.cur.y+y,gx=p.cur.x+x;if(gy>=0)p.grid[gy][gx]=p.cur.color}}));let cleared=0;for(let y=ROWS-1;y>=0;y--)if(p.grid[y].every(c=>c)){p.grid.splice(y,1);p.grid.unshift(Array(COLS).fill(0));cleared++;y++;}if(cleared){p.lines+=cleared;p.score+=[0,100,300,600,1000][cleared]*p.lv;p.lv=Math.floor(p.lines/10)+1;p.interval=Math.max(90,700-(p.lv-1)*60);sndLine(cleared);if(mode!='solo')addGarbage(players[otherIdx],cleared);}spawn(p);sndLock();}
+function lock(p,otherIdx){p.cur.shape.forEach((r,y)=>r.forEach((v,x)=>{if(v){let gy=p.cur.y+y,gx=p.cur.x+x;if(gy>=0)p.grid[gy][gx]=p.cur.color}}));let cleared=0;for(let y=ROWS-1;y>=0;y--)if(p.grid[y].every(c=>c)){p.grid.splice(y,1);p.grid.unshift(Array(COLS).fill(0));cleared++;y++;}if(cleared){p.lines+=cleared;p.score+=[0,100,300,600,1000][cleared]*p.lv;p.lv=Math.floor(p.lines/10)+1;p.interval=Math.max(250,1000-(p.lv-1)*50);sndLine(cleared);if(mode!='solo')addGarbage(players[otherIdx],cleared);}spawn(p);sndLock();}
 function spawn(p){p.cur=p.next||randPiece();p.next=randPiece();p.canHold=true;if(collide(p.grid,p.cur))p.over=true;}
 function drawP(p){let sW=p.canvas.getBoundingClientRect().width/COLS;let ctx=p.ctx;ctx.clearRect(0,0,999,999);ctx.strokeStyle='rgba(255,255,255,.04)';for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*sW,0);ctx.lineTo(i*sW,ROWS*sW);ctx.stroke()}for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*sW);ctx.lineTo(COLS*sW,i*sW);ctx.stroke()}p.grid.forEach((row,y)=>row.forEach((c,x)=>{if(c){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=10;ctx.fillRect(x*sW+1,y*sW+1,sW-2,sW-2);ctx.shadowBlur=0}}));if(p.cur){let gy=p.cur.y;while(!collide(p.grid,p.cur,0,gy-p.cur.y+1))gy++;if(gy!=p.cur.y){ctx.globalAlpha=0.18;p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v){ctx.fillStyle=p.cur.color;ctx.fillRect((p.cur.x+xx)*sW+1,(gy+yy)*sW+1,sW-2,sW-2)}}));ctx.globalAlpha=1;}p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v){ctx.fillStyle=p.cur.color;ctx.shadowColor=p.cur.color;ctx.shadowBlur=12;ctx.fillRect((p.cur.x+xx)*sW+1,(p.cur.y+yy)*sW+1,sW-2,sW-2);ctx.shadowBlur=0}}));}}
-
-function saveHistory(winner){
-  let duration=Math.floor((Date.now()-sessionStart)/1000); // seconds
-  let mins=(duration/60).toFixed(1);
-  let now=new Date();
-  let entry={
-    game: mode=='solo'?'Tetris Solo':mode=='local'?'Tetris Battle Local':'Tetris Online',
-    player: players[0]?.name||'Mazta',
-    vs: mode!='solo'?players[1]?.name:'-',
-    score: players[0]?.score||0,
-    winner: winner?winner.name:'DRAW',
-    durationSec: duration,
-    durationMin: mins,
-    date: now.toLocaleDateString(),
-    time: now.toLocaleTimeString(),
-    timestamp: now.getTime(),
-    location: currentLocation
-  };
-  let hist=JSON.parse(localStorage.getItem('mgcHistory')||'[]');
-  hist.unshift(entry); hist=hist.slice(0,200); // keep 200
-  localStorage.setItem('mgcHistory',JSON.stringify(hist));
-  renderHistory();
-}
-
+function saveHistory(winner){let duration=Math.floor((Date.now()-sessionStart)/1000);let mins=(duration/60).toFixed(1);let now=new Date();let entry={game: mode=='solo'?'Tetris Solo':mode=='local'?'Tetris Battle Local':'Tetris Online',player: players[0]?.name||'Mazta',vs: mode!='solo'?players[1]?.name:'-',score: players[0]?.score||0,winner: winner?winner.name:'DRAW',durationSec: duration,durationMin: mins,date: now.toLocaleDateString(),time: now.toLocaleTimeString(),timestamp: now.getTime(),location: currentLocation};let hist=JSON.parse(localStorage.getItem('mgcHistory')||'[]');hist.unshift(entry); hist=hist.slice(0,200);localStorage.setItem('mgcHistory',JSON.stringify(hist));renderHistory();}
 let last=0;function loop(t){if(!players.length)return;players.forEach((p,i)=>{if(p.over)return;p.dropT+=16;if(p.dropT>p.interval){if(!collide(p.grid,p.cur,0,1))p.cur.y++;else lock(p,i==0?1:0);p.dropT=0;}drawP(p);document.getElementById(i==0?'scoreA':'scoreB').innerText=p.score;document.getElementById(i==0?'linesA':'linesB').innerText=p.lines;document.getElementById(i==0?'lvA':'lvB').innerText=p.lv;});if(players.some(p=>p.over)){let winner=players.find(p=>!p.over);saveHistory(winner);if(mode=='solo'){let lb=JSON.parse(localStorage.getItem('mgcTetrisLB')||'[]');lb.push({name:players[0].name,score:players[0].score,lines:players[0].lines});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcTetrisLB',JSON.stringify(lb));renderLB();alert('GAME OVER! Score '+players[0].score+' | '+Math.floor((Date.now()-sessionStart)/60000)+' mins');}else{if(winner){let lb=JSON.parse(localStorage.getItem('mgcBattleLB')||'[]');lb.push({name:winner.name,score:winner.score,vs:players.find(p=>p!=winner).name});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcBattleLB',JSON.stringify(lb));renderLB();alert('🏆 WINNER: '+winner.name);}else alert('DRAW!');}document.getElementById('modal').style.display='flex';return;}requestAnimationFrame(loop);}
-
-function moveP(i,d){let p=players[i];if(!p||p.over||!p.cur)return;if(!collide(p.grid,p.cur,d,0)){p.cur.x+=d;sndMove();}}
+function moveP(i,d,force){if(!force && Date.now()-lastMoveTime<150) return;if(!force) lastMoveTime=Date.now();let p=players[i];if(!p||p.over||!p.cur)return;if(!collide(p.grid,p.cur,d,0)){p.cur.x+=d;sndMove();}}
 function rotateP(i){let p=players[i];if(!p||!p.cur)return;let r=rotM(p.cur.shape);if(!collide(p.grid,p.cur,0,0,r)){p.cur.shape=r;sndRot();}else if(!collide(p.grid,p.cur,-1,0,r)){p.cur.x--;p.cur.shape=r;sndRot();}else if(!collide(p.grid,p.cur,1,0,r)){p.cur.x++;p.cur.shape=r;sndRot();}}
-function softP(i){let p=players[i];if(!p||p.over)return;if(!collide(p.grid,p.cur,0,1))p.cur.y++;}
+function softP(i){let p=players[i];if(!p||p.over)return;if(!collide(p.grid,p.cur,0,1)){p.cur.y++;p.dropT=0;}}
 function hardP(i){let p=players[i];if(!p||p.over)return;let d=0;while(!collide(p.grid,p.cur,0,d+1))d++;p.cur.y+=d;p.score+=d*2;lock(p,i==0?1:0);}
 function holdP(i){let p=players[i];if(!p||!p.canHold)return;if(!p.hold){p.hold=p.cur;spawn(p);}else{let tmp=p.hold;p.hold=p.cur;p.cur=tmp;p.cur.x=3;p.cur.y=0;}p.canHold=false;}
-
-function startGame(){
-  let a=document.getElementById('inA').value||'Mazta';let b=document.getElementById('inB').value||'Kalaban';
-  localStorage.setItem('mgcName',a);
-  document.getElementById('nameA').innerText=a;document.getElementById('nameB').innerText=b;
-  let ca=document.getElementById('boardA'),cb=document.getElementById('boardB');
-  if(mode=='solo'){players=[makePlayer(ca,a)];}else{players=[makePlayer(ca,a),makePlayer(cb,b)];}
-  players.forEach(p=>{p.next=randPiece();spawn(p);});
-  sessionStart=Date.now(); getLocation();
-  document.getElementById('modal').style.display='none';
-  if(!actx){actx=new(window.AudioContext||window.webkitAudioContext)();}
-  window.addEventListener('resize',()=>players.forEach(p=>p.resize()));
-  requestAnimationFrame(loop);
-}
+function startGame(){let a=document.getElementById('inA').value||'Mazta';let b=document.getElementById('inB').value||'Kalaban';localStorage.setItem('mgcName',a);document.getElementById('nameA').innerText=a;document.getElementById('nameB').innerText=b;let ca=document.getElementById('boardA'),cb=document.getElementById('boardB');if(mode=='solo'){players=[makePlayer(ca,a)];}else{players=[makePlayer(ca,a),makePlayer(cb,b)];}players.forEach(p=>{p.next=randPiece();spawn(p);});sessionStart=Date.now(); getLocation();document.getElementById('modal').style.display='none';if(!actx){actx=new(window.AudioContext||window.webkitAudioContext)();}window.addEventListener('resize',()=>players.forEach(p=>p.resize()));requestAnimationFrame(loop);}
 function renderLB(){let lb=JSON.parse(localStorage.getItem(mode=='solo'?'mgcTetrisLB':'mgcBattleLB')||'[]');let h='';lb.slice(0,20).forEach((e,i)=>{h+=`<div class="logRow"><span>${i+1}</span><span>${e.name} ${e.vs?'vs '+e.vs:''}</span><span>${e.score}</span><span></span></div>`});if(!lb.length)h='<div style="opacity:.5;font-size:11px">Wala pa score!</div>';document.getElementById('lbList').innerHTML=h;}
 function renderHistory(){let hist=JSON.parse(localStorage.getItem('mgcHistory')||'[]');let h='<div class="logRow" style="font-weight:900;opacity:.6"><span>DATE</span><span>GAME / PLAYER / LOCATION</span><span>SCORE</span><span>MINS</span></div>';hist.slice(0,10).forEach(e=>{h+=`<div class="logRow"><span>${e.date}<br>${e.time}</span><span><b>${e.game}</b><br>${e.player} vs ${e.vs}<br>📍 ${e.location}<br>🏆 Winner: ${e.winner}</span><span>${e.score}</span><span>${e.durationMin}m</span></div>`});if(!hist.length)h='<div style="opacity:.5;font-size:11px">No history yet - maglaro ka muna boss!</div>';document.getElementById('historyList').innerHTML=h;}
 renderLB();renderHistory();setMode('solo');
-document.addEventListener('keydown',e=>{if(document.getElementById('modal').style.display!='none')return;if(e.key=='a'||e.key=='A')moveP(0,-1);if(e.key=='d'||e.key=='D')moveP(0,1);if(e.key=='s'||e.key=='S')softP(0);if(e.key=='q'||e.key=='Q'||e.key=='e'||e.key=='E')rotateP(0);if(e.key=='f'||e.key=='F')holdP(0);if(e.key=='g'||e.key=='G')hardP(0);if(mode!='solo'){if(e.key=='ArrowLeft'){e.preventDefault();moveP(1,-1)}if(e.key=='ArrowRight'){e.preventDefault();moveP(1,1)}if(e.key=='ArrowDown'){e.preventDefault();softP(1)}if(e.key=='ArrowUp'||e.key=='x'||e.key=='X')rotateP(1);if(e.code=='Space'){e.preventDefault();hardP(1)}if(e.key=='c'||e.key=='C')holdP(1);}else{if(e.key=='ArrowLeft')moveP(0,-1);if(e.key=='ArrowRight')moveP(0,1);if(e.key=='ArrowDown')softP(0);if(e.key=='ArrowUp')rotateP(0);if(e.code=='Space'){e.preventDefault();hardP(0)}if(e.key=='c'||e.key=='C')holdP(0);}});
+document.addEventListener('keydown',e=>{if(document.getElementById('modal').style.display!='none')return;if(e.key=='a'||e.key=='A'){moveP(0,-1,true)}if(e.key=='d'||e.key=='D'){moveP(0,1,true)}if(e.key=='s'||e.key=='S'){softP(0)}if(e.key=='q'||e.key=='Q'||e.key=='e'||e.key=='E')rotateP(0);if(e.key=='f'||e.key=='F')holdP(0);if(e.key=='g'||e.key=='G')hardP(0);if(mode!='solo'){if(e.key=='ArrowLeft'){e.preventDefault();moveP(1,-1,true)}if(e.key=='ArrowRight'){e.preventDefault();moveP(1,1,true)}if(e.key=='ArrowDown'){e.preventDefault();softP(1)}if(e.key=='ArrowUp'||e.key=='x'||e.key=='X')rotateP(1);if(e.code=='Space'){e.preventDefault();hardP(1)}if(e.key=='c'||e.key=='C')holdP(1);}else{if(e.key=='ArrowLeft'){moveP(0,-1,true)}if(e.key=='ArrowRight'){moveP(0,1,true)}if(e.key=='ArrowDown')softP(0);if(e.key=='ArrowUp')rotateP(0);if(e.code=='Space'){e.preventDefault();hardP(0)}if(e.key=='c'||e.key=='C')holdP(0);}});
 document.getElementById('inA').value=localStorage.getItem('mgcName')||'Mazta';
 </script>
 </body>
