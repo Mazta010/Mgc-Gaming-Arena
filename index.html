@@ -8,19 +8,21 @@
   <!-- Monetag Verification -->
   <meta name="monetag" content="939aa112d3a1dd6e0dd6af1aefb5e4a">
   
-  <!-- Monetag MULTITAG - TRIPLE INCOME - Zone 286000 - NEW! -->
+  <!-- Monetag MULTITAG - TRIPLE INCOME - Zone 286000 -->
   <script src="https://quge5.com/88/tag.min.js" data-zone="286000" async data-cfasync="false"></script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: white; min-height: 100vh; padding-bottom: 85px; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: white; min-height: 100vh; }
     .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center; }
     .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
     .header p { opacity: 0.9; }
     .games { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-    .game-card { background: #1e1e2f; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #333; }
+    .game-card { background: #1e1e2f; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #333; transition: 0.3s; }
+    .game-card:hover { transform: translateY(-5px); border-color: #667eea; }
     .game-card h3 { margin: 15px 0 10px; }
     .play-btn { background: #667eea; color: white; padding: 12px 25px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 10px; }
+    .play-btn:hover { background: #5568d3; }
   </style>
 </head>
 <body>
@@ -41,13 +43,5 @@
       <a href="block-blast.html" class="play-btn">PLAY NOW</a>
     </div>
   </div>
-
-<!-- MGC BANNER - NON-DISTURBING - DOUBLE INCOME -->
-<div id="mgc-banner" style="position:fixed;bottom:0;left:0;right:0;height:75px;background:rgba(10,20,40,0.96);z-index:99999;display:flex;align-items:center;justify-content:center;border-top:2px solid #00ffff;backdrop-filter:blur(8px);">
-  <small style="color:#00ffff;position:absolute;top:3px;left:8px;font-size:9px;opacity:0.7">ADS - SUPPORTS MGC</small>
-  <button onclick="document.getElementById('mgc-banner').style.display='none'; document.body.style.paddingBottom='0'" style="position:absolute;top:3px;right:8px;background:#ff4d6d;border:none;color:white;padding:3px 10px;border-radius:5px;font-size:11px;cursor:pointer;">✕</button>
-  <div style="color:#888;font-size:11px;margin-top:10px;">Game continues - Ads support MGC Arena 🎮</div>
-</div>
-
 </body>
 </html>
