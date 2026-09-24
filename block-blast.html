@@ -6,21 +6,26 @@
 <title>Block Blast - MGC Gaming Arena</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;height:100vh;padding-bottom:72px;overflow:hidden}
+body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;padding-bottom:70px}
 .top-bar{background:#1e293b;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #22d3ee}
 .top-bar a{color:#22d3ee;text-decoration:none;font-weight:900;font-size:13px}
 .score-box{text-align:right}.score-box div{font-size:11px;opacity:0.7}.score-box b{font-size:19px;color:#22d3ee}
 .game-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;gap:14px}
 #board{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;background:#1e293b;padding:8px;border-radius:12px;border:2px solid #334155;width:100%;max-width:360px;aspect-ratio:1}
-.cell{aspect-ratio:1;background:#0f172a;border-radius:4px}.cell.filled{background:#22d3ee;box-shadow:0 0 6px rgba(34,211,238,0.6)}
-.blocks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.block-option{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:8px;cursor:grab;display:grid;gap:2px}
+.cell{aspect-ratio:1;background:#0f172a;border-radius:4px;transition:0.1s}.cell.filled{background:#22d3ee;box-shadow:0 0 6px rgba(34,211,238,0.6)}
+.blocks{display:flex;gap:10px;justify-content:center}
+.block-option{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:8px;display:grid;gap:2px;cursor:pointer}
+.block-option:active{transform:scale(0.95)}
 .block-cell{width:18px;height:18px;border-radius:3px}.block-cell.on{background:#a78bfa}.block-cell.off{background:transparent}
-#gameOver{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:10000;flex-direction:column;gap:14px;padding:24px;text-align:center}
-#gameOver.show{display:flex}.btn{background:#22d3ee;color:#000;border:none;padding:13px 30px;border-radius:30px;font-weight:900;font-size:15px;cursor:pointer;width:260px}.btn.sec{background:#334155;color:#fff}
-.mgc-banner{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:2px solid #22d3ee;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
-.mgc-banner.left{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}.mgc-banner.ad-text{font-size:12px;color:#fff}.mgc-banner.ad-text span{color:#22d3ee;font-weight:900}
-.mgc-banner.ad-btn{background:#22d3ee;color:#000;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:900;border:none}.mgc-banner.close-ad{background:none;border:none;color:#fff;font-size:18px;opacity:0.6;margin-left:8px}
+#gameOver{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:10000;flex-direction:column;gap:14px;padding:24px;text-align:center}
+#gameOver.show{display:flex}
+.btn{background:#22d3ee;color:#000;border:none;padding:14px 32px;border-radius:30px;font-weight:900;font-size:15px;cursor:pointer;width:260px}
+.btn.sec{background:#334155;color:#fff}
+#mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
+.mgc-left{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer}
+.mgc-text{font-size:12px;line-height:1.2}.mgc-text b{color:#22d3ee}
+.mgc-btn{background:#22d3ee;color:#000;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:900;border:none;cursor:pointer}
+.mgc-x{background:none;border:none;color:#fff;font-size:20px;opacity:0.6;cursor:pointer;margin-left:10px}
 </style>
 </head>
 <body>
@@ -41,102 +46,34 @@ body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;display:flex
     <button class="btn sec" onclick="restartGame()">🔄 RESTART</button>
     <a href="index.html" style="color:#94a3b8;font-size:13px;text-decoration:none;margin-top:6px">Back to Arena</a>
   </div>
-  <p style="font-size:11px;opacity:0.5;max-width:260px">CONTINUE = watch ad to support MGC + clear 2 rows! 1x per game only.</p>
+  <p style="font-size:11px;opacity:0.5;max-width:260px">CONTINUE clears 2 rows! 1x per game only. Supports MGC!</p>
 </div>
 
-<div class="mgc-banner" id="mgcBanner">
-  <div class="left" onclick="openAd()"><div style="font-size:20px">🎮</div><div class="ad-text"><span>MGC Gaming</span><br>Support free games!</div></div>
-  <button class="ad-btn" onclick="openAd()">SUPPORT</button>
-  <button class="close-ad" onclick="document.getElementById('mgcBanner').style.display='none'">✕</button>
+<div id="mgcBanner">
+  <div class="mgc-left" onclick="openAd()"><div style="font-size:20px">🎮</div><div class="mgc-text"><b>MGC Gaming</b><br>Support free games!</div></div>
+  <button class="mgc-btn" onclick="openAd()">SUPPORT</button>
+  <button class="mgc-x" onclick="document.getElementById('mgcBanner').style.display='none'">✕</button>
 </div>
 
 <script>
-const DIRECT_LINK = "https://omg10.com/4/11879270";
-function openAd(){ window.open(DIRECT_LINK,'_blank'); }
-
+const DIRECT_LINK="https://omg10.com/4/11879270";
+function openAd(){window.open(DIRECT_LINK,'_blank');}
 const boardEl=document.getElementById('board'), blocksEl=document.getElementById('blocks');
 const scoreEl=document.getElementById('score'), bestEl=document.getElementById('best');
 let board=Array(10).fill(0).map(()=>Array(10).fill(0));
 let score=0, best=localStorage.getItem('mgc_best')||0, canContinue=true;
 bestEl.textContent=best;
 const SHAPES=[[[1]],[[1,1],[1,1]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1,1,1]],[[1,1,1],[0,1,0]],[[1,1,0],[0,1,1]],[[1,0],[1,1],[0,1]],[[1,1,1],[1,1,1]],[[1,1]]];
-
-function createBoard(){
-  boardEl.innerHTML='';
-  for(let r=0;r<10;r++) for(let c=0;c<10;c++){
-    const d=document.createElement('div');
-    d.className='cell'+(board[r][c]?' filled':'');
-    boardEl.appendChild(d);
-  }
-}
-function randomBlocks(){
-  blocksEl.innerHTML='';
-  for(let i=0;i<3;i++){
-    const shape=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-    const opt=document.createElement('div');
-    opt.className='block-option';
-    opt.style.gridTemplateColumns=`repeat(${shape[0].length},18px)`;
-    shape.forEach(row=>row.forEach(v=>{
-      const cell=document.createElement('div');
-      cell.className='block-cell '+(v?'on':'off');
-      opt.appendChild(cell);
-    }));
-    opt._shape=shape;
-    opt.addEventListener('click',()=>autoPlace(shape,opt));
-    blocksEl.appendChild(opt);
-  }
-}
-function canPlace(br,bc,shape){
-  for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++){
-    if(shape[r][c] && (br+r>=10||bc+c>=10||board[br+r][bc+c])) return false;
-  }
-  return true;
-}
-function place(br,bc,shape){
-  for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++) if(shape[r][c]) board[br+r][bc+c]=1;
-  score+=shape.flat().filter(v=>v).length*10;
-  scoreEl.textContent=score;
-  clearLines(); createBoard();
-}
-function clearLines(){
-  let cleared=0;
-  for(let r=0;r<10;r++) if(board[r].every(v=>v)){board[r]=Array(10).fill(0);cleared++}
-  for(let c=0;c<10;c++) if(board.every(row=>row[c])){for(let r=0;r<10;r++) board[r][c]=0;cleared++}
-  if(cleared) score+=cleared*100;
-}
-function autoPlace(shape,optEl){
-  for(let r=0;r<=10-shape.length;r++) for(let c=0;c<=10-shape[0].length;c++) if(canPlace(r,c,shape)){
-    place(r,c,shape); optEl.remove();
-    if(blocksEl.children.length===0) randomBlocks();
-    checkGameOver(); return;
-  }
-}
-function checkGameOver(){
-  let shapes=[...blocksEl.children].map(el=>el._shape);
-  if(shapes.length===0) return;
-  let can=false;
-  for(let shape of shapes) for(let r=0;r<=10-shape.length;r++) for(let c=0;c<=10-shape[0].length;c++) if(canPlace(r,c,shape)) can=true;
-  if(!can){
-    document.getElementById('finalScore').textContent=score;
-    document.getElementById('gameOver').classList.add('show');
-    if(score>best){best=score; localStorage.setItem('mgc_best',best); bestEl.textContent=best;}
-  }
-}
-function continueGame(){
-  if(!canContinue){restartGame();return;}
-  openAd();
-  board.splice(0,2); board.push(Array(10).fill(0)); board.push(Array(10).fill(0));
-  document.getElementById('gameOver').classList.remove('show');
-  createBoard(); canContinue=false;
-}
-function restartGame(){
-  canContinue=true;
-  board=Array(10).fill(0).map(()=>Array(10).fill(0));
-  score=0; scoreEl.textContent=0;
-  document.getElementById('gameOver').classList.remove('show');
-  createBoard(); randomBlocks();
-}
-createBoard(); randomBlocks();
+function createBoard(){boardEl.innerHTML='';for(let r=0;r<10;r++) for(let c=0;c<10;c++){const d=document.createElement('div');d.className='cell'+(board[r][c]?' filled':'');boardEl.appendChild(d);}}
+function randomBlocks(){blocksEl.innerHTML='';for(let i=0;i<3;i++){const shape=SHAPES[Math.floor(Math.random()*SHAPES.length)];const opt=document.createElement('div');opt.className='block-option';opt.style.gridTemplateColumns=`repeat(${shape[0].length},18px)`;shape.forEach(row=>row.forEach(v=>{const cell=document.createElement('div');cell.className='block-cell '+(v?'on':'off');opt.appendChild(cell);}));opt._shape=shape;opt.addEventListener('click',()=>autoPlace(shape,opt));blocksEl.appendChild(opt);}}
+function canPlace(br,bc,shape){for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++){if(shape[r][c] && (br+r>=10||bc+c>=10||board[br+r][bc+c])) return false;}return true;}
+function place(br,bc,shape){for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++) if(shape[r][c]) board[br+r][bc+c]=1;score+=shape.flat().filter(v=>v).length*10;scoreEl.textContent=score;clearLines();createBoard();}
+function clearLines(){let cleared=0;for(let r=0;r<10;r++) if(board[r].every(v=>v)){board[r]=Array(10).fill(0);cleared++}for(let c=0;c<10;c++) if(board.every(row=>row[c])){for(let r=0;r<10;r++) board[r][c]=0;cleared++}if(cleared) score+=cleared*100;}
+function autoPlace(shape,optEl){for(let r=0;r<=10-shape.length;r++) for(let c=0;c<=10-shape[0].length;c++) if(canPlace(r,c,shape)){place(r,c,shape);optEl.remove();if(blocksEl.children.length===0) randomBlocks();checkGameOver();return;}}
+function checkGameOver(){let shapes=[...blocksEl.children].map(el=>el._shape);if(shapes.length===0) return;let can=false;for(let shape of shapes) for(let r=0;r<=10-shape.length;r++) for(let c=0;c<=10-shape[0].length;c++) if(canPlace(r,c,shape)) can=true;if(!can){document.getElementById('finalScore').textContent=score;document.getElementById('gameOver').classList.add('show');if(score>best){best=score;localStorage.setItem('mgc_best',best);bestEl.textContent=best;}}}
+function continueGame(){if(!canContinue){restartGame();return;}openAd();board.splice(0,2);board.push(Array(10).fill(0));board.push(Array(10).fill(0));document.getElementById('gameOver').classList.remove('show');createBoard();canContinue=false;}
+function restartGame(){canContinue=true;board=Array(10).fill(0).map(()=>Array(10).fill(0));score=0;scoreEl.textContent=0;document.getElementById('gameOver').classList.remove('show');createBoard();randomBlocks();}
+createBoard();randomBlocks();
 </script>
 </body>
 </html>
