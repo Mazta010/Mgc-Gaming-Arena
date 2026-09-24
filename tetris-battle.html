@@ -2,91 +2,114 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>MGC TETRIS V6.1c - LB + BANNER</title>
+<title>MGC TETRIS V6.1e SCORE FIX</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{height:100dvh;width:100vw;overflow:hidden;background:#020617}
 body{background:radial-gradient(120% at 50% 0%,#1e1b4b,#020617 85%);color:#fff;font-family:system-ui;display:flex;flex-direction:column;align-items:center;padding-bottom:60px}
-.topbar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:rgba(0,0,0,.9);height:36px;flex-shrink:0;border-bottom:1px solid rgba(34,211,238,.4);font-size:10px;font-weight:900}
-.tbtn{padding:4px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:9px;font-weight:800;cursor:pointer}
-.mbtn{flex:1;padding:5px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-weight:800;font-size:10px}
-.mbtn.active{background:#22d3ee;color:#000}
-.modeSel{display:flex;gap:5px;margin:4px;width:99%;max-width:500px;flex-shrink:0}
-#battle{width:100%;flex:1;display:flex;justify-content:center;align-items:flex-start;padding:2px 4px;overflow:hidden}
-.boardCard{background:rgba(15,23,42,.98);border:2px solid #22d3ee;border-radius:12px;padding:4px;width:100%;max-width:400px;display:flex;flex-direction:column;position:relative;height:100%;max-height:calc(100dvh - 36px - 28px - 66px)}
-.pName{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:900;padding:3px 6px;background:rgba(0,0,0,.5);border-radius:6px;margin-bottom:3px;flex-shrink:0}
-#nextA{width:44px;height:20px;background:#020617;border-radius:4px}
+.topbar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(0,0,0,.95);height:42px;flex-shrink:0;border-bottom:2px solid #22d3ee;font-size:12px;font-weight:900;z-index:30}
+.score-mini{color:#22d3ee;font-size:13px;font-weight:900}
+.tbtn{padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:11px;font-weight:800}
+.boardCard{background:rgba(15,23,42,.98);border:2px solid #22d3ee;border-radius:12px;padding:4px;width:100%;max-width:400px;display:flex;flex-direction:column;position:relative;height:100%;max-height:calc(100dvh - 42px - 66px)}
+.pName{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;padding:6px 8px;background:rgba(0,0,0,.6);border-radius:8px;margin-bottom:4px;border:1px solid rgba(34,211,238,.3)}
+#nextA{width:48px;height:22px;background:#020617;border-radius:4px;border:1px solid #334155}
 canvas.mainBoard{width:100%!important;height:auto!important;flex:1;display:block;border-radius:8px;background:#020617;aspect-ratio:10/20;min-height:0}
-#controls{position:absolute;bottom:30px;left:4px;right:4px;display:flex;gap:4px;z-index:20}
-.gbtn{flex:1;padding:10px 2px;border-radius:10px;border:1px solid rgba(34,211,238,.5);background:rgba(15,23,42,.85);color:#22d3ee;font-weight:900;font-size:11px;text-align:center;backdrop-filter:blur(4px);cursor:pointer}
+#controls{position:absolute;bottom:32px;left:4px;right:4px;display:flex;gap:4px;z-index:20}
+.gbtn{flex:1;padding:12px 2px;border-radius:10px;border:1px solid rgba(34,211,238,.6);background:rgba(15,23,42,.9);color:#22d3ee;font-weight:900;font-size:12px;text-align:center}
 .gbtn:active{background:#22d3ee;color:#000}
-.gbtn.big{flex:1.3;background:rgba(251,191,36,.2);border-color:#fbbf24;color:#fbbf24}
-#hintBar{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);padding:2px 8px;border-radius:12px;font-size:7px;opacity:.6;pointer-events:none;border:1px solid rgba(34,211,238,.3)}
-.stat{font-size:9px;display:flex;justify-content:space-between;padding:3px 6px;opacity:.8;flex-shrink:0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.gbtn.big{flex:1.3;background:rgba(251,191,36,.25);border-color:#fbbf24;color:#fbbf24}
+.stat{font-size:11px;display:flex;justify-content:space-between;padding:6px 8px;background:rgba(0,0,0,.5);border-radius:6px;margin-top:4px;border:1px solid rgba(255,255,255,.1);font-weight:800}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
 .box{background:#0f172a;border:2px solid #22d3ee;border-radius:16px;padding:16px;width:100%;max-width:360px;text-align:center}
-input{width:100%;padding:10px;border-radius:10px;border:2px solid #334155;background:#020617;color:#fff;text-align:center;font-weight:700;margin:5px 0}
-button.pri{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:900;color:#000;margin-top:6px;cursor:pointer}
+input{width:100%;padding:12px;border-radius:10px;border:2px solid #334155;background:#020617;color:#fff;text-align:center;font-weight:700;margin:6px 0}
+button.pri{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:900;color:#000;margin-top:6px}
 .lb-row{display:flex;justify-content:space-between;padding:6px 8px;background:#0f172a;margin:4px 0;border-radius:8px;font-size:12px}
 .lb-row.me{border:2px solid #ffeb3b;background:#2a3a6a}
 #mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
 </style>
 </head>
 <body>
-<div class="topbar"><span>⚔️ <b>MGC</b> V6.1c</span><div style="display:flex;gap:5px;align-items:center"><span onclick="showLB()" style="background:#16264a;padding:3px 8px;border-radius:12px;border:1px solid #ffeb3b;cursor:pointer">🏆 <b id="bestTop">0</b></span><span id="scoreTop">0</span>|<span id="lvTop">Lv1</span><button class="tbtn" id="pauseBtn" onclick="togglePause()">⏸️</button><button class="tbtn" id="muteBtn" onclick="toggleMute()">🔊</button><button class="tbtn" onclick="location.href='index.html'">⬅️</button></div></div>
-<div class="modeSel"><button class="mbtn active">🎮 SOLO</button><button class="mbtn">⚔️ 2P</button><button class="mbtn">🌐 ONLINE</button></div>
-<div id="battle"><div class="boardCard" id="cardA"><div class="pName"><span id="nameA" onclick="editName()" style="cursor:pointer">👤 Mazta</span><div style="display:flex;align-items:center;gap:4px">NEXT<canvas id="nextA"></canvas></div><span id="scoreA">0</span></div><canvas id="boardA" class="mainBoard"></canvas>
-<div id="controls"><button class="gbtn" ontouchstart="moveP(0,-1)" onmousedown="moveP(0,-1)">◀</button><button class="gbtn" ontouchstart="rotateP(0)" onmousedown="rotateP(0)">↻</button><button class="gbtn" ontouchstart="moveP(0,1)" onmousedown="moveP(0,1)">▶</button><button class="gbtn big" ontouchstart="hardP(0)" onmousedown="hardP(0)">⬇️</button><button class="gbtn" ontouchstart="holdP(0)" onmousedown="holdP(0)">HOLD</button></div>
-<div id="hintBar">TAP BOARD TOO! | 🏆=LB</div><div class="stat"><span>HOLD:<b id="holdA">-</b></span><span id="linesA">L0</span></div></div></div>
+<div class="topbar">
+<span style="color:#22d3ee">⚔️ MGC TETRIS</span>
+<div style="display:flex;gap:8px;align-items:center">
+<span onclick="showLB()" style="background:#1e293b;padding:4px 10px;border-radius:20px;border:2px solid #ffeb3b;color:#ffeb3b">🏆 <b id="bestTop">0</b></span>
+<span class="score-mini">SCORE: <b id="scoreTop" style="color:#fff">0</b></span>
+<span style="color:#a78bfa">Lv <b id="lvTop">1</b></span>
+<button class="tbtn" id="pauseBtn" onclick="togglePause()">⏸️</button>
+<button class="tbtn" id="muteBtn" onclick="toggleMute()">🔊</button>
+<button class="tbtn" onclick="location.href='index.html'">⬅️</button>
+</div>
+</div>
 
-<div id="pauseOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:80"><div class="box" style="border-color:#fbbf24"><h2>⏸️ PAUSE</h2><p style="font-size:11px;margin:8px 0">Break muna boss!</p><button class="pri" onclick="togglePause()">▶️ RESUME</button><button class="pri" style="background:#1e293b;color:#fff;margin-top:6px" onclick="location.reload()">🏠 MENU</button></div></div>
+<div id="battle" style="width:100%;flex:1;display:flex;justify-content:center;align-items:flex-start;padding:4px;overflow:hidden">
+<div class="boardCard" id="cardA">
+<div class="pName">
+<span id="nameA" onclick="editName()" style="cursor:pointer;color:#22d3ee">👤 Mazta</span>
+<div style="display:flex;align-items:center;gap:6px">NEXT <canvas id="nextA"></canvas></div>
+<span style="color:#22d3ee">SCORE <b id="scoreA" style="color:#fff;font-size:14px">0</b></span>
+</div>
+<canvas id="boardA" class="mainBoard"></canvas>
+<div id="controls"><button class="gbtn" ontouchstart="moveP(0,-1)" onmousedown="moveP(0,-1)">◀</button><button class="gbtn" ontouchstart="rotateP(0)" onmousedown="rotateP(0)">↻</button><button class="gbtn" ontouchstart="moveP(0,1)" onmousedown="moveP(0,1)">▶</button><button class="gbtn big" ontouchstart="hardP(0)" onmousedown="hardP(0)">⬇️ DROP</button><button class="gbtn" ontouchstart="holdP(0)" onmousedown="holdP(0)">HOLD</button></div>
+<div class="stat"><span>TYPE: <b id="curType" style="color:#22d3ee">-</b> | HOLD: <b id="holdA">-</b></span><span style="color:#fbbf24">LINES: <b id="linesA" style="color:#fff">0</b></span><span>BEST: <b id="bestA" style="color:#ffeb3b">0</b></span></div>
+</div>
+</div>
 
-<div id="startModal" class="modal" style="display:flex"><div class="box"><h3>🎮 MGC TETRIS V6.1c</h3><p style="font-size:9px;opacity:.7">VISIBLE BUTTONS + LEADERBOARD!</p><input id="inA" value="Mazta" placeholder="Your name"><button class="pri" onclick="startGame()">START 🚀</button><button class="pri" style="background:#1e293b;color:#ffeb3b" onclick="showLB()">🏆 VIEW LEADERBOARD</button></div></div>
+<div id="pauseOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:80"><div class="box" style="border-color:#fbbf24"><h2>⏸️ PAUSE</h2><p>SCORE: <b id="pauseScore">0</b></p><button class="pri" onclick="togglePause()">▶️ RESUME</button></div></div>
 
-<div id="overModal" class="modal"><div class="box"><h2 style="color:#ef4444">💀 GAME OVER</h2><p>Score: <b id="finalS">0</b> | Lines: <b id="finalL">0</b></p><button class="pri" onclick="continueGame()">▶ CONTINUE - Watch Ad</button><button class="pri" style="background:#1e293b;color:#fff" onclick="startGame()">🔄 ULIT</button><button class="pri" style="background:#0f172a;color:#ffeb3b;border:1px solid #ffeb3b" onclick="showLB()">🏆 LEADERBOARD</button></div></div>
+<div id="startModal" class="modal" style="display:flex"><div class="box"><h3>🎮 MGC TETRIS V6.1e</h3><p style="font-size:11px;color:#22d3ee">SCORE FIXED! Kita na numbers!</p><input id="inA" value="Mazta"><button class="pri" onclick="startGame()">START 🚀</button><button class="pri" style="background:#1e293b;color:#ffeb3b" onclick="showLB()">🏆 LEADERBOARD TOP 100</button></div></div>
 
-<div id="lbModal" class="modal"><div class="box" style="text-align:left;max-height:80vh;overflow-y:auto"><h2 style="text-align:center">🏆 TOP 100 TETRIS</h2><div id="lbList"></div><button class="pri" style="background:#334155;color:#fff" onclick="closeLB()">CLOSE</button></div></div>
+<div id="overModal" class="modal"><div class="box"><h2 style="color:#ef4444">💀 GAME OVER</h2><p>SCORE: <b id="finalS">0</b> | LINES: <b id="finalL">0</b> | BEST: <b id="finalB">0</b></p><button class="pri" onclick="continueGame()">▶ CONTINUE - Watch Ad</button><button class="pri" style="background:#1e293b;color:#fff" onclick="startGame()">🔄 ULIT</button><button class="pri" style="background:#0f172a;color:#ffeb3b;border:1px solid #ffeb3b" onclick="showLB()">🏆 LEADERBOARD</button></div></div>
 
-<div id="mgcBanner"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="openAd()"><span style="font-size:20px">💙</span><span style="font-size:11px;text-align:left"><b style="color:#22d3ee">MGC Gaming</b><br>Support free games!</span></div><button onclick="openAd()" style="background:#22d3ee;color:#000;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:900;border:none">SUPPORT</button><button onclick="this.parentElement.style.display='none'" style="background:none;border:none;color:#fff;font-size:20px;margin-left:8px;opacity:.6">✕</button></div>
+<div id="lbModal" class="modal"><div class="box" style="text-align:left;max-height:80vh;overflow-y:auto"><h2 style="text-align:center">🏆 TOP 100</h2><div id="lbList"></div><button class="pri" style="background:#334155;color:#fff" onclick="closeLB()">CLOSE</button></div></div>
+
+<div id="mgcBanner"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="openAd()"><span style="font-size:20px">💙</span><span style="font-size:11px;text-align:left"><b style="color:#22d3ee">MGC Gaming</b><br>Support!</span></div><button onclick="openAd()" style="background:#22d3ee;color:#000;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:900;border:none">SUPPORT</button><button onclick="this.parentElement.style.display='none'" style="background:none;border:none;color:#fff;font-size:20px;margin-left:8px;opacity:.6">✕</button></div>
 
 <script>
 const DIRECT_LINK="https://omg10.com/4/11879270";function openAd(){window.open(DIRECT_LINK,'_blank');}
 let audioCtx=null,muted=false,volume=0.7,isPaused=false;
 let player=localStorage.getItem('mgcName')||'Mazta';
 let tetrisLB=JSON.parse(localStorage.getItem('mgcTetrisLB')||'[]');
-let bestScore=tetrisLB[0]?.score||0;
-document.getElementById('bestTop').innerText=bestScore;
+let bestScore=tetrisLB.length?Math.max(...tetrisLB.map(e=>e.score)):0;
+function updateAllScores(s,l,lv){
+ document.getElementById('bestTop').innerText=bestScore;
+ document.getElementById('bestA').innerText=bestScore;
+ document.getElementById('scoreTop').innerText=s;
+ document.getElementById('scoreA').innerText=s;
+ document.getElementById('linesA').innerText=l;
+ document.getElementById('lvTop').innerText=lv;
+ document.getElementById('pauseScore').innerText=s;
+}
 document.getElementById('inA').value=player;
+updateAllScores(0,0,1);
 function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
-function tone(f,d,t='sine',v=0.3,s=0){try{if(muted||!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t;o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(v*volume,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);if(s)o.frequency.exponentialRampToValueAtTime(f+s,audioCtx.currentTime+d);o.start();o.stop(actx.currentTime+d);}catch{}}
-function playMove(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.value=320;g.gain.setValueAtTime(0.15*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.07);}
-function playRotate(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=420;g.gain.setValueAtTime(0.22*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.11);}
-function playHard(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.value=120;g.gain.setValueAtTime(0.32*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.18);}
-function playHold(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=650;g.gain.setValueAtTime(0.18*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.13);}
-function playClear(l){for(let i=0;i<Math.min(l,4);i++)setTimeout(()=>{if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=400+i*130;g.gain.setValueAtTime(0.28*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.2);},i*80);}
-function playPause(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=500;g.gain.setValueAtTime(0.25*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.15);}
-function playResume(){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=350;g.gain.setValueAtTime(0.25*volume,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.12);setTimeout(()=>{let o2=audioCtx.createOscillator(),g2=audioCtx.createGain();o2.frequency.value=600;g2.gain.setValueAtTime(0.3*volume,audioCtx.currentTime);o2.connect(g2);g2.connect(audioCtx.destination);o2.start();o2.stop(audioCtx.currentTime+0.18);},100);}
-function toggleMute(){muted=!muted;document.getElementById('muteBtn').innerText=muted?'🔇':'🔊';if(!muted){initAudio();}}
+function playSound(f,d,t='sine',v=0.3){if(muted||!audioCtx)return;try{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v*volume,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch{}}
+function toggleMute(){muted=!muted;document.getElementById('muteBtn').innerText=muted?'🔇':'🔊';if(!muted){initAudio();playSound(440,0.12);}}
 function editName(){let n=prompt("Enter name:",player);if(n&&n.trim()){player=n.trim().slice(0,12);localStorage.setItem('mgcName',player);document.getElementById('nameA').innerText='👤 '+player;document.getElementById('inA').value=player;}}
-function showLB(){tetrisLB.sort((a,b)=>b.score-a.score);let html='';if(!tetrisLB.length)html='<p style="text-align:center;opacity:.6">No scores yet - play now!</p>';else tetrisLB.slice(0,100).forEach((e,i)=>{let me=e.name===player;html+=`<div class="lb-row ${me?'me':''}"><span>#${i+1} ${e.name}</span><span>${e.score}pts L${e.lines}</span></div>`;});document.getElementById('lbList').innerHTML=html;document.getElementById('lbModal').style.display='flex';}
+function showLB(){tetrisLB.sort((a,b)=>b.score-a.score);let html='';if(!tetrisLB.length)html='<p style="text-align:center;opacity:.6">No scores yet</p>';else tetrisLB.slice(0,100).forEach((e,i)=>{let me=e.name===player;html+=`<div class="lb-row ${me?'me':''}"><span>#${i+1} ${e.name}</span><span>${e.score}pts L${e.lines}</span></div>`;});document.getElementById('lbList').innerHTML=html;document.getElementById('lbModal').style.display='flex';}
 function closeLB(){document.getElementById('lbModal').style.display='none';}
-function togglePause(){if(!players.length)return;isPaused=!isPaused;let ov=document.getElementById('pauseOverlay');if(isPaused){ov.style.display='flex';document.getElementById('pauseBtn').innerText='▶️';playPause();}else{ov.style.display='none';document.getElementById('pauseBtn').innerText='⏸️';playResume();requestAnimationFrame(loop);}}
-const COLS=10,ROWS=20;const SHAPES={I:[[1,1,1,1]],J:[[1,0,0],[1,1,1]],L:[[0,0,1],[1,1,1]],O:[[1,1],[1,1]],S:[[0,1,1],[1,1,0]],T:[[0,1,0],[1,1,1]],Z:[[1,1,0],[0,1,1]]};const COLORS={I:'#22d3ee',J:'#3b82f6',L:'#f97316',O:'#facc15',S:'#22c55e',T:'#a78bfa',Z:'#ef4444'};const KEYS=Object.keys(SHAPES);
+function togglePause(){if(!players.length)return;isPaused=!isPaused;let ov=document.getElementById('pauseOverlay');if(isPaused){ov.style.display='flex';document.getElementById('pauseBtn').innerText='▶️';}else{ov.style.display='none';document.getElementById('pauseBtn').innerText='⏸️';requestAnimationFrame(loop);}}
+const COLS=10,ROWS=20;
+const BASE_SHAPES={I:[[1,1,1,1]],J:[[1,0,0],[1,1,1]],L:[[0,0,1],[1,1,1]],O:[[1,1],[1,1]],S:[[0,1,1],[1,1,0]],T:[[0,1,0],[1,1,1]],Z:[[1,1,0],[0,1,1]]};
+const COLORS={I:'#22d3ee',J:'#3b82f6',L:'#f97316',O:'#facc15',S:'#22c55e',T:'#a78bfa',Z:'#ef4444'};
+const KEYS=Object.keys(BASE_SHAPES);
 let players=[],lastMove=[0,0],lastRot=[0,0],lastHard=[0,0],canContinue=true;
-function makePlayer(c,nc,name){let ctx=c.getContext('2d'),nctx=nc.getContext('2d'),dpr=window.devicePixelRatio||1;function rs(){let r=c.getBoundingClientRect();c.width=r.width*dpr;c.height=r.width*2*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);nc.width=60*dpr;nc.height=20*dpr;nctx.setTransform(dpr,0,0,dpr,0,0);}rs();return{canvas:c,ctx,nc,nctx,grid:Array.from({length:ROWS},()=>Array(COLS).fill(0)),cur:null,next:null,hold:null,canHold:true,score:0,lines:0,lv:1,name,over:false,dropT:0,interval:1100}}
-function randPiece(){let k=KEYS[Math.floor(Math.random()*KEYS.length)];return{k,shape:SHAPES[k].map(r=>[...r]),x:3,y:0,color:COLORS[k]}}function rotM(m){return m[0].map((_,i)=>m.map(r=>r[i]).reverse())}
+function cloneShape(s){return s.map(r=>[...r]);}
+function makePlayer(c,nc,name){let ctx=c.getContext('2d'),nctx=nc.getContext('2d'),dpr=window.devicePixelRatio||1;function rs(){let r=c.getBoundingClientRect();c.width=r.width*dpr;c.height=r.width*2*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);nc.width=60*dpr;nc.height=22*dpr;nctx.setTransform(dpr,0,0,dpr,0,0);}rs();return{canvas:c,ctx,nc,nctx,grid:Array.from({length:ROWS},()=>Array(COLS).fill(0)),cur:null,next:null,hold:null,canHold:true,score:0,lines:0,lv:1,name,over:false,dropT:0,interval:1000}}
+function randPiece(){let k=KEYS[Math.floor(Math.random()*KEYS.length)];return{k,shape:cloneShape(BASE_SHAPES[k]),x:3,y:0,color:COLORS[k],rot:0}}
+function rotateShapeCW(shape){let H=shape.length,W=shape[0].length;let res=Array.from({length:W},()=>Array(H).fill(0));for(let y=0;y<H;y++)for(let x=0;x<W;x++)res[x][H-1-y]=shape[y][x];return res;}
 function collide(g,p,dx=0,dy=0,sh=null){let s=sh||p.shape;for(let y=0;y<s.length;y++)for(let x=0;x<s[y].length;x++)if(s[y][x]){let nx=p.x+x+dx,ny=p.y+y+dy;if(nx<0||nx>=COLS||ny>=ROWS||(ny>=0&&g[ny][nx]))return true}return false}
-function lock(p){p.cur.shape.forEach((r,y)=>r.forEach((v,x)=>{if(v){let gy=p.cur.y+y,gx=p.cur.x+x;if(gy>=0)p.grid[gy][gx]=p.cur.color}}));let cl=0;for(let y=ROWS-1;y>=0;y--)if(p.grid[y].every(c=>c)){p.grid.splice(y,1);p.grid.unshift(Array(COLS).fill(0));cl++;y++;}if(cl){p.lines+=cl;p.score+=[0,100,300,600,1000][cl]*p.lv;p.lv=Math.floor(p.lines/10)+1;p.interval=Math.max(280,1100-(p.lv-1)*45);playClear(cl);}spawn(p);p.dropT=0;}
-function spawn(p){p.cur=p.next||randPiece();p.next=randPiece();p.canHold=true;if(collide(p.grid,p.cur))p.over=true;}
-function drawP(p){let rect=p.canvas.getBoundingClientRect(),sW=rect.width/COLS,ctx=p.ctx;ctx.clearRect(0,0,9999,9999);ctx.strokeStyle='rgba(255,255,255,.05)';for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*sW,0);ctx.lineTo(i*sW,ROWS*sW);ctx.stroke()}for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*sW);ctx.lineTo(COLS*sW,i*sW);ctx.stroke()}p.grid.forEach((row,y)=>row.forEach((c,x)=>{if(c){ctx.fillStyle=c;ctx.fillRect(x*sW+1,y*sW+1,sW-2,sW-2);}}));if(p.cur){let gy=p.cur.y;while(!collide(p.grid,p.cur,0,gy-p.cur.y+1))gy++;if(gy!=p.cur.y){ctx.globalAlpha=0.25;p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v)ctx.fillRect((p.cur.x+xx)*sW+1,(gy+yy)*sW+1,sW-2,sW-2)}));ctx.globalAlpha=1;}p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v){ctx.fillStyle=p.cur.color;ctx.fillRect((p.cur.x+xx)*sW+1,(p.cur.y+yy)*sW+1,sW-2,sW-2);}}));}let nctx=p.nctx,ns=9;nctx.clearRect(0,0,99,99);if(p.next){let sh=p.next.shape,offX=(60-sh[0].length*ns)/2,offY=(20-sh.length*ns)/2;sh.forEach((r,y)=>r.forEach((v,x)=>{if(v){nctx.fillStyle=p.next.color;nctx.fillRect(offX+x*ns,offY+y*ns,ns-1,ns-1);}}));}document.getElementById('holdA').innerText=p.hold?p.hold.k:'-';document.getElementById('scoreA').innerText=p.score;document.getElementById('scoreTop').innerText=p.score;document.getElementById('lvTop').innerText='Lv'+p.lv;document.getElementById('linesA').innerText='L'+p.lines;}
-function loop(){if(!players.length||isPaused)return;let p=players[0];if(p.over){tetrisLB.push({name:p.name,score:p.score,lines:p.lines,date:Date.now()});tetrisLB.sort((a,b)=>b.score-a.score);tetrisLB=tetrisLB.slice(0,100);localStorage.setItem('mgcTetrisLB',JSON.stringify(tetrisLB));bestScore=tetrisLB[0]?.score||0;document.getElementById('bestTop').innerText=bestScore;document.getElementById('finalS').innerText=p.score;document.getElementById('finalL').innerText=p.lines;document.getElementById('overModal').style.display='flex';return;}p.dropT+=16;if(p.dropT>p.interval){if(!collide(p.grid,p.cur,0,1))p.cur.y++;else lock(p);p.dropT=0;}drawP(p);requestAnimationFrame(loop);}
-function moveP(i,d){if(isPaused||Date.now()-lastMove[i]<90)return;lastMove[i]=Date.now();let p=players[i];if(!p||p.over)return;if(!collide(p.grid,p.cur,d,0)){p.cur.x+=d;playMove();}}
-function rotateP(i){if(isPaused||Date.now()-lastRot[i]<170)return;lastRot[i]=Date.now();let p=players[i];if(!p||!p.cur)return;let r=rotM(p.cur.shape);if(!collide(p.grid,p.cur,0,0,r)){p.cur.shape=r;playRotate();}else if(!collide(p.grid,p.cur,-1,0,r)){p.cur.x--;p.cur.shape=r;playRotate();}}
-function hardP(i){if(isPaused||Date.now()-lastHard[i]<350)return;lastHard[i]=Date.now();let p=players[i];if(!p||p.over)return;let d=0;while(!collide(p.grid,p.cur,0,d+1))d++;p.cur.y+=d;p.score+=d*2;playHard();lock(p);}
-function holdP(i){if(isPaused)return;let p=players[i];if(!p||!p.canHold)return;if(!p.hold){p.hold=p.cur;spawn(p);}else{let t=p.hold;p.hold=p.cur;p.cur=t;p.cur.x=3;p.cur.y=0;}p.canHold=false;playHold();}
+function lock(p){p.cur.shape.forEach((r,y)=>r.forEach((v,x)=>{if(v){let gy=p.cur.y+y,gx=p.cur.x+x;if(gy>=0)p.grid[gy][gx]=p.cur.color}}));let cl=0;for(let y=ROWS-1;y>=0;y--)if(p.grid[y].every(c=>c)){p.grid.splice(y,1);p.grid.unshift(Array(COLS).fill(0));cl++;y++;}if(cl){p.lines+=cl;p.score+=[0,100,300,600,1000][cl]*p.lv;p.lv=Math.floor(p.lines/10)+1;p.interval=Math.max(280,1000-(p.lv-1)*50);for(let i=0;i<Math.min(cl,4);i++)setTimeout(()=>playSound(400+i*130,0.2,'sine',0.28),i*80);updateAllScores(p.score,p.lines,p.lv);}spawn(p);p.dropT=0;}
+function spawn(p){p.cur=p.next?{k:p.next.k,shape:cloneShape(p.next.shape),x:3,y:0,color:p.next.color,rot:p.next.rot}:randPiece();p.next=randPiece();p.canHold=true;if(collide(p.grid,p.cur))p.over=true;}
+function drawP(p){let rect=p.canvas.getBoundingClientRect(),sW=rect.width/COLS,ctx=p.ctx;ctx.clearRect(0,0,9999,9999);ctx.strokeStyle='rgba(255,255,255,.07)';for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*sW,0);ctx.lineTo(i*sW,ROWS*sW);ctx.stroke()}for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*sW);ctx.lineTo(COLS*sW,i*sW);ctx.stroke()}p.grid.forEach((row,y)=>row.forEach((c,x)=>{if(c){ctx.fillStyle=c;ctx.fillRect(x*sW+1,y*sW+1,sW-2,sW-2);}}));if(p.cur){let gy=p.cur.y;while(!collide(p.grid,p.cur,0,gy-p.cur.y+1))gy++;if(gy!=p.cur.y){ctx.globalAlpha=0.25;p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v)ctx.fillRect((p.cur.x+xx)*sW+1,(gy+yy)*sW+1,sW-2,sW-2)}));ctx.globalAlpha=1;}p.cur.shape.forEach((r,yy)=>r.forEach((v,xx)=>{if(v){ctx.fillStyle=p.cur.color;ctx.fillRect((p.cur.x+xx)*sW+1,(p.cur.y+yy)*sW+1,sW-2,sW-2);}}));}let nctx=p.nctx,ns=9;nctx.clearRect(0,0,99,99);if(p.next){let sh=p.next.shape,offX=(60-sh[0].length*ns)/2,offY=(22-sh.length*ns)/2;sh.forEach((r,y)=>r.forEach((v,x)=>{if(v){nctx.fillStyle=p.next.color;nctx.fillRect(offX+x*ns,offY+y*ns,ns-1,ns-1);}}));}document.getElementById('holdA').innerText=p.hold?p.hold.k:'-';document.getElementById('curType').innerText=p.cur?p.cur.k:'-';document.getElementById('scoreA').innerText=p.score;document.getElementById('scoreTop').innerText=p.score;document.getElementById('linesA').innerText=p.lines;document.getElementById('lvTop').innerText=p.lv;bestScore=Math.max(bestScore,p.score);document.getElementById('bestTop').innerText=bestScore;document.getElementById('bestA').innerText=bestScore;}
+function loop(){if(!players.length||isPaused)return;let p=players[0];if(p.over){tetrisLB.push({name:p.name,score:p.score,lines:p.lines,date:Date.now()});tetrisLB.sort((a,b)=>b.score-a.score);tetrisLB=tetrisLB.slice(0,100);localStorage.setItem('mgcTetrisLB',JSON.stringify(tetrisLB));bestScore=tetrisLB[0]?.score||0;updateAllScores(p.score,p.lines,p.lv);document.getElementById('finalS').innerText=p.score;document.getElementById('finalL').innerText=p.lines;document.getElementById('finalB').innerText=bestScore;document.getElementById('overModal').style.display='flex';return;}p.dropT+=16;if(p.dropT>p.interval){if(!collide(p.grid,p.cur,0,1))p.cur.y++;else lock(p);p.dropT=0;}drawP(p);requestAnimationFrame(loop);}
+function moveP(i,d){if(isPaused||Date.now()-lastMove[i]<90)return;lastMove[i]=Date.now();let p=players[i];if(!p||p.over)return;if(!collide(p.grid,p.cur,d,0)){p.cur.x+=d;playSound(320,0.07,'square',0.15);}}
+function rotateP(i){if(isPaused||Date.now()-lastRot[i]<170)return;lastRot[i]=Date.now();let p=players[i];if(!p||!p.cur||p.cur.k==='O')return;let r=rotateShapeCW(p.cur.shape);if(!collide(p.grid,p.cur,0,0,r)){p.cur.shape=r;p.cur.rot=(p.cur.rot+1)%4;playSound(420,0.11,'sine',0.22);}else if(!collide(p.grid,p.cur,-1,0,r)){p.cur.x--;p.cur.shape=r;p.cur.rot=(p.cur.rot+1)%4;playSound(420,0.11);}else if(!collide(p.grid,p.cur,1,0,r)){p.cur.x++;p.cur.shape=r;p.cur.rot=(p.cur.rot+1)%4;playSound(420,0.11);}else if(!collide(p.grid,p.cur,0,-1,r)){p.cur.y--;p.cur.shape=r;p.cur.rot=(p.cur.rot+1)%4;playSound(420,0.11);}}
+function hardP(i){if(isPaused||Date.now()-lastHard[i]<350)return;lastHard[i]=Date.now();let p=players[i];if(!p||p.over)return;let d=0;while(!collide(p.grid,p.cur,0,d+1))d++;p.cur.y+=d;p.score+=d*2;playSound(120,0.18,'sawtooth',0.32);lock(p);}
+function holdP(i){if(isPaused)return;let p=players[i];if(!p||!p.canHold)return;if(!p.hold){p.hold={k:p.cur.k,shape:cloneShape(p.cur.shape),color:p.cur.color,rot:p.cur.rot};spawn(p);}else{let t=p.hold;p.hold={k:p.cur.k,shape:cloneShape(p.cur.shape),color:p.cur.color,rot:p.cur.rot};p.cur={k:t.k,shape:cloneShape(t.shape),x:3,y:0,color:t.color,rot:t.rot};}p.canHold=false;playSound(650,0.13);}
 function continueGame(){openAd();let p=players[0];for(let k=0;k<3;k++){p.grid.pop();p.grid.unshift(Array(COLS).fill(0));}document.getElementById('overModal').style.display='none';p.over=false;isPaused=false;canContinue=false;requestAnimationFrame(loop);}
-function startGame(){initAudio();let a=document.getElementById('inA').value||'Mazta';player=a;localStorage.setItem('mgcName',player);let ca=document.getElementById('boardA'),na=document.getElementById('nextA');players=[makePlayer(ca,na,a)];document.getElementById('nameA').innerText='👤 '+a;canContinue=true;players.forEach(p=>{p.next=randPiece();spawn(p);});document.getElementById('startModal').style.display='none';document.getElementById('overModal').style.display='none';isPaused=false;requestAnimationFrame(loop);}
+function startGame(){initAudio();let a=document.getElementById('inA').value||'Mazta';player=a;localStorage.setItem('mgcName',player);let ca=document.getElementById('boardA'),na=document.getElementById('nextA');players=[makePlayer(ca,na,a)];document.getElementById('nameA').innerText='👤 '+a;canContinue=true;players.forEach(p=>{p.next=randPiece();spawn(p);});document.getElementById('startModal').style.display='none';document.getElementById('overModal').style.display='none';isPaused=false;updateAllScores(0,0,1);requestAnimationFrame(loop);}
 document.getElementById('boardA').addEventListener('touchstart',e=>{let t=e.touches[0],r=e.target.getBoundingClientRect();if(t.clientX<r.left+r.width*0.33)moveP(0,-1);else if(t.clientX>r.left+r.width*0.66)moveP(0,1);else rotateP(0);},{passive:false});
+start();
 </script>
 </body>
 </html>
