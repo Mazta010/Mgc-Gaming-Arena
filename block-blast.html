@@ -2,172 +2,100 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Block Blast - MGC V3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Block Blast 1-2-3-4</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent;font-family:system-ui}
-body{background:#1e3a8a;min-height:100dvh;display:flex;flex-direction:column;align-items:center;color:#fff}
-.topbar{width:100%;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-weight:900;font-size:13px;position:sticky;top:0;z-index:20;border-bottom:2px solid #22d3ee}
-.backArena{background:#020617;border:2px solid #22d3ee;color:#22d3ee;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:900;text-decoration:none}
-.scoreBig{font-size:56px;font-weight:900;margin:8px 0 2px;line-height:1}
-.sub{color:#facc15;font-weight:800;font-size:12px;margin-bottom:8px}
-.boardWrap{width:94%;max-width:390px;background:#0f172a;border:3px solid #1e293b;border-radius:18px;padding:10px}
-#board{width:100%;aspect-ratio:1;background:#0f172a;border-radius:12px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:4px;padding:6px}
-.cell{background:#1e293b;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:.15s;position:relative}
-.cell.filled{box-shadow:inset 0 2px 0 rgba(255,255,255,.4), 0 3px 8px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);animation:pop.2s}
-.cell.clearAnim{animation:clear.4s}
-@keyframes pop{0%{transform:scale(.5)}100%{transform:scale(1)}}
-@keyframes clear{0%{transform:scale(1)}50%{transform:scale(1.2);background:#fff}100%{transform:scale(0)}}
-.trayWrap{width:94%;max-width:390px;margin-top:10px;background:#0f172a;border-radius:14px;padding:10px;border:1px solid #334155}
-.trayTitle{font-size:10px;opacity:.7;font-weight:800;display:flex;justify-content:space-between;margin-bottom:8px}
-#tray{display:flex;gap:10px;justify-content:center;align-items:center;min-height:70px}
-.piece{padding:8px;background:#020617;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:.15s}
-.piece.selected{border-color:#22d3ee;box-shadow:0 0 15px rgba(34,211,238,.5);transform:scale(1.05)}
-.miniGrid{display:grid;gap:3px}
-.miniCell{width:14px;height:14px;border-radius:4px}
-.bottomBtns{display:flex;gap:10px;margin:14px 0 24px}
-.bbtn{padding:11px 20px;border-radius:12px;font-weight:900;font-size:12px;border:none;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;touch-action:manipulation;user-select:none}
+body{background:#1e3a8a;min-height:100vh;display:flex;flex-direction:column;align-items:center;color:#fff}
+.top{width:100%;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;font-size:13px;border-bottom:2px solid #22d3ee;position:sticky;top:0;z-index:99}
+.top a{background:#020617;border:2px solid #22d3ee;color:#22d3ee;padding:6px 16px;border-radius:20px;text-decoration:none}
+.score{font-size:60px;font-weight:900;margin:8px 0 0;line-height:1}
+.sub{color:#facc15;font-weight:800;font-size:11px}
+#board{width:92vw;max-width:380px;aspect-ratio:1;background:#0f172a;border-radius:16px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:5px;padding:10px;margin-top:10px;border:3px solid #1e293b}
+.cell{background:#1e293b;border-radius:6px}
+.cell.f{box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2)}
+#tray{width:94%;max-width:390px;background:#0f172a;border-radius:14px;padding:12px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px;justify-content:center}
+.b{height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#000;box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 4px 8px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);cursor:pointer}
+.b.sel{outline:3px solid #22d3ee;box-shadow:0 0 18px #22d3ee;transform:scale(1.08)}
+.b.w1{width:70px}.b.w2{width:110px}.b.w3{width:150px}.b.w4{width:190px}
+#hint{font-size:11px;color:#22d3ee;font-weight:800;margin:8px;text-align:center}
 </style>
 </head>
 <body>
-
-<div class="topbar">
-  <a href="index.html" class="backArena">← ARENA</a>
-  <span>🏆 <b id="best">0</b></span>
-  <span id="player">Mazta</span>
-  <span>Moves: <b id="moves">0</b></span>
-</div>
-
-<div class="scoreBig" id="score">0</div>
-<div class="sub" id="subTxt">SOUNDS ON 🔊 Tap block sa baba → Tap board!</div>
-
-<div class="boardWrap">
-  <div id="board"></div>
-</div>
-
-<div class="trayWrap">
-  <div class="trayTitle"><span>👇 PILI KA BLOCK - TAP MO!</span><span id="hint" style="color:#22d3ee">Pili ka muna!</span></div>
-  <div id="tray"></div>
-</div>
-
-<div class="bottomBtns">
-  <button class="bbtn" style="background:#e2e8f0;color:#000" onclick="newGame()">🔄 NEW GAME</button>
-  <button class="bbtn" style="background:#22d3ee;color:#000" onclick="toggleSound()" id="sndBtn">🔊 SOUND ON</button>
-  <a href="index.html" class="bbtn" style="background:#0f172a;color:#22d3ee;border:2px solid #22d3ee;text-decoration:none">🏠 ARENA</a>
-</div>
+<div class="top"><a href="index.html">← ARENA</a><span>🏆<span id="best">0</span></span><span>Moves:<b id="mv">0</b></span></div>
+<div class="score" id="sc">0</div>
+<div class="sub">1-2-3-4 BLOCKS | TAP BLOCK → TAP BOARD!</div>
+<div id="board"></div>
+<div id="hint">PILI KA BLOCK (1,2,3,4) SA BABA!</div>
+<div id="tray"></div>
+<div style="display:flex;gap:10px;margin:18px 0 30px"><button onclick="newGame()" style="padding:12px 22px;border-radius:12px;border:none;font-weight:900">🔄 NEW</button><a href="index.html" style="padding:12px 22px;border-radius:12px;background:#0f172a;border:2px solid #22d3ee;color:#22d3ee;text-decoration:none;font-weight:900">🏠 ARENA</a></div>
 
 <script>
-const SIZE=8;
-const COLORS=['#f472b6','#60a5fa','#34d399','#facc15','#fb923c','#a78bfa','#22d3ee','#f87171'];
-const SHAPES=[
-[[1,1,1],[1,1,1]],
-[[1,1,1],[0,1,0]],
-[[1,1,1,1]],
-[[1,1],[1,1]],
-[[1,1,1],[1,0,0]],
-[[1,1,1],[0,0,1]],
-[[1,1,0],[0,1,1]],
-[[0,1,1],[1,1,0]],
-[[1,1,1]],
-[[1,1,1,1,1]],
-[[1],[1],[1]],
-[[1,0],[1,1],[1,0]]
-];
-let board=[], score=0, moves=0, best=parseInt(localStorage.getItem('bbBest')||0), selected=null, pieces=[], soundOn=true, audioCtx=null;
-function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
-function beep(f,d,v=0.2){if(!soundOn||!audioCtx)return;try{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(v,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+d);o.start();o.stop(audioCtx.currentTime+d);}catch{}}
+const C=8,R=8,COLORS=["#f472b6","#60a5fa","#34d399","#facc15","#fb923c","#a78bfa","#22d3ee","#f87171"];
+let board,score,moves,best=+localStorage.getItem("bbBest")||0,sel=null,tray=[];
+
 function newGame(){
- board=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
- score=0; moves=0; selected=null;
- document.getElementById('best').innerText=best;
- genPieces(); renderBoard(); updateUI();
+ board=Array.from({length:R},()=>Array(C).fill(0));score=0;moves=0;sel=null;
+ document.getElementById("best").innerText=best; genTray(); draw(); upd();
 }
-function genPieces(){
- pieces=[];
- for(let i=0;i<3;i++){
-   let s=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-   pieces.push({id:i, shape:s.map(r=>[...r]), color:COLORS[Math.floor(Math.random()*COLORS.length)]});
+function genTray(){
+ tray=[];
+ let trayEl=document.getElementById("tray"); trayEl.innerHTML="";
+ // 8 blocks total 1,2,3,4 random
+ for(let i=0;i<8;i++){
+   let w=[1,2,3,4][Math.floor(Math.random()*4)];
+   let col=COLORS[Math.floor(Math.random()*COLORS.length)];
+   tray.push({id:Math.random(),w,col});
  }
- renderTray();
+ drawTray();
 }
-function renderTray(){
- let t=document.getElementById('tray'); t.innerHTML='';
- pieces.forEach((p,idx)=>{
-   let wrap=document.createElement('div'); wrap.className='piece'+(selected&&selected.id===p.id?' selected':'');
-   wrap.onclick=()=>selectPiece(p.id);
-   let rows=p.shape.length, cols=p.shape[0].length;
-   let grid=document.createElement('div'); grid.className='miniGrid'; grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
-   p.shape.forEach(r=>r.forEach(v=>{
-     let c=document.createElement('div'); c.className='miniCell'; c.style.background=v?p.color:'transparent'; if(v) c.style.boxShadow='inset 0 1px 0 rgba(255,255,255,.4)';
-     grid.appendChild(c);
-   }));
-   wrap.appendChild(grid);
-   t.appendChild(wrap);
+function drawTray(){
+ let el=document.getElementById("tray"); el.innerHTML="";
+ // 3 rows: 3,3,2
+ let rows=[tray.slice(0,3),tray.slice(3,6),tray.slice(6,8)];
+ rows.forEach(r=>{
+   let row=document.createElement("div"); row.className="row";
+   r.forEach(d=>{
+     let b=document.createElement("div"); b.className="b w"+d.w+(sel&&sel.id==d.id?" sel":""); b.style.background=d.col; b.innerText=d.w; b.onclick=()=>{sel=d; document.getElementById("hint").innerText="Block "+d.w+" pinili! Tap board kung saan hulog!"; drawTray();};
+     row.appendChild(b);
+   });
+   el.appendChild(row);
  });
- if(!pieces.length){ setTimeout(()=>{genPieces();},300); }
 }
-function selectPiece(id){
- initAudio();
- selected=pieces.find(p=>p.id===id);
- document.getElementById('hint').innerText='Tap board para ilagay!';
- beep(500,0.08);
- renderTray();
-}
-function renderBoard(){
- let b=document.getElementById('board'); b.innerHTML='';
- for(let y=0;y<SIZE;y++) for(let x=0;x<SIZE;x++){
-   let cell=document.createElement('div'); cell.className='cell'+(board[y][x]?' filled':''); if(board[y][x]) cell.style.background=board[y][x];
-   cell.dataset.x=x; cell.dataset.y=y;
-   cell.onclick=()=>placeAt(x,y);
-   b.appendChild(cell);
+function draw(){
+ let b=document.getElementById("board"); b.innerHTML="";
+ for(let y=0;y<R;y++) for(let x=0;x<C;x++){
+   let c=document.createElement("div"); c.className="cell"+(board[y][x]?" f":""); if(board[y][x]) c.style.background=board[y][x];
+   c.onclick=()=>drop(x);
+   b.appendChild(c);
  }
 }
-function canPlace(sx,sy,shape){
- for(let y=0;y<shape.length;y++) for(let x=0;x<shape[y].length;x++) if(shape[y][x]){
-   let nx=sx+x, ny=sy+y;
-   if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]) return false;
- }
- return true;
+function drop(col){
+ if(!sel){ document.getElementById("hint").innerText="PILI KA MUNA BLOCK 1-2-3-4 SA BABA!"; return; }
+ if(col+sel.w>C) col=C-sel.w;
+ // find lowest empty
+ let target=-1;
+ for(let y=R-1;y>=0;y--){ let ok=true; for(let i=0;i<sel.w;i++) if(board[y][col+i]) ok=false; if(ok){target=y; break;} }
+ if(target==-1){ document.getElementById("hint").innerText="Puno na dyan!"; return; }
+ for(let i=0;i<sel.w;i++) board[target][col+i]=sel.col;
+ tray=tray.filter(t=>t.id!=sel.id); sel=null; moves++; score+=10;
+ let clr=0;
+ for(let y=0;y<R;y++) if(board[y].every(v=>v)){ board[y].fill(0); clr++; }
+ if(clr){ score+=clr*100; document.getElementById("hint").innerText=clr+" LINES CLEAR! 🔥"; gravity(); }
+ else document.getElementById("hint").innerText="Nice! Block "+sel?.w+" nahulog!";
+ if(tray.length<3) genTray(); else drawTray();
+ if(score>best){best=score; localStorage.setItem("bbBest",best);}
+ draw(); upd();
 }
-function placeAt(x,y){
- if(!selected){ document.getElementById('hint').innerText='Pili ka muna block sa baba!'; beep(200,0.15); return; }
- // auto adjust para magkasya
- if(x+selected.shape[0].length>SIZE) x=SIZE-selected.shape[0].length;
- if(y+selected.shape.length>SIZE) y=SIZE-selected.shape.length;
- if(!canPlace(x,y,selected.shape)){ document.getElementById('hint').innerText='Hindi kasya! Pili ibang spot'; beep(150,0.2); return; }
- // PLACE!
- selected.shape.forEach((r,yy)=>r.forEach((v,xx)=>{ if(v) board[y+yy][x+xx]=selected.color; }));
- pieces=pieces.filter(p=>p.id!==selected.id);
- selected=null;
- moves++; score+=10;
- beep(400,0.07); setTimeout(()=>beep(700,0.1),70);
- // CHECK LINES - DITO YUNG FIX BOSS!
- let cleared=checkAndClear();
- if(cleared>0){ score+=cleared*100*cleared; beep(900,0.25,0.3); document.getElementById('hint').innerText=`CLEAR ${cleared} LINE! 🔥`; }
- else { document.getElementById('hint').innerText='Nice! Pili ulit!'; }
- if(score>best){ best=score; localStorage.setItem('bbBest',best); document.getElementById('best').innerText=best; }
- renderBoard(); renderTray(); updateUI();
- checkGameOver();
-}
-function checkAndClear(){
- let toClearRows=[], toClearCols=[];
- for(let y=0;y<SIZE;y++) if(board[y].every(c=>c)) toClearRows.push(y);
- for(let x=0;x<SIZE;x++){ let full=true; for(let y=0;y<SIZE;y++) if(!board[y][x]) full=false; if(full) toClearCols.push(x); }
- toClearRows.forEach(y=>{ for(let x=0;x<SIZE;x++) board[y][x]=0; });
- toClearCols.forEach(x=>{ for(let y=0;y<SIZE;y++) board[y][x]=0; });
- return toClearRows.length+toClearCols.length;
-}
-function checkGameOver(){
- for(let p of pieces){
-   for(let y=0;y<SIZE;y++) for(let x=0;x<SIZE;x++) if(canPlace(x,y,p.shape)) return;
- }
- if(pieces.length>0){
-   setTimeout(()=>{ alert('GAME OVER! No moves! Score:'+score); newGame(); },400);
+function gravity(){
+ for(let x=0;x<C;x++){
+   let stack=[]; for(let y=0;y<R;y++) if(board[y][x]) stack.push(board[y][x]);
+   for(let y=0;y<R;y++) board[y][x]=0;
+   for(let i=0;i<stack.length;i++) board[R-stack.length+i][x]=stack[i];
  }
 }
-function updateUI(){ document.getElementById('score').innerText=score; document.getElementById('moves').innerText=moves; }
-function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 SOUND ON':'🔇 OFF'; document.getElementById('subTxt').innerText=soundOn?'SOUNDS ON 🔊 Tap block sa baba → Tap board!':'SOUNDS OFF 🔇'; initAudio(); if(soundOn) beep(440,0.1); }
-document.addEventListener('click',()=>initAudio(),{once:true});
+function upd(){ document.getElementById("sc").innerText=score; document.getElementById("mv").innerText=moves; document.getElementById("best").innerText=best; }
 newGame();
 </script>
 </body>
