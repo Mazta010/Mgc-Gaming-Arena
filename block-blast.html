@@ -1,197 +1,252 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC FINAL - Arena Pause Preview</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Block Blast - MGC Gaming Arena</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
-#top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a;font-size:13px;align-items:center;position:sticky;top:0;z-index:10}
-#top a{background:#020617;border:2px solid #22d3ee;color:#22d3ee;padding:5px 14px;border-radius:20px;text-decoration:none;font-size:11px}
-#score{font-size:58px;font-weight:900}
-#msg{color:#ffeb3b;font-size:11px;font-weight:bold;height:18px}
-#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
-.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 3px 6px rgba(0,0,0,.6);border:2px solid rgba(0,0,0,.25);transition:top.22s cubic-bezier(.2,.9,.2,1), left.1s}
-.bar.drag{transition:none!important;z-index:99;transform:scale(1.15)}
-.bar.ghost{opacity:.4;filter:grayscale(.3)}
-.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
-.full{box-shadow:0 0 22px #ffeb3b!important;border-color:#ffeb3b!important}
-.boom{animation:boom.32s forwards}@keyframes boom{50%{transform:scale(1.6);filter:brightness(3)}100%{transform:scale(0);opacity:0}}
-.pop{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font-size:32px;font-weight:900;background:rgba(0,0,0,.9);padding:8px 20px;border-radius:20px;animation:popUp.8s forwards;z-index:200;color:#ffeb3b;border:2px solid #ffeb3b}
-@keyframes popUp{0%{transform:translate(-50%,0) scale(0)}100%{transform:translate(-50%,-130%) scale(1);opacity:0}}
-button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px;cursor:pointer}
-#over{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:500}
-.inner{background:#1e2f5a;padding:22px;border-radius:16px;width:90%;max-width:320px;border:3px solid #ff3b3b}
-.lb{width:96%;max-width:360px;margin:12px auto;background:#0f172a;border-radius:14px;padding:12px;border:2px solid #334155;text-align:left}
-.lbRow{display:flex;justify-content:space-between;padding:7px 10px;background:#020617;border-radius:8px;margin-bottom:5px;font-size:11px;font-weight:800}
-#preview{width:96%;max-width:360px;height:52px;margin:8px auto;background:#0e1a33;border:2px dashed #22d3ee;border-radius:10px;position:relative;overflow:hidden;display:flex;align-items:center}
-#preview span{position:absolute;left:8px;font-size:9px;color:#22d3ee;font-weight:900;z-index:2}
-.previewBar{position:absolute;height:32px;border-radius:6px;top:10px;opacity:.85;border:1px solid rgba(255,255,255,.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;overflow:hidden;display:flex;flex-direction:column;height:100vh;padding-bottom:70px}
+.top-bar{background:#1e293b;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #22d3ee}
+.top-bar a{color:#22d3ee;text-decoration:none;font-weight:900;font-size:13px}
+.score-box{text-align:right}
+.score-box div{font-size:12px;opacity:0.7}
+.score-box b{font-size:20px;color:#22d3ee}
+.game-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:16px}
+#board{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;background:#1e293b;padding:8px;border-radius:12px;border:2px solid #334155;width:100%;max-width:360px;aspect-ratio:1}
+.cell{aspect-ratio:1;background:#0f172a;border-radius:4px;transition:0.15s}
+.cell.filled{background:#22d3ee;box-shadow:0 0 6px rgba(34,211,238,0.6)}
+.cell.preview{background:#22d3ee33}
+.cell.clear{animation:pop 0.3s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+.blocks{display:flex;gap:12px;justify-content:center}
+.block-option{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:8px;cursor:grab;display:grid;gap:2px}
+.block-option.dragging{opacity:0.5;transform:scale(0.9)}
+.block-cell{width:18px;height:18px;border-radius:3px}
+.block-cell.on{background:#a78bfa}
+.block-cell.off{background:transparent}
+#gameOver{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:10000;flex-direction:column;gap:16px;padding:20px;text-align:center}
+#gameOver.show{display:flex}
+#gameOver h2{font-size:32px;color:#22d3ee}
+#gameOver p{opacity:0.8}
+.btn{background:#22d3ee;color:#000;border:none;padding:12px 28px;border-radius:30px;font-weight:900;font-size:15px;cursor:pointer}
+.btn.sec{background:#334155;color:#fff}
+/* BANNER */
+.mgc-banner{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:2px solid #22d3ee;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
+.mgc-banner.left{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
+.mgc-banner.ad-text{font-size:12px;color:#fff;line-height:1.2}
+.mgc-banner.ad-text span{color:#22d3ee;font-weight:900}
+.mgc-banner.ad-btn{background:#22d3ee;color:#000;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:900;border:none;cursor:pointer}
+.mgc-banner.close-ad{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;margin-left:8px;opacity:0.6}
 </style>
 </head>
 <body>
-<div id="top"><a href="index.html">← ARENA</a><div>🏆 <span id="best">0</span></div><div id="moves">Moves: 0</div><button onclick="togglePause()" id="pauseBtn" style="padding:5px 12px;font-size:11px">⏸️ PAUSE</button></div>
-<div id="score">0</div>
-<div id="msg">SOUNDS ON 🔊 Drag → Auto drop → Aakyat!</div>
-<div id="grid"></div>
 
-<div id="preview"><span>👁️ NEXT LINE:</span></div>
-
-<div style="margin:6px">
-<button onclick="start()">🔄 NEW GAME</button>
-<button onclick="toggleSound()" id="sndBtn">🔊 SOUND ON</button>
-<a href="index.html" style="background:#0f172a;border:2px solid #22d3ee;color:#22d3ee;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px;text-decoration:none;display:inline-block;font-size:13px">🏠 BACK TO ARENA</a>
+<div class="top-bar">
+  <a href="index.html">← ARENA</a>
+  <div class="score-box">
+    <div>SCORE</div>
+    <b id="score">0</b>
+  </div>
+  <div class="score-box">
+    <div>BEST</div>
+    <b id="best">0</b>
+  </div>
 </div>
 
-<div class="lb">
-<div style="display:flex;justify-content:space-between;font-weight:900;color:#22d3ee;font-size:12px;margin-bottom:8px"><span>🏆 LEADERBOARD</span><span id="lc">0</span></div>
-<div id="lbList"></div>
+<div class="game-area">
+  <div id="board"></div>
+  <div class="blocks" id="blocks"></div>
 </div>
 
-<div id="over"><div class="inner"><h2 style="color:#ff3b3b">💀 PUNO NA!</h2><p>Score: <b id="finalS">0</b> | Moves: <b id="finalM">0</b></p><button onclick="start()" style="width:100%;margin-top:12px">🔄 ULIT</button><a href="index.html" style="display:block;text-align:center;margin-top:10px;padding:10px;border-radius:10px;background:#0f172a;border:2px solid #22d3ee;color:#22d3ee;text-decoration:none;font-weight:900">🏠 BACK TO ARENA</a></div></div>
+<div id="gameOver">
+  <h2>GAME OVER!</h2>
+  <p>Score: <b id="finalScore" style="color:#22d3ee">0</b></p>
+  <p style="font-size:13px;max-width:280px">Support MGC para tuloy ang free games! Click ad below 👇</p>
+  <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
+  <button class="btn sec" onclick="openAd()">SUPPORT MGC (AD)</button>
+  <a href="index.html" style="color:#94a3b8;font-size:13px;margin-top:8px;text-decoration:none">Back to Arena</a>
+</div>
+
+<!-- BOTTOM BANNER - KITA HABANG NAGLALARO -->
+<div class="mgc-banner" id="mgcBanner">
+  <div class="left" onclick="openAd()">
+    <div style="font-size:20px">🎮</div>
+    <div class="ad-text"><span>MGC Gaming</span><br>Support free games!</div>
+  </div>
+  <button class="ad-btn" onclick="openAd()">SUPPORT</button>
+  <button class="close-ad" onclick="closeBanner()">✕</button>
+</div>
 
 <script>
-let W=8,H=10,cellW,cellH=52,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,paused=false,nextRow=[];
-const cols=['c1','c2','c3','c4','c5','c6','c7'];
-let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); best=lb[0]?.score||0;
+// ========== MONETAG DIRECT LINK ==========
+const DIRECT_LINK = "https://omg10.com/4/11879270";
+function openAd(){
+  window.open(DIRECT_LINK,'_blank');
+}
+function closeBanner(){
+  document.getElementById('mgcBanner').style.display='none';
+  setTimeout(()=>{document.getElementById('mgcBanner').style.display='flex'}, 120000);
+}
 
-let actx=null;
-function initAudio(){ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); }
-function beep(f,d,v=0.3,type='sine'){ if(!soundOn) return; initAudio(); let o=actx.createOscillator(),g=actx.createGain(); o.type=type; o.frequency.value=f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(v,actx.currentTime); g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d); o.start(); o.stop(actx.currentTime+d); }
-function sMove(){ beep(300,0.08,0.15); }
-function sFall(){ beep(180,0.12,0.2,'square'); setTimeout(()=>beep(120,0.15,0.2,'square'),60); }
-function sBoom(){ beep(200,0.15,0.4,'sawtooth'); setTimeout(()=>beep(600,0.25,0.5,'sine'),80); }
-function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 SOUND ON':'🔇 OFF'; }
+// ========== BLOCK BLAST GAME LOGIC ==========
+const boardEl = document.getElementById('board');
+const blocksEl = document.getElementById('blocks');
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+let board = Array(10).fill(0).map(()=>Array(10).fill(0));
+let score = 0;
+let best = localStorage.getItem('mgc_best')||0;
+bestEl.textContent = best;
+let dragData = null;
 
-function newRow(y){
- let arr=[],x=0;
- while(x<W){
-  if(Math.random()<0.85){ let len=Math.min(Math.floor(Math.random()*3)+1,W-x); arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random().toString(36).slice(2)+Date.now()+Math.random()}); x+=len; if(Math.random()<0.28) x++; } else x++;
- }
- if(arr.length==0) arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});
- return arr;
+const SHAPES = [
+  [[1]], [[1,1],[1,1]], [[1,1,1],[1,0,0]], [[1,1,1],[0,0,1]], [[1,1,1,1]],
+  [[1,1,1],[0,1,0]], [[1,1,0],[0,1,1]], [[1,0],[1,1],[0,1]], [[1,1,1],[1,1,1]], [[1,1]]
+];
+
+function createBoard(){
+  boardEl.innerHTML='';
+  for(let r=0;r<10;r++) for(let c=0;c<10;c++){
+    const d=document.createElement('div');
+    d.className='cell'+(board[r][c]?' filled':'');
+    d.dataset.r=r; d.dataset.c=c;
+    boardEl.appendChild(d);
+  }
 }
-function genNextPreview(){
- nextRow=[]; let x=0;
- while(x<W){
-  if(Math.random()<0.8){ let len=Math.min(Math.floor(Math.random()*3)+1,W-x); nextRow.push({x,len,c:cols[Math.floor(Math.random()*cols.length)]}); x+=len; if(Math.random()<0.3) x++; } else x++;
- }
- drawPreview();
+
+function randomBlocks(){
+  blocksEl.innerHTML='';
+  for(let i=0;i<3;i++){
+    const shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+    const opt = document.createElement('div');
+    opt.className='block-option';
+    const rows = shape.length, cols = shape[0].length;
+    opt.style.gridTemplateColumns=`repeat(${cols},18px)`;
+    shape.forEach(row=>row.forEach(v=>{
+      const cell=document.createElement('div');
+      cell.className='block-cell '+(v?'on':'off');
+      opt.appendChild(cell);
+    }));
+    opt._shape=shape;
+    opt.draggable=true;
+    opt.addEventListener('dragstart', e=>{
+      dragData={shape,el:opt};
+      opt.classList.add('dragging');
+    });
+    opt.addEventListener('dragend',()=>opt.classList.remove('dragging'));
+    opt.addEventListener('click',()=>{
+      // Mobile tap to place - find first fit
+      autoPlace(shape, opt);
+    });
+    blocksEl.appendChild(opt);
+  }
 }
-function drawPreview(){
- let p=document.getElementById('preview'); p.querySelectorAll('.previewBar').forEach(e=>e.remove());
- cellW=document.getElementById('grid').clientWidth/W;
- nextRow.forEach(b=>{
-   let d=document.createElement('div'); d.className='previewBar '+b.c; d.style.left=(b.x*cellW+60)+'px'; d.style.width=(b.len*cellW-6)+'px'; p.appendChild(d);
- });
+
+function autoPlace(shape, optEl){
+  for(let r=0;r<=10-shape.length;r++){
+    for(let c=0;c<=10-shape[0].length;c++){
+      if(canPlace(r,c,shape)){
+        place(r,c,shape);
+        optEl.remove();
+        if(blocksEl.children.length===0) randomBlocks();
+        checkGameOver();
+        return;
+      }
+    }
+  }
 }
-function start(){ initAudio(); let g=document.getElementById('grid'); cellW=g.clientWidth/W; blocks=[]; score=0; moves=0; lock=false; paused=false; document.getElementById('over').style.display='none'; document.getElementById('pauseBtn').innerText='⏸️ PAUSE'; for(let y=H-3;y<H;y++) blocks=blocks.concat(newRow(y)); genNextPreview(); gravityInstant(); render(); renderLB(); }
-function getDrop(b){
- let ny=b.y;
- for(let test=b.y+1; test<H; test++){
-  if(blocks.some(o=>o.id!=b.id && o.y==test &&!(b.x+b.len<=o.x || b.x>=o.x+o.len))) break;
-  ny=test;
- }
- return ny;
+
+function canPlace(br,bc,shape){
+  for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++){
+    if(shape[r][c]){
+      if(br+r>=10||bc+c>=10||board[br+r][bc+c]) return false;
+    }
+  }
+  return true;
 }
-// IBABA KAPAG MAY EMPTY SLOT SA BABA - AUTO DROP KAHIT ILANG LINES!
-function gravityInstant(){
- let moved=true, loops=0;
- while(moved && loops<30){
-  moved=false; loops++;
-  let sorted=[...blocks].sort((a,b)=>b.y-a.y);
-  sorted.forEach(b=>{
-   let drop=getDrop(b);
-   if(drop!=b.y){ b.y=drop; moved=true; }
-  });
- }
- if(moved && loops>1) sFall();
+
+function place(br,bc,shape){
+  for(let r=0;r<shape.length;r++) for(let c=0;c<shape[0].length;c++){
+    if(shape[r][c]) board[br+r][bc+c]=1;
+  }
+  score+=shape.flat().filter(v=>v).length*10;
+  scoreEl.textContent=score;
+  clearLines();
+  createBoard();
 }
-function getFull(){
- let full=[];
- for(let y=0;y<H;y++){ let row=blocks.filter(b=>b.y==y); if(!row.length) continue; let cov=Array(W).fill(0); row.forEach(o=>{for(let i=0;i<o.len;i++) cov[o.x+i]=1;}); if(cov.every(v=>v)) full.push(y); }
- return full;
+
+function clearLines(){
+  let cleared=0;
+  for(let r=0;r<10;r++) if(board[r].every(v=>v)){
+    board[r]=Array(10).fill(0); cleared++;
+  }
+  for(let c=0;c<10;c++) if(board.every(row=>row[c])){
+    for(let r=0;r<10;r++) board[r][c]=0; cleared++;
+  }
+  if(cleared) score+=cleared*100;
 }
-function render(){
- let g=document.getElementById('grid'); g.innerHTML=''; cellW=g.clientWidth/W;
- let fullSet=new Set(getFull());
- blocks.forEach(b=>{
-  if(b.y<0||b.y>=H) return;
-  let d=document.createElement('div'); d.className='bar '+b.c+(fullSet.has(b.y)?' full':''); d.dataset.id=b.id;
-  d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+2)+'px'; d.style.width=(b.len*cellW-6)+'px';
-  if(!paused) { d.addEventListener('touchstart',s,{passive:false}); d.addEventListener('mousedown',s); }
-  g.appendChild(d);
- });
- document.getElementById('score').innerText=score;
- document.getElementById('moves').innerText='Moves: '+moves;
- document.getElementById('best').innerText=best;
+
+function checkGameOver(){
+  const shapes = [...blocksEl.children].map(el=>el._shape);
+  if(shapes.length===0) return;
+  let can=false;
+  for(let shape of shapes){
+    for(let r=0;r<=10-shape.length;r++) for(let c=0;c<=10-shape[0].length;c++) if(canPlace(r,c,shape)) can=true;
+  }
+  if(!can){
+    document.getElementById('finalScore').textContent=score;
+    document.getElementById('gameOver').classList.add('show');
+    if(score>best){best=score; localStorage.setItem('mgc_best',best); bestEl.textContent=best;}
+    // AUTO AD ON GAME OVER - KITA KA DITO BOSS!
+    setTimeout(()=>{ openAd(); }, 800);
+  }
 }
-let drag=null;
-function s(e){
- if(lock||paused) return; e.preventDefault(); initAudio();
- let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
- let t=e.touches?e.touches[0]:e; drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*cellW,_last:null}; e.currentTarget.classList.add('drag'); sMove();
- window.addEventListener('touchmove',m,{passive:false}); window.addEventListener('mousemove',m);
- window.addEventListener('touchend',eD); window.addEventListener('mouseup',eD);
+
+function restartGame(){
+  board=Array(10).fill(0).map(()=>Array(10).fill(0));
+  score=0; scoreEl.textContent=0;
+  document.getElementById('gameOver').classList.remove('show');
+  createBoard(); randomBlocks();
 }
-function m(e){
- if(!drag||lock||paused) return; e.preventDefault();
- let t=e.touches?e.touches[0]:e; let dx=t.clientX-drag.sx; let newL=drag.startLeft+dx;
- let max=(W-drag.b.len)*cellW; newL=Math.max(0,Math.min(max,newL));
- let projX=Math.round(newL/cellW);
- let others=blocks.filter(o=>o.y==drag.b.y && o.id!=drag.b.id);
- for(let o of others){ if(!(projX+drag.b.len<=o.x || projX>=o.x+o.len)){ if(dx>0) newL=(o.x-drag.b.len)*cellW-2; else newL=(o.x+o.len)*cellW+2; break; } }
- drag.el.style.left=newL+'px'; drag._last=newL;
-}
-function eD(){
- if(!drag||paused) return;
- let b=drag.b; let finalL=drag._last!==null?drag._last:drag.startLeft;
- let nx=Math.round(finalL/cellW); nx=Math.max(0,Math.min(W-b.len,nx));
- if(!blocks.filter(o=>o.y==b.y && o.id!=b.id).some(o=>!(nx+b.len<=o.x || nx>=o.x+o.len))) b.x=nx;
- drag.el.classList.remove('drag'); drag=null;
- window.removeEventListener('touchmove',m); window.removeEventListener('mousemove',m);
- window.removeEventListener('touchend',eD); window.removeEventListener('mouseup',eD);
- b.y=getDrop(b); gravityInstant(); moves++; render(); setTimeout(afterMove,80);
-}
-function afterMove(){
- if(lock||paused) return;
- let full=getFull();
- if(full.length){
-  lock=true; sBoom();
-  document.querySelectorAll('.bar').forEach(el=>{ let b=blocks.find(o=>o.id==el.dataset.id); if(b&&full.includes(b.y)) el.classList.add('boom'); });
-  setTimeout(()=>{
-   blocks=blocks.filter(b=>!full.includes(b.y));
-   gravityInstant();
-   let add=full.length*30*full.length; score+=add; if(score>best) best=score;
-   lb.push({name:document.getElementById('moves').innerText,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
-   let p=document.createElement('div'); p.className='pop'; p.innerText='+'+add+' BOOM!'; document.body.appendChild(p); setTimeout(()=>p.remove(),900);
-   lock=false; render(); renderLB(); setTimeout(afterMove,200);
-  },300);
- } else {
-  if(blocks.some(b=>b.y<=0)){ document.getElementById('finalS').innerText=score; document.getElementById('finalM').innerText=moves; document.getElementById('over').style.display='flex'; renderLB(); return; }
-  // AAKYAT PAG NAG-MOVE - GAMIT YUNG NEXT PREVIEW!
-  blocks.forEach(b=>b.y--);
-  let newBlocks=nextRow.map(r=>({x:r.x,y:H-1,len:r.len,c:r.c,id:Math.random().toString(36).slice(2)+Date.now()+Math.random()}));
-  blocks=blocks.concat(newBlocks);
-  genNextPreview();
-  gravityInstant();
-  render();
- }
-}
-function togglePause(){
- paused=!paused;
- document.getElementById('pauseBtn').innerText=paused?'▶️ RESUME':'⏸️ PAUSE';
- document.getElementById('msg').innerText=paused?'⏸️ PAUSED - Click RESUME':'SOUNDS ON 🔊 Drag → Auto drop → Aakyat!';
- render();
-}
-function renderLB(){
- let el=document.getElementById('lbList'); el.innerHTML=""; document.getElementById('lc').innerText=lb.length+" players";
- if(!lb.length){ el.innerHTML='<div style="opacity:.5;font-size:10px;text-align:center;padding:8px">Wala pa score</div>'; return; }
- lb.forEach((r,i)=>{
-   let row=document.createElement("div"); row.className="lbRow"+(i==0?" top1":""); row.innerHTML=`<span>${i==0?"🥇":i==1?"🥈":i==2?"🥉":"#"+(i+1)} Score</span><span>${r.score}</span>`; el.appendChild(row);
- });
-}
-start();
+
+// Drag over board
+boardEl.addEventListener('dragover', e=>{
+  e.preventDefault();
+  if(!dragData) return;
+  const rect=boardEl.getBoundingClientRect();
+  const cellSize=rect.width/10;
+  const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  const bc=Math.floor(x/cellSize), br=Math.floor(y/cellSize);
+  // preview
+  document.querySelectorAll('.cell').forEach(el=>el.classList.remove('preview'));
+  if(canPlace(br,bc,dragData.shape)){
+    for(let r=0;r<dragData.shape.length;r++) for(let c=0;c<dragData.shape[0].length;c++) if(dragData.shape[r][c]){
+      const el=document.querySelector(`.cell[data-r="${br+r}"][data-c="${bc+c}"]`);
+      if(el) el.classList.add('preview');
+    }
+  }
+});
+
+boardEl.addEventListener('drop', e=>{
+  e.preventDefault();
+  if(!dragData) return;
+  const rect=boardEl.getBoundingClientRect();
+  const cellSize=rect.width/10;
+  const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  const bc=Math.floor(x/cellSize), br=Math.floor(y/cellSize);
+  if(canPlace(br,bc,dragData.shape)){
+    place(br,bc,dragData.shape);
+    dragData.el.remove();
+    if(blocksEl.children.length===0) randomBlocks();
+    checkGameOver();
+  }
+  document.querySelectorAll('.cell').forEach(el=>el.classList.remove('preview'));
+  dragData=null;
+});
+
+// Init
+createBoard(); randomBlocks();
 </script>
 </body>
 </html>
