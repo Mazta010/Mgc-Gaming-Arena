@@ -1,39 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGC Gaming Arena - Mazta Gaming</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MGC Gaming Arena - Play Free!</title>
+
+<!-- MGC MONETAG FINAL - MultiTag -->
+<script>(function(d,s){var z=d.createElement(s);z.src='https://omg10.com/4/11879270';z.async=true;d.head.appendChild(z);})(document,'script');</script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;padding-bottom:80px}
-.header{background:linear-gradient(90deg,#06b6d4,#3b82f6);padding:22px;text-align:center}
-.header h1{font-size:28px;font-weight:900}
-.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:20px;max-width:900px;margin:0 auto}
-.game-card{background:#1e293b;border-radius:16px;padding:12px;text-decoration:none;color:#fff;border:2px solid #334155;transition:0.2s;display:block}
-.game-card.live{border-color:#22d3ee}
-.game-card:hover{transform:translateY(-4px)}
-.game-card img{width:100%;height:120px;object-fit:cover;border-radius:12px;background:#0f172a}
-.game-card h3{margin:10px 0 4px;font-size:15px}
-.badge{background:#22d3ee;color:#000;font-size:10px;font-weight:900;padding:4px 10px;border-radius:20px;display:inline-block}
-#mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
-.mgc-left{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer}
-.mgc-text{font-size:13px;line-height:1.2}.mgc-text b{color:#22d3ee}
-.mgc-btn{background:#22d3ee;color:#000;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;border:none;cursor:pointer}
-.mgc-x{background:none;border:none;color:#fff;font-size:20px;opacity:0.6;cursor:pointer;margin-left:12px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:radial-gradient(120% at 50% 0%,#1e1b4b,#020617 90%);color:#fff;min-height:100vh;padding-bottom:70px}
+.top{background:rgba(0,0,0,.9);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #22d3ee;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;color:#22d3ee;font-size:18px}
+.stats{display:flex;gap:8px;align-items:center;font-size:12px;font-weight:800}
+.badge{background:#1e293b;padding:6px 12px;border-radius:20px;border:1px solid rgba(34,211,238,.3)}
+.badge.gold{border-color:#ffeb3b;color:#ffeb3b}
+.hero{text-align:center;padding:20px 16px}
+.hero h1{font-size:32px;background:linear-gradient(90deg,#22d3ee,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
+.hero p{opacity:.7;font-size:13px;margin-top:6px}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;max-width:600px;margin:0 auto}
+@media(max-width:400px){.games{grid-template-columns:1fr}}
+.card{background:rgba(15,23,42,.95);border:2px solid #334155;border-radius:16px;padding:14px;text-align:center;transition:.2s;cursor:pointer;text-decoration:none;color:#fff;display:block}
+.card:hover{border-color:#22d3ee;transform:translateY(-3px);box-shadow:0 10px 30px rgba(34,211,238,.2)}
+.card.hot{border-color:#ffeb3b}
+.card-icon{font-size:48px;margin-bottom:8px}
+.card h3{font-size:16px;font-weight:900;margin-bottom:4px}
+.card p{font-size:11px;opacity:.6;margin-bottom:10px}
+.btn{width:100%;padding:10px;border-radius:10px;border:none;background:linear-gradient(90deg,#22d3ee,#a78bfa);font-weight:900;color:#000;cursor:pointer}
+.btn.gold{background:linear-gradient(90deg,#facc15,#f97316)}
+.footer{text-align:center;padding:20px;opacity:.5;font-size:11px}
+#mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
 </style>
 </head>
 <body>
-<div class="header"><h1>🎮 MGC GAMING ARENA</h1><p>Free To Play - No Ads On Start!</p></div>
+<div class="top">
+<div class="logo">💙 MGC GAMING</div>
+<div class="stats">
+<span class="badge" onclick="location.href='block-blast.html'">🧱 BAR</span>
+<span class="badge" onclick="location.href='tetris.html'">🎮 TETRIS</span>
+<span class="badge gold">🏆 <span id="totalScore">0</span></span>
+<span class="badge">👤 <span id="pName">Mazta</span></span>
+</div>
+</div>
+
+<div class="hero">
+<h1>GAMING ARENA</h1>
+<p>Play Free • No Ads on Start • Support us via Banner ❤️</p>
+<p style="margin-top:8px"><span id="welcome">Welcome, Mazta!</span> | Best: <b id="bestAll">0</b> pts</p>
+</div>
+
 <div class="games">
-  <a href="block-blast.html" class="game-card live"><img src="https://placehold.co/300x200/06b6d4/000?text=BLOCK+BLAST"><h3>Block Blast</h3><span class="badge">▶ PLAY NOW</span></a>
-  <a href="tetris-battle.html" class="game-card live"><img src="https://placehold.co/300x200/8b5cf6/fff?text=TETRIS"><h3>Tetris Battle</h3><span class="badge">▶ PLAY NOW</span></a>
+<a href="block-blast.html" class="card hot">
+<div class="card-icon">🧱</div>
+<h3>BLOCK BLAST BAR</h3>
+<p>Drag bars • Clear rows • Auto-drop fixed!</p>
+<p style="color:#ffeb3b">🏆 <span id="bestBAR">0</span> pts • <span id="movesBAR">0</span> games</p>
+<button class="btn gold">▶ PLAY BAR</button>
+</a>
+
+<a href="tetris.html" class="card">
+<div class="card-icon">⚔️</div>
+<h3>MGC TETRIS V6.1f</h3>
+<p>L stays L, T stays T! Pause + LB!</p>
+<p style="color:#22d3ee">🏆 <span id="bestTETRIS">0</span> pts • <span id="linesTETRIS">0</span> lines</p>
+<button class="btn">▶ PLAY TETRIS</button>
+</a>
+
+<a href="block-blast.html" class="card" style="opacity:.7">
+<div class="card-icon">🔜</div>
+<h3>COMING SOON</h3>
+<p>More games loading...</p>
+<button class="btn" style="background:#334155;color:#fff">SOON</button>
+</a>
+
+<a href="#" onclick="openAd();return false;" class="card" style="border-color:#22d3ee;background:rgba(34,211,238,.08)">
+<div class="card-icon">💙</div>
+<h3>SUPPORT MGC</h3>
+<p>Click to support free games!</p>
+<button class="btn">💙 SUPPORT</button>
+</a>
 </div>
-<div id="mgcBanner">
-  <div class="mgc-left" onclick="openAd()"><div style="font-size:22px">💙</div><div class="mgc-text"><b>Support MGC!</b><br>Free games forever</div></div>
-  <button class="mgc-btn" onclick="openAd()">SUPPORT</button>
-  <button class="mgc-x" onclick="document.getElementById('mgcBanner').style.display='none'">✕</button>
+
+<div class="footer">
+<p>© 2026 MGC Gaming • Made with 💙 by Mazta</p>
+<p style="margin-top:6px">Monetag Final • No auto pop • 1 ad per Game Over only</p>
+<p style="margin-top:6px"><a href="https://omg10.com/4/11879270" target="_blank" style="color:#22d3ee">Direct Link</a> | GitHub Pages HTTPS ✅</p>
 </div>
-<script>const DIRECT_LINK="https://omg10.com/4/11879270"; function openAd(){window.open(DIRECT_LINK,'_blank');}</script>
+
+<div id="mgcBanner"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="openAd()"><span style="font-size:20px">💙</span><span style="font-size:11px;text-align:left"><b style="color:#22d3ee">MGC Gaming Arena</b><br>Support = More Games!</span></div><button onclick="openAd()" style="background:#22d3ee;color:#000;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:900;border:none">SUPPORT</button><button onclick="this.parentElement.style.display='none'" style="background:none;border:none;color:#fff;font-size:20px;margin-left:8px;opacity:.6">✕</button></div>
+
+<script>
+const DIRECT_LINK="https://omg10.com/4/11879270";function openAd(){window.open(DIRECT_LINK,'_blank');}
+let player=localStorage.getItem('mgcName')||'Mazta';
+document.getElementById('pName').innerText=player;
+document.getElementById('welcome').innerText='Welcome, '+player+'!';
+let barLB=JSON.parse(localStorage.getItem('mgcLB')||'[]');
+let tetrisLB=JSON.parse(localStorage.getItem('mgcTetrisLB')||'[]');
+let bestBar=barLB.length?Math.max(...barLB.map(e=>e.score||e)):0;
+let bestTetris=tetrisLB.length?Math.max(...tetrisLB.map(e=>e.score)):0;
+document.getElementById('bestBAR').innerText=bestBar;
+document.getElementById('bestTETRIS').innerText=bestTetris;
+document.getElementById('bestAll').innerText=Math.max(bestBar,bestTetris);
+document.getElementById('totalScore').innerText=bestBar+bestTetris;
+document.getElementById('movesBAR').innerText=barLB.length;
+document.getElementById('linesTETRIS').innerText=tetrisLB.reduce((s,e)=>s+(e.lines||0),0);
+</script>
 </body>
 </html>
