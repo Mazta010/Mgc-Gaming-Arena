@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>MGC TETRIS V6.1f FINAL</title>
+<script>(function(s){s.dataset.zone='11881250',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{height:100dvh;width:100vw;overflow:hidden;background:#020617}
@@ -184,7 +185,7 @@ function holdP(i){if(isPaused)return;let p=players[i];if(!p||!p.canHold)return;i
 function continueGame(){openAd();let p=players[0];for(let k=0;k<3;k++){p.grid.pop();p.grid.unshift(Array(COLS).fill(0));}document.getElementById('overModal').style.display='none';p.over=false;isPaused=false;requestAnimationFrame(loop);}
 function startGame(){initAudio();let a=document.getElementById('inA').value||'Mazta';player=a;localStorage.setItem('mgcName',player);let ca=document.getElementById('boardA'),na=document.getElementById('nextA');players=[makePlayer(ca,na,a)];document.getElementById('nameA').innerText='👤 '+a+' ✏️';players.forEach(p=>{p.next=randP();spawn(p);});document.getElementById('startModal').style.display='none';document.getElementById('overModal').style.display='none';isPaused=false;updScores(0,0,1);requestAnimationFrame(loop);}
 document.getElementById('boardA').addEventListener('touchstart',e=>{let t=e.touches[0],r=e.target.getBoundingClientRect();if(t.clientX<r.left+r.width*0.33)moveP(0,-1);else if(t.clientX>r.left+r.width*0.66)moveP(0,1);else rotateP(0);},{passive:false});
-start();
+// FIXED - tinanggal start() na nagpapa error
 </script>
 </body>
 </html>
