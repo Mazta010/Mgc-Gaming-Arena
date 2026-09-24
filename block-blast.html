@@ -1,126 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Block Blast V6 - TAP FIX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MGC SOUNDS + INSTANT HULOG</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;user-select:none;-webkit-tap-highlight-color:transparent}
-body{background:#1e3a8a;min-height:100vh;display:flex;flex-direction:column;align-items:center;color:#fff}
-.top{width:100%;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;font-size:13px;border-bottom:2px solid #22d3ee;position:sticky;top:0;z-index:99}
-.top a{background:#020617;border:2px solid #22d3ee;color:#22d3ee;padding:7px 18px;border-radius:20px;text-decoration:none;font-size:13px}
-.score{font-size:62px;font-weight:900;margin:8px 0 0;line-height:1}
-.sub{color:#facc15;font-weight:800;font-size:11px;text-align:center}
-#board{width:92vw;max-width:380px;aspect-ratio:1;background:#0f172a;border-radius:18px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:5px;padding:10px;margin-top:10px;border:3px solid #1e293b}
-.cell{background:#1e293b;border-radius:7px;display:flex;align-items:center;justify-content:center}
-.cell.f{box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.25)}
-#trayWrap{width:94%;max-width:390px;background:#0f172a;border-radius:16px;padding:14px;margin-top:12px;border:1px solid #334155}
-#hint{font-size:11px;color:#22d3ee;font-weight:900;text-align:center;margin-bottom:10px}
-#tray{display:flex;gap:12px;justify-content:center}
-.piece{flex:1;background:#020617;border-radius:14px;padding:14px 8px;border:3px solid transparent;display:flex;align-items:center;justify-content:center;min-height:70px}
-.piece.sel{border-color:#22d3ee!important;box-shadow:0 0 20px rgba(34,211,238,.8);background:#0a1a2a}
-.mg{display:grid;gap:4px;pointer-events:none}
-.mc{width:18px;height:18px;border-radius:5px;pointer-events:none}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
+#top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a;font-size:13px}
+#score{font-size:58px;font-weight:900}
+#msg{color:#ffeb3b;font-size:11px;font-weight:bold;height:18px}
+#grid{width:96%;max-width:360px;height:520px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
+.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 3px 6px rgba(0,0,0,.6);border:2px solid rgba(0,0,0,.25);transition:top.22s cubic-bezier(.2,.9,.2,1), left.1s}
+.bar.drag{transition:none!important;z-index:99;transform:scale(1.15)}
+.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
+.full{box-shadow:0 0 22px #ffeb3b!important;border-color:#ffeb3b!important}
+.boom{animation:boom.32s forwards}@keyframes boom{50%{transform:scale(1.6);filter:brightness(3)}100%{transform:scale(0);opacity:0}}
+.pop{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font-size:36px;font-weight:900;background:rgba(0,0,0,.9);padding:8px 20px;border-radius:20px;animation:popUp.8s forwards;z-index:200;color:#ffeb3b;border:2px solid #ffeb3b}
+@keyframes popUp{0%{transform:translate(-50%,0) scale(0)}100%{transform:translate(-50%,-130%) scale(1);opacity:0}}
+button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px}
+#over{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:500}
+.inner{background:#1e2f5a;padding:22px;border-radius:16px;width:90%;max-width:320px;border:3px solid #ff3b3b}
 </style>
 </head>
 <body>
-<div class="top"><a href="index.html">← ARENA</a><span>🏆 <span id="best">0</span></span><span>Mazta</span><span>Moves:<b id="mv">0</b></span></div>
-<div class="score" id="sc">0</div>
-<div class="sub">SOUNDS ON 🔊 TAP BLOCK SA BABA → TAP BOARD!</div>
-<div id="board"></div>
-<div id="trayWrap">
-<div id="hint">👇 TAP MO YUNG BLOCK SA BABA!</div>
-<div id="tray"></div>
-</div>
-<div style="display:flex;gap:10px;margin:16px 0 30px"><button onclick="newGame()" style="padding:12px 20px;border-radius:12px;border:none;font-weight:900;background:#e2e8f0">🔄 NEW GAME</button><a href="index.html" style="padding:12px 20px;border-radius:12px;background:#0f172a;border:2px solid #22d3ee;color:#22d3ee;text-decoration:none;font-weight:900">🏠 ARENA</a></div>
+<div id="top"><div>🏆 <span id="best">0</span></div><div id="pName">Mazta</div><div id="moves">Moves: 0</div></div>
+<div id="score">0</div>
+<div id="msg">SOUNDS ON 🔊 Instant hulog!</div>
+<div id="grid"></div>
+<div><button onclick="start()">🔄 NEW</button><button onclick="toggleSound()" id="sndBtn">🔊 SOUND ON</button></div>
+<div id="over"><div class="inner"><h2 style="color:#ff3b3b">💀 PUNO NA!</h2><p>Score: <b id="finalS">0</b> | Moves: <b id="finalM">0</b></p><button onclick="start()" style="width:100%;background:#22d3ee;margin-top:12px">🔄 ULIT</button></div></div>
 
 <script>
-const SIZE=8, COLORS=["#f472b6","#22d3ee","#fb923c","#34d399","#facc15","#a78bfa"];
-const SHAPES=[[[1,1,1]],[[1,1,1,1,1]],[[1,1],[1,0],[1,0]],[[1,1,1],[0,1,0]],[[1,1],[1,1]],[[1,1,1,1]],[[1,0,0],[1,1,1]]];
-let board,score=0,moves=0,best=+localStorage.getItem("bbBest")||0,selIdx=null,pieces=[];
+let W=8,H=10,cellW,cellH=52,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true;
+const cols=['c1','c2','c3','c4','c5','c6','c7'];
+let player=localStorage.getItem('mgcName')||'Mazta';
+let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]'); best=lb[0]?.score||0;
 
-function newGame(){
- board=Array.from({length:SIZE},()=>Array(SIZE).fill(0)); score=0; moves=0; selIdx=null;
- document.getElementById("best").innerText=best;
- genPieces(); drawBoard(); drawTray(); upd();
- document.getElementById("hint").innerText="👇 TAP MO YUNG BLOCK SA BABA!";
-}
-function genPieces(){
- pieces=[];
- for(let i=0;i<3;i++){
-   let sh=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-   pieces.push({sh:sh.map(r=>[...r]), col:COLORS[Math.floor(Math.random()*COLORS.length)]});
+// ---- SOUNDS BOSS ----
+let actx=null;
+function initAudio(){ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); }
+function beep(f,d,v=0.3,type='sine'){ if(!soundOn) return; initAudio(); let o=actx.createOscillator(),g=actx.createGain(); o.type=type; o.frequency.value=f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(v,actx.currentTime); g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d); o.start(); o.stop(actx.currentTime+d); }
+function sMove(){ beep(300,0.08,0.15); }
+function sFall(){ beep(180,0.12,0.2,'square'); setTimeout(()=>beep(120,0.15,0.2,'square'),60); }
+function sBoom(){ beep(200,0.15,0.4,'sawtooth'); setTimeout(()=>beep(600,0.25,0.5,'sine'),80); setTimeout(()=>beep(900,0.3,0.3,'triangle'),150); }
+function sOver(){ beep(150,0.5,0.5,'sawtooth'); setTimeout(()=>beep(80,0.8,0.5,'sawtooth'),200); }
+function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF'; if(soundOn){initAudio(); beep(500,0.2,0.3);} }
+
+function newRow(y){
+ let arr=[],x=0;
+ while(x<W){
+  if(Math.random()<0.85){ let len=Math.min(Math.floor(Math.random()*3)+1,W-x); arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random().toString(36).slice(2)+Date.now()+Math.random()}); x+=len; if(Math.random()<0.28) x++; } else x++;
  }
+ if(arr.length==0) arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});
+ return arr;
 }
-function drawTray(){
- let t=document.getElementById("tray"); t.innerHTML="";
- pieces.forEach((p,i)=>{
-   let d=document.createElement("div");
-   d.className="piece"+(selIdx===i?" sel":"");
-   d.id="piece-"+i;
-   // SUPER FIX: lahat ng event - click, touchstart
-   d.addEventListener("click",()=>select(i));
-   d.addEventListener("touchstart",(e)=>{e.preventDefault(); select(i);},{passive:false});
-
-   let g=document.createElement("div"); g.className="mg"; g.style.gridTemplateColumns=`repeat(${p.sh[0].length},1fr)`;
-   p.sh.forEach(r=>r.forEach(v=>{
-     let m=document.createElement("div"); m.className="mc"; m.style.background=v?p.col:"transparent";
-     if(v) m.style.border="1px solid rgba(255,255,255,.3)";
-     g.appendChild(m);
-   }));
-   d.appendChild(g);
-   t.appendChild(d);
+function start(){ initAudio(); let g=document.getElementById('grid'); cellW=g.clientWidth/W; blocks=[]; score=0; moves=0; lock=false; document.getElementById('over').style.display='none'; for(let y=H-3;y<H;y++) blocks=blocks.concat(newRow(y)); gravityInstant(); render(); }
+function getDrop(b){
+ let ny=b.y;
+ for(let test=b.y+1; test<H; test++){
+  let coll=blocks.some(o=>o.id!=b.id && o.y==test &&!(b.x+b.len<=o.x || b.x>=o.x+o.len));
+  if(coll) break; ny=test;
+ }
+ return ny;
+}
+function gravityInstant(){
+ let moved=true, loops=0;
+ while(moved && loops<20){ moved=false; loops++;
+  let sorted=[...blocks].sort((a,b)=>b.y-a.y);
+  sorted.forEach(b=>{
+   let drop=getDrop(b);
+   if(drop!=b.y){ b.y=drop; moved=true; }
+  });
+ }
+ if(moved) sFall();
+}
+function getFull(){
+ let full=[];
+ for(let y=0;y<H;y++){ let row=blocks.filter(b=>b.y==y); if(!row.length) continue; let cov=Array(W).fill(0); row.forEach(o=>{for(let i=0;i<o.len;i++) if(o.x+i<W) cov[o.x+i]=1;}); if(cov.every(v=>v)) full.push(y); }
+ return full;
+}
+function render(){
+ let g=document.getElementById('grid'); g.innerHTML=''; cellW=g.clientWidth/W;
+ let fullSet=new Set(getFull());
+ blocks.forEach(b=>{
+  if(b.y<0||b.y>=H) return;
+  let d=document.createElement('div'); d.className='bar '+b.c+(fullSet.has(b.y)?' full':''); d.dataset.id=b.id;
+  d.style.left=(b.x*cellW+2)+'px'; d.style.top=(b.y*cellH+2)+'px'; d.style.width=(b.len*cellW-6)+'px';
+  d.addEventListener('touchstart',s,{passive:false}); d.addEventListener('mousedown',s);
+  g.appendChild(d);
  });
+ document.getElementById('score').innerText=score;
+ document.getElementById('moves').innerText='Moves: '+moves;
+ document.getElementById('best').innerText=best;
 }
-function select(i){
- selIdx=i;
- document.getElementById("hint").innerText="✅ Block "+(i+1)+" pinili! NGAYON TAP SA BOARD!";
- // vibrate + visual
- if(navigator.vibrate) navigator.vibrate(50);
- drawTray();
+let drag=null;
+function s(e){
+ if(lock) return; e.preventDefault(); initAudio();
+ let b=blocks.find(o=>o.id==e.currentTarget.dataset.id); if(!b) return;
+ let t=e.touches?e.touches[0]:e; drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*cellW,_last:null}; e.currentTarget.classList.add('drag'); sMove();
+ window.addEventListener('touchmove',m,{passive:false}); window.addEventListener('mousemove',m);
+ window.addEventListener('touchend',eD); window.addEventListener('mouseup',eD);
 }
-function drawBoard(){
- let b=document.getElementById("board"); b.innerHTML="";
- for(let y=0;y<SIZE;y++) for(let x=0;x<SIZE;x++){
-   let c=document.createElement("div"); c.className="cell"+(board[y][x]?" f":"");
-   if(board[y][x]) c.style.background=board[y][x];
-   c.addEventListener("click",()=>place(x,y));
-   c.addEventListener("touchstart",(e)=>{e.preventDefault(); place(x,y);},{passive:false});
-   b.appendChild(c);
+function m(e){
+ if(!drag||lock) return; e.preventDefault();
+ let t=e.touches?e.touches[0]:e; let dx=t.clientX-drag.sx; let newL=drag.startLeft+dx;
+ let min=0,max=(W-drag.b.len)*cellW; newL=Math.max(min,Math.min(max,newL));
+ let projX=Math.round(newL/cellW);
+ let others=blocks.filter(o=>o.y==drag.b.y && o.id!=drag.b.id);
+ for(let o of others){ if(!(projX+drag.b.len<=o.x || projX>=o.x+o.len)){ if(dx>0) newL=(o.x-drag.b.len)*cellW-2; else newL=(o.x+o.len)*cellW+2; break; } }
+ drag.el.style.left=newL+'px'; drag._last=newL;
+}
+function eD(){
+ if(!drag) return;
+ let b=drag.b; let finalL=drag._last!==null?drag._last:drag.startLeft;
+ let nx=Math.round(finalL/cellW); nx=Math.max(0,Math.min(W-b.len,nx));
+ let others=blocks.filter(o=>o.y==b.y && o.id!=b.id);
+ if(!others.some(o=>!(nx+b.len<=o.x || nx>=o.x+o.len))) b.x=nx;
+ drag.el.classList.remove('drag'); drag=null;
+ window.removeEventListener('touchmove',m); window.removeEventListener('mousemove',m);
+ window.removeEventListener('touchend',eD); window.removeEventListener('mouseup',eD);
+ // INSTANT HULOG BOSS - kahit may bakante sa baba, hulog agad!
+ let oldY=b.y; let drop=getDrop(b); b.y=drop;
+ if(drop!=oldY) sFall();
+ gravityInstant(); // LAHAT HULOG DIKIT-DIKIT!
+ moves++; render(); setTimeout(afterMove,80);
+}
+function afterMove(){
+ if(lock) return;
+ let full=getFull();
+ if(full.length){
+  lock=true; sBoom();
+  document.querySelectorAll('.bar').forEach(el=>{ let b=blocks.find(o=>o.id==el.dataset.id); if(b&&full.includes(b.y)) el.classList.add('boom'); });
+  setTimeout(()=>{
+   blocks=blocks.filter(b=>!full.includes(b.y));
+   gravityInstant(); // after boom, instant laglag lahat!
+   let add=full.length*30*full.length; score+=add; if(score>best) best=score;
+   lb.push({name:player,score}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10); localStorage.setItem('mgcLB',JSON.stringify(lb));
+   let p=document.createElement('div'); p.className='pop'; p.innerText='+'+add+' BOOM!'; document.body.appendChild(p); setTimeout(()=>p.remove(),900);
+   lock=false; render(); setTimeout(afterMove,200);
+  },300);
+ } else {
+  if(blocks.some(b=>b.y<=0)){ sOver(); document.getElementById('finalS').innerText=score; document.getElementById('finalM').innerText=moves; document.getElementById('over').style.display='flex'; return; }
+  blocks.forEach(b=>b.y--); blocks=blocks.concat(newRow(H-1)); render();
  }
 }
-function canPlace(sx,sy,sh){
- for(let y=0;y<sh.length;y++) for(let x=0;x<sh[y].length;x++) if(sh[y][x]){
-   let nx=sx+x, ny=sy+y;
-   if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]) return false;
- }
- return true;
-}
-function place(x,y){
- if(selIdx===null){
-   document.getElementById("hint").innerText="❌ PILI KA MUNA BLOCK SA BABA! TAP MO YUNG PINK/CYAN/ORANGE!";
-   return;
- }
- let p=pieces[selIdx];
- if(x+p.sh[0].length>SIZE) x=SIZE-p.sh[0].length;
- if(y+p.sh.length>SIZE) y=SIZE-p.sh.length;
- if(!canPlace(x,y,p.sh)){
-   document.getElementById("hint").innerText="❌ Hindi kasya dyan! Pili ibang spot!";
-   return;
- }
- p.sh.forEach((r,yy)=>r.forEach((v,xx)=>{ if(v) board[y+yy][x+xx]=p.col; }));
- pieces.splice(selIdx,1); selIdx=null; moves++; score+=10;
- let clr=0;
- for(let yy=0;yy<SIZE;yy++) if(board[yy].every(c=>c)){ board[yy].fill(0); clr++; }
- for(let xx=0;xx<SIZE;xx++){ let full=true; for(let yy=0;yy<SIZE;yy++) if(!board[yy][xx]) full=false; if(full){ for(let yy=0;yy<SIZE;yy++) board[yy][xx]=0; clr++; } }
- if(clr){ score+=clr*100; document.getElementById("hint").innerText="🔥 BOOM! "+clr+" LINES CLEAR! Pili ulit!"; if(navigator.vibrate) navigator.vibrate([50,30,100]); }
- else document.getElementById("hint").innerText="Nice! Pili ulit block sa baba!";
- if(score>best){best=score; localStorage.setItem("bbBest",best);}
- if(pieces.length===0) genPieces();
- drawBoard(); drawTray(); upd();
-}
-function upd(){ document.getElementById("sc").innerText=score; document.getElementById("mv").innerText=moves; document.getElementById("best").innerText=best; }
-newGame();
+start();
 </script>
 </body>
 </html>
