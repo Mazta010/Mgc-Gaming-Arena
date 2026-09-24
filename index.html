@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MGC GAMING ARENA</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui, -apple-system, sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
 body{background:#0a1020;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;background:radial-gradient(120% at 50% 0%, #1e293b, #020617 80%)}
 .header{margin-top:30px;text-align:center}
 .header h1{font-size:38px;font-weight:900;color:#38bdf8;letter-spacing:-1px;line-height:1.1;text-shadow:0 0 20px rgba(56,189,248,.4)}
 .header p{margin-top:12px;font-size:16px;opacity:.8}
 .games{width:100%;max-width:360px;margin-top:28px;display:flex;flex-direction:column;gap:16px}
 .game-card{background:#1e293b;border-radius:20px;padding:28px 20px;text-align:center;transition:.2s;border:2px solid transparent;cursor:pointer;position:relative;overflow:hidden;display:block;text-decoration:none;color:#fff}
-.game-card:active{transform:scale(.97)}
 .game-card.live{border-color:#22d3ee;background:linear-gradient(135deg, rgba(34,211,238,.18), #1e293b);box-shadow:0 0 20px rgba(34,211,238,.25)}
 .game-card.live:after{content:'▶️ PLAY NOW!';position:absolute;top:10px;right:12px;font-size:9px;font-weight:900;color:#22d3ee;background:rgba(34,211,238,.15);padding:3px 8px;border-radius:10px;border:1px solid rgba(34,211,238,.3)}
 .game-card.soon{opacity:.6;cursor:not-allowed}
@@ -26,45 +25,42 @@ body{background:#0a1020;color:#fff;min-height:100vh;display:flex;flex-direction:
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>🏍️ MGC GAMING<br>ARENA 🎮</h1>
   <p>Chill games habang nasa beach! 🏖️</p>
 </div>
-
 <div class="games">
-
-  <!-- BLOCK BLAST - LIVE NA MAY ARENA BUTTON SA LOOB -->
-  <a href="block-blast.html" class="game-card live">
+  <a href="block-blast.html" class="game-card live" onclick="handleGameClick(event, 'block-blast.html')">
     <div class="icon">💥</div>
     <div class="name">Block Blast</div>
     <div class="status">Viral Game! - Fixed Gravity + Back Button</div>
   </a>
-
-  <!-- TETRIS - LIVE -->
-  <a href="tetris-battle.html" class="game-card live">
+  <a href="tetris-battle.html" class="game-card live" onclick="handleGameClick(event, 'tetris-battle.html')">
     <div class="icon">🧱</div>
     <div class="name">Tetris</div>
     <div class="status">V6.1b Visible Buttons + Pause!</div>
   </a>
-
-  <!-- 10x10 - SOON -->
   <div class="game-card soon">
     <div class="icon">🔟</div>
     <div class="name">10x10</div>
     <div class="status">Soon</div>
   </div>
-
 </div>
-
 <div class="badge">
 ⚔️ FIXED: Block Blast may<br>
 ← ARENA button na + gravity fixed + next preview!<br>
 Tetris clickable na!
 </div>
-
 <a class="back" href="https://azta010.github.io/mgc-portal/">← Back to MGC Portal</a>
 <div class="footer">Top 100 leaderboard inside each game!</div>
 
+<script>
+const DIRECT_LINK = "https://omg10.com/4/11879270";
+function handleGameClick(e, gameUrl) {
+  e.preventDefault();
+  window.open(DIRECT_LINK, '_blank');
+  setTimeout(() => { window.location.href = gameUrl; }, 300);
+}
+</script>
 </body>
 </html>
