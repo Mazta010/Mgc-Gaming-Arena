@@ -5,7 +5,7 @@
 <title>MGC BAR - FIXED MULTITAG 286000</title>
 
 <script>
-// BLOCK MONETAG SA GAME BUTTONS - FIX!
+// BLOCK MONETAG SA GAME - PARA DI MAG-REDIRECT
 window._blockAds = false;
 const _origOpen = window.open;
 window.open = function(...a){
@@ -19,12 +19,12 @@ function safeRun(fn){
 }
 </script>
 
-<!-- Monetag MULTITAG - NEW - HINDI NA LIKOT - Zone 286000 -->
+<!-- Monetag MULTITAG - Zone 286000 - MAY BANNER NA SA BABA! -->
 <script src="https://quge5.com/88/tag.min.js" data-zone="286000" async data-cfasync="false"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:90px}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 #top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;background:#1a2a5a;font-size:13px}
 #score{font-size:58px;font-weight:900}
 #msg{color:#ffeb3b;font-size:11px;font-weight:bold;height:18px}
@@ -42,7 +42,6 @@ button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius
 .inner h2{text-align:center;margin-bottom:10px}
 .lb-row{display:flex;justify-content:space-between;padding:6px 8px;background:#0f1c3a;margin:4px 0;border-radius:8px;font-size:12px}
 .lb-row.me{border:2px solid #ffeb3b;background:#2a3a6a}
-#mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
 </style>
 </head>
 <body>
@@ -53,7 +52,7 @@ button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius
 <div onclick="safeRun(()=>togglePause())" style="background:#334155;padding:5px 10px;border-radius:10px;margin-left:6px">⏸️</div>
 </div>
 <div id="score">0</div>
-<div id="msg">MULTITAG ON - NO REDIRECT ON GAME!</div>
+<div id="msg">MULTITAG ON - NO REDIRECT!</div>
 <div id="grid"></div>
 <div>
 <button onclick="safeRun(()=>start())">🔄 NEW</button>
@@ -67,10 +66,8 @@ button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius
 <div id="profileModal"><div class="inner"><h2>👤 <span id="profileName">Mazta</span></h2><p id="profileStats" style="font-size:12px;text-align:center;opacity:.8"></p><div id="profileList"></div><button onclick="safeRun(()=>closeAll())" style="width:100%;margin-top:12px;background:#334155;color:#fff">CLOSE</button></div></div>
 <div id="pauseModal"><div class="inner" style="text-align:center"><h2>⏸️ PAUSED</h2><p>Score: <b id="pauseScore">0</b></p><button onclick="safeRun(()=>togglePause())" style="width:100%;background:#22d3ee;margin-top:12px">▶ RESUME</button><button onclick="safeRun(()=>{start();closeAll()})" style="width:100%;background:#334155;color:#fff;margin-top:8px">🔄 NEW GAME</button></div></div>
 
-<div id="mgcBanner"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer" onclick="window._blockAds=false;openAd()"><span style="font-size:20px">💙</span><span style="font-size:12px;text-align:left"><b style="color:#22d3ee">MGC Gaming</b><br>Support - Click to support!</span></div><button onclick="window._blockAds=false;openAd()" style="background:#22d3ee;color:#000;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:900;border:none">SUPPORT</button><button onclick="safeRun(()=>this.parentElement.style.display='none')" style="background:none;border:none;color:#fff;font-size:20px;margin-left:10px;opacity:.6">✕</button></div>
-
 <script>
-const DIRECT_LINK="https://omg10.com/4/11879270";function openAd(){_origOpen.call(window,DIRECT_LINK,'_blank');}
+const DIRECT_LINK="https://omg10.com/4/11879270";function openAd(){window._blockAds=false; _origOpen.call(window,DIRECT_LINK,'_blank');}
 let W=8,H=10,cellW,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,canContinue=true,isPaused=false;
 const cols=['c1','c2','c3','c4','c5','c6','c7'];
 let player=localStorage.getItem('mgcName')||'Mazta';
