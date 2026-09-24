@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>MGC BAR - FIXED + LB + PAUSE</title>
+<script>(function(s){s.dataset.zone='11881250',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
 body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:80px}
@@ -36,7 +37,7 @@ button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius
 <div id="score">0</div>
 <div id="msg">CLICK 🏆=LB | 👤=HISTORY | ⏸️=PAUSE</div>
 <div id="grid"></div>
-<div><button onclick="start()">🔄 NEW</button><button onclick="toggleSound()" id="sndBtn">🔊 ON</button><button onclick="togglePause()" id="pauseBtn">⏸️ PAUSE</button></div>
+<div><button onclick="start()">🔄 NEW</button><button onclick="toggleSound()" id="sndBtn">🔊 ON</button><button onclick="togglePause()" id="pauseBtn">⏸️ PAUSE</button><button onclick="location.href='index.html'" style="background:#334155;color:#fff">⬅️ ARENA</button></div>
 
 <div id="over"><div class="inner" style="text-align:center"><h2 style="color:#ff3b3b">💀 PUNO NA!</h2><p>Score: <b id="finalS">0</b> | Moves: <b id="finalM">0</b> | <span id="finalP">-</span></p><button onclick="continueGame()" style="width:100%;background:#22d3ee;margin-top:12px">▶ CONTINUE - Watch Ad</button><button onclick="start()" style="width:100%;background:#334155;color:#fff;margin-top:8px">🔄 ULIT</button><button onclick="showLB()" style="width:100%;background:#0f1c3a;color:#ffeb3b;border:1px solid #ffeb3b;margin-top:8px">🏆 LEADERBOARD</button></div></div>
 <div id="lbModal"><div class="inner"><h2>🏆 TOP 100</h2><div id="lbList"></div><button onclick="closeAll()" style="width:100%;margin-top:12px;background:#334155;color:#fff">CLOSE</button></div></div>
