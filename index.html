@@ -1,17 +1,73 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MGC Gaming Arena</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MGC GAMING ARENA</title>
 <style>
-body{background:#0f172a;color:white;font-family:Arial;text-align:center;padding:20px}
-h1{color:#38bdf8}
-.game{display:inline-block;background:#1e293b;padding:25px;margin:10px;border-radius:15px;width:160px;cursor:pointer;border:2px solid transparent}
-.game:hover{border-color:#38bdf8;background:#334155}
-</style></head><body>
-<h1>🏍️ MGC GAMING ARENA 🎮</h1>
-<p>Chill games habang nasa beach! 🏖️</p>
-<div class="game" onclick="location.href='block-blast.html'">💥<br><b>Block Blast</b><br><small>Viral Game!</small></div>
-<div class="game" onclick="alert('Coming Soon!')">🧱<br><b>Tetris</b><br><small>Soon</small></div>
-<div class="game" onclick="alert('Coming Soon!')">🔟<br><b>10x10</b><br><small>Soon</small></div>
-<p style="margin-top:40px"><a href="#" style="color:#38bdf8">← Back to MGC Portal</a></p>
-<p>Top 100 leaderboard inside each game!</p>
-</body></html>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui, -apple-system, sans-serif}
+body{background:#0a1020;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px;background:radial-gradient(120% at 50% 0%, #1e293b, #020617 80%)}
+.header{margin-top:30px;text-align:center}
+.header h1{font-size:38px;font-weight:900;color:#38bdf8;letter-spacing:-1px;line-height:1.1;text-shadow:0 0 20px rgba(56,189,248,.4)}
+.header p{margin-top:12px;font-size:16px;opacity:.8}
+.games{width:100%;max-width:360px;margin-top:28px;display:flex;flex-direction:column;gap:16px}
+.game-card{background:#1e293b;border-radius:20px;padding:28px 20px;text-align:center;transition:.2s;border:2px solid transparent;cursor:pointer;position:relative;overflow:hidden}
+.game-card:active{transform:scale(.97)}
+.game-card.live{border-color:#22d3ee;background:linear-gradient(135deg, rgba(34,211,238,.18), #1e293b);box-shadow:0 0 20px rgba(34,211,238,.25)}
+.game-card.live:after{content:'▶️ PLAY NOW!';position:absolute;top:10px;right:12px;font-size:9px;font-weight:900;color:#22d3ee;background:rgba(34,211,238,.15);padding:3px 8px;border-radius:10px;border:1px solid rgba(34,211,238,.3)}
+.game-card.soon{opacity:.6;cursor:not-allowed}
+.game-card .icon{font-size:34px}
+.game-card .name{font-size:20px;font-weight:900;margin-top:6px}
+.game-card .status{font-size:14px;opacity:.7;margin-top:2px}
+.game-card.live .status{color:#22d3ee;font-weight:800;opacity:1}
+.back{margin-top:30px;color:#38bdf8;text-decoration:none;font-size:16px;border-bottom:1px solid #38bdf8}
+.footer{margin-top:14px;font-size:13px;opacity:.6}
+.badge{margin-top:20px;background:rgba(34,211,238,.1);border:1px dashed #22d3ee;padding:8px 14px;border-radius:12px;font-size:11px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏍️ MGC GAMING<br>ARENA 🎮</h1>
+  <p>Chill games habang nasa beach! 🏖️</p>
+</div>
+
+<div class="games">
+
+  <!-- BLOCK BLAST - LIVE -->
+  <div class="game-card live" onclick="location.href='block-blast.html'">
+    <div class="icon">💥</div>
+    <div class="name">Block Blast</div>
+    <div class="status">Viral Game!</div>
+  </div>
+
+  <!-- TETRIS - NOW CLICKABLE! -->
+  <div class="game-card live" onclick="location.href='tetris-battle.html'">
+    <div class="icon">🧱</div>
+    <div class="name">Tetris</div>
+    <div class="status">V6.1b Visible + Pause!</div>
+  </div>
+
+  <!-- 10x10 - SOON -->
+  <div class="game-card soon">
+    <div class="icon">🔟</div>
+    <div class="name">10x10</div>
+    <div class="status">Soon</div>
+  </div>
+
+</div>
+
+<div class="badge">⚔️ NEW: Tetris may ⏸️ Pause + 🔊 Sounds + 👻 Visible Buttons!</div>
+
+<a class="back" href="https://azta010.github.io/mgc-portal/">← Back to MGC Portal</a>
+<div class="footer">Top 100 leaderboard inside each game!</div>
+
+<script>
+// Auto check if tetris file exists
+fetch('tetris-battle.html', {method:'HEAD'}).then(r=>{
+  if(!r.ok) console.log('Wala pa tetris-battle.html sa repo boss!');
+}).catch(()=>{});
+</script>
+
+</body>
+</html>
