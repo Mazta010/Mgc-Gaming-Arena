@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Block Blast - MGC</title>
+<title>Block Blast - BAR VERSION - MGC</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:70px}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:75px}
 #top{display:flex;justify-content:space-between;padding:10px 14px;font-weight:900;background:#1a2a5a;font-size:13px}
 #score{font-size:58px;font-weight:900}
 #msg{color:#ffeb3b;font-size:11px;font-weight:bold;height:18px}
@@ -17,24 +17,21 @@ body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-b
 .boom{animation:boom.32s forwards}@keyframes boom{50%{transform:scale(1.6);filter:brightness(3)}100%{transform:scale(0);opacity:0}}
 .pop{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font-size:36px;font-weight:900;background:rgba(0,0,0,.9);padding:8px 20px;border-radius:20px;animation:popUp.8s forwards;z-index:200;color:#ffeb3b;border:2px solid #ffeb3b}
 @keyframes popUp{0%{transform:translate(-50%,0) scale(0)}100%{transform:translate(-50%,-130%) scale(1);opacity:0}}
-button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px;cursor:pointer}
+button{background:#22d3ee;color:#000;border:none;padding:10px 16px;border-radius:20px;font-weight:900;margin:4px}
 #over{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:500}
 .inner{background:#1e2f5a;padding:22px;border-radius:16px;width:90%;max-width:320px;border:3px solid #ff3b3b}
 #mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
-.mgc-left{display:flex;align-items:center;gap:12px;flex:1}
-.mgc-text{font-size:12px;text-align:left;line-height:1.2}.mgc-text b{color:#22d3ee}
-.mgc-btn{background:#22d3ee;color:#000;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:900;border:none;cursor:pointer}
-.mgc-x{background:none;border:none;color:#fff;font-size:20px;opacity:.6;margin-left:10px}
+.mgc-left{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer}.mgc-text{font-size:12px;text-align:left;line-height:1.2}.mgc-text b{color:#22d3ee}.mgc-btn{background:#22d3ee;color:#000;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:900;border:none}.mgc-x{background:none;border:none;color:#fff;font-size:20px;opacity:.6;margin-left:10px}
 </style>
 </head>
 <body>
 <div id="top"><div>🏆 <span id="best">0</span></div><div><a href="index.html" style="color:#22d3ee;text-decoration:none">← ARENA</a></div><div id="moves">Moves: 0</div></div>
 <div id="score">0</div>
-<div id="msg">SOUNDS ON 🔊 Instant hulog!</div>
+<div id="msg">BAR VERSION 🔊 Instant hulog dikit-dikit!</div>
 <div id="grid"></div>
 <div><button onclick="start()">🔄 NEW</button><button onclick="toggleSound()" id="sndBtn">🔊 SOUND ON</button></div>
 <div id="over"><div class="inner"><h2 style="color:#ff3b3b">💀 PUNO NA!</h2><p>Score: <b id="finalS">0</b> | Moves: <b id="finalM">0</b></p><button onclick="continueGame()" style="width:100%;background:#22d3ee;margin-top:12px">▶ CONTINUE - Watch Ad</button><button onclick="start()" style="width:100%;background:#334155;color:#fff;margin-top:8px">🔄 ULIT</button></div></div>
-<div id="mgcBanner"><div class="mgc-left" onclick="openAd()"><div style="font-size:20px">💙</div><div class="mgc-text"><b>Support MGC!</b><br>Click to support</div></div><button class="mgc-btn" onclick="openAd()">SUPPORT</button><button class="mgc-x" onclick="this.parentElement.style.display='none'">✕</button></div>
+<div id="mgcBanner"><div class="mgc-left" onclick="openAd()"><div style="font-size:20px">💙</div><div class="mgc-text"><b>MGC Gaming</b><br>Support free games!</div></div><button class="mgc-btn" onclick="openAd()">SUPPORT</button><button class="mgc-x" onclick="this.parentElement.style.display='none'">✕</button></div>
 <script>
 const DIRECT_LINK="https://omg10.com/4/11879270";function openAd(){window.open(DIRECT_LINK,'_blank');}
 let W=8,H=10,cellW,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,canContinue=true;
