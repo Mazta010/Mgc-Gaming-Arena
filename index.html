@@ -1,53 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="monetag" content="939aa11cdd015975157ef97f98e77c81">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC Gaming Arena - Play Free!</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MGC Gaming Arena - Play & Earn!</title>
+  
+  <!-- Monetag Verification -->
+  <meta name="monetag" content="939aa112d3a1dd6e0dd6af1aefb5e4a">
+  
+  <!-- Monetag OnClick Ads - MONEY CODE - Zone 11881250 -->
+  <script>(function(s){s.dataset.zone='11881250',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
-<!-- MGC MONETAG FINAL - MultiTag -->
-<script>(function(d,z,s){z=d.createElement(s);z.src='https://omg10.com/4/11879270';z.async=true;d.head.appendChild(z)})(document,'script')</script>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:radial-gradient(120% at 50% 0%,#1e1b4b 0%,#020617 90%);color:#fff;min-height:100vh}
-.header{padding:20px;text-align:center;background:rgba(0,0,0,0.3);border-bottom:2px solid #6366f1}
-.header h1{font-size:2.5rem;color:#818cf8;text-shadow:0 0 20px #6366f1}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;padding:30px;max-width:1200px;margin:0 auto}
-.card{background:linear-gradient(145deg,#1e293b,#0f172a);border:2px solid #334155;border-radius:16px;padding:20px;text-align:center;transition:0.3s}
-.card:hover{border-color:#6366f1;transform:translateY(-5px);box-shadow:0 10px 30px rgba(99,102,241,0.3)}
-.card h2{margin:10px 0;color:#e2e8f0}
-.card a{display:inline-block;margin-top:15px;padding:12px 30px;background:#6366f1;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold}
-.card a:hover{background:#4f46e5}
-</style>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: white; min-height: 100vh; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center; }
+    .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .header p { opacity: 0.9; }
+    .games { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 30px; max-width: 1200px; margin: 0 auto; }
+    .game-card { background: #1a1a2e; border-radius: 15px; overflow: hidden; border: 2px solid #2a2a4a; transition: 0.3s; cursor: pointer; }
+    .game-card:hover { transform: translateY(-5px); border-color: #667eea; box-shadow: 0 10px 30px rgba(102,126,234,0.3); }
+    .game-img { height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    .game-info { padding: 20px; }
+    .game-info h3 { font-size: 1.4rem; margin-bottom: 8px; }
+    .game-info p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
+    .play-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1rem; }
+    .play-btn:hover { opacity: 0.9; }
+    .stats { background: #1a1a2e; margin: 0 30px; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #2a2a4a; }
+  </style>
 </head>
 <body>
 
-<div class="header">
-<h1>🎮 MGC Gaming Arena</h1>
-<p>Play Free - No Download Needed!</p>
-</div>
+  <div class="header">
+    <h1>🎮 MGC GAMING ARENA 🎮</h1>
+    <p>Play Tetris, Block Blast & More - Free to Play!</p>
+  </div>
 
-<div class="games">
-<div class="card">
-<h2>🧱 Tetris Battle</h2>
-<p>Classic Tetris with modern twist!</p>
-<a href="tetris-battle.html">PLAY NOW</a>
-</div>
+  <div class="stats">
+    <h3>🔥 LIVE NOW: Click Any Game to Play - Ads = Kita Mo Boss! 🔥</h3>
+  </div>
 
-<div class="card">
-<h2>💥 Block Blast</h2>
-<p>Blast the blocks and score high!</p>
-<a href="block-blast.html">PLAY NOW</a>
-</div>
+  <div class="games">
+    <!-- TETRIS -->
+    <div class="game-card" onclick="window.location.href='tetris/'">
+      <div class="game-img">🧱</div>
+      <div class="game-info">
+        <h3>Tetris Classic</h3>
+        <p>Stack blocks, clear lines, beat high score!</p>
+        <button class="play-btn">PLAY NOW ▶️</button>
+      </div>
+    </div>
 
-<div class="card">
-<h2>👑 More Games Soon</h2>
-<p>New games coming this week!</p>
-<a href="#">COMING SOON</a>
-</div>
-</div>
+    <!-- BLOCK BLAST -->
+    <div class="game-card" onclick="window.location.href='block-blast/'">
+      <div class="game-img">💥</div>
+      <div class="game-info">
+        <h3>Block Blast</h3>
+        <p>Drag blocks, blast lines, addictive puzzle!</p>
+        <button class="play-btn">PLAY NOW ▶️</button>
+      </div>
+    </div>
+
+    <!-- COMING SOON -->
+    <div class="game-card">
+      <div class="game-img">🚀</div>
+      <div class="game-info">
+        <h3>More Games Coming</h3>
+        <p>Snake, 2048, Flappy Bird - Soon!</p>
+        <button class="play-btn" style="background: #333;">COMING SOON</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("MGC Gaming Arena Loaded - Monetag Active - Zone 11881250");
+  </script>
 
 </body>
 </html>
