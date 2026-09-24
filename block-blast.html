@@ -2,93 +2,141 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Block Blast RISING - Original</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Block Blast AUTO RISING - 2AM</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;touch-action:manipulation;user-select:none}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent}
 body{background:#1e3a8a;min-height:100vh;display:flex;flex-direction:column;align-items:center;color:#fff}
-.top{width:100%;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;border-bottom:2px solid #22d3ee;position:sticky;top:0;z-index:99}
+.top{width:100%;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;font-size:13px;border-bottom:2px solid #22d3ee;position:sticky;top:0;z-index:99}
 .top a{background:#020617;border:2px solid #22d3ee;color:#22d3ee;padding:6px 16px;border-radius:20px;text-decoration:none}
+.score{font-size:56px;font-weight:900;margin:6px 0 0;line-height:1}
+.sub{color:#facc15;font-weight:800;font-size:11px;text-align:center}
 #board{width:92vw;max-width:380px;aspect-ratio:1;background:#0f172a;border-radius:16px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:5px;padding:10px;margin-top:10px;border:3px solid #1e293b}
-.cell{background:#1e293b;border-radius:6px}
+.cell{background:#1e293b;border-radius:7px;display:flex;align-items:center;justify-content:center;transition:.15s;cursor:pointer}
 .cell.f{box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2)}
-#tray{width:94%;max-width:390px;background:#0f172a;border-radius:14px;padding:12px;margin-top:12px;display:flex;gap:10px;justify-content:center}
-.b{height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;box-shadow:inset 0 3px 0 rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.2);cursor:pointer}
-.b.w1{width:70px}.b.w2{width:110px}.b.w3{width:150px}.b.w4{width:190px}
-.b.sel{outline:3px solid #22d3ee;box-shadow:0 0 15px #22d3ee;transform:scale(1.05)}
-#hint{font-size:11px;color:#22d3ee;font-weight:800;margin:8px;text-align:center}
+.cell.sel{outline:3px solid #22d3ee;box-shadow:0 0 15px #22d3ee;transform:scale(1.1);z-index:2}
+.cell.hint{animation:blink.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#hint{font-size:11px;color:#22d3ee;font-weight:800;margin:8px;text-align:center;min-height:16px}
+.controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center}
+.ctrl{padding:10px 14px;border-radius:10px;border:none;font-weight:900;font-size:11px;background:#0f172a;border:1px solid #334155;color:#fff}
 </style>
 </head>
 <body>
-<div class="top"><a href="index.html">← ARENA</a><span>🏆<span id="best">0</span></span><span>RISING MODE ⬆️</span><span>Moves:<b id="mv">0</b></span></div>
-<div style="font-size:50px;font-weight:900;margin:8px 0" id="sc">0</div>
-<div style="color:#facc15;font-size:11px;font-weight:800">UMAATYAT PAG NAGLAGAY KA NG BLOCK! ⬆️</div>
+<div class="top"><a href="index.html">← ARENA</a><span>🏆<span id="best">0</span></span><span>AUTO ⬆️ <span id="timer">0</span>s</span><span>Score:<b id="sc">0</b></span></div>
+<div class="score" id="big">0</div>
+<div class="sub">AUTO UMAKYAT! TAP BLOCK PARA I-MOVE → TAP EMPTY PARA MAPUNO LINE!</div>
 <div id="board"></div>
-<div id="hint">TAP BLOCK (1-4) → TAP BOARD PARA IHULOG!</div>
-<div id="tray"></div>
-<div style="display:flex;gap:10px;margin:16px 0 30px"><button onclick="newGame()" style="padding:12px 20px;border-radius:12px;border:none;font-weight:900">🔄 NEW</button><a href="index.html" style="padding:12px 20px;border-radius:12px;background:#0f172a;border:2px solid #22d3ee;color:#22d3ee;text-decoration:none;font-weight:900">🏠 ARENA</a></div>
+<div id="hint">Auto aakyat every 2 sec! Tap block para i-move para mabuo line!</div>
+<div class="controls">
+<button class="ctrl" onclick="toggleAuto()" id="autoBtn">⏸️ PAUSE</button>
+<button class="ctrl" onclick="newGame()">🔄 NEW</button>
+<a href="index.html" class="ctrl" style="text-decoration:none;border-color:#22d3ee;color:#22d3ee">🏠 ARENA</a>
+</div>
 
 <script>
-const C=8,R=8,COLORS=["#f472b6","#60a5fa","#34d399","#facc15","#fb923c","#a78bfa","#22d3ee"];
-let board,score,moves,best=+localStorage.getItem("bbBest")||0,sel=null,tray=[],hasPlaced=false;
+const COLS=8,ROWS=8,COLORS=["#f472b6","#60a5fa","#34d399","#facc15","#fb923c","#a78bfa","#22d3ee","#f87171"];
+let board,score=0,best=+localStorage.getItem("bbBest")||0,sel=null,auto=true,timer=0,interval;
 
 function newGame(){
- board=Array.from({length:R},()=>Array(C).fill(0));score=0;moves=0;sel=null;hasPlaced=false;
- document.getElementById("best").innerText=best; genTray(); draw(); upd();
+ board=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+ score=0; sel=null; timer=0;
+ document.getElementById("best").innerText=best;
+ // start with 3 rows at bottom
+ for(let y=ROWS-3;y<ROWS;y++){
+   for(let x=0;x<COLS;x++) if(Math.random()<0.35) board[y][x]=COLORS[Math.floor(Math.random()*COLORS.length)];
+ }
+ draw(); upd();
+ startAuto();
 }
-function genTray(){
- tray=[];
- for(let i=0;i<4;i++){ let w=[1,2,3,4][Math.floor(Math.random()*4)]; tray.push({id:Math.random(),w,col:COLORS[Math.floor(Math.random()*COLORS.length)]}) }
- drawTray();
+function startAuto(){
+ clearInterval(interval);
+ interval=setInterval(()=>{
+   if(!auto) return;
+   timer++;
+   document.getElementById("timer").innerText=timer;
+   if(timer%2==0) rise();
+ },1000);
 }
-function drawTray(){
- let el=document.getElementById("tray"); el.innerHTML="";
- tray.forEach(d=>{
-   let b=document.createElement("div"); b.className="b w"+d.w+(sel&&sel.id==d.id?" sel":""); b.style.background=d.col; b.innerText=d.w;
-   b.onclick=()=>{sel=d; document.getElementById("hint").innerText="Block "+d.w+" pinili! Tap board!"; drawTray();};
-   el.appendChild(b);
- });
+function rise(){
+ // UMAAKYAT AUTO!
+ for(let y=0;y<ROWS-1;y++) board[y]=[...board[y+1]];
+ let newRow=Array(COLS).fill(0);
+ // 1,2,3,4 blocks random sa baba
+ let x=0;
+ while(x<COLS){
+   if(Math.random()<0.5){
+     let w=[1,2,3,4][Math.floor(Math.random()*4)];
+     if(x+w>COLS) w=COLS-x;
+     let col=COLORS[Math.floor(Math.random()*COLORS.length)];
+     for(let i=0;i<w;i++) newRow[x+i]=col;
+     x+=w+ (Math.random()<0.5?1:0);
+   } else x++;
+ }
+ board[ROWS-1]=newRow;
+ checkLines();
+ draw(); upd();
+ document.getElementById("hint").innerText="⬆️ UMAKYAT! I-move mo blocks para mapuno line!";
+ if(board[0].some(c=>c)){ clearInterval(interval); setTimeout(()=>{alert("GAME OVER! Naabot na taas! Score:"+score); newGame();},300); }
 }
 function draw(){
  let b=document.getElementById("board"); b.innerHTML="";
- for(let y=0;y<R;y++) for(let x=0;x<C;x++){
-   let c=document.createElement("div"); c.className="cell"+(board[y][x]?" f":""); if(board[y][x]) c.style.background=board[y][x];
-   c.onclick=()=>drop(x);
+ for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+   let c=document.createElement("div"); c.className="cell"+(board[y][x]?" f":"")+(sel&&sel.x==x&&sel.y==y?" sel":"");
+   if(board[y][x]) c.style.background=board[y][x];
+   c.onclick=()=>tapCell(x,y);
    b.appendChild(c);
  }
 }
-function drop(col){
- if(!sel){ document.getElementById("hint").innerText="PILI KA MUNA BLOCK 1-4!"; return; }
- if(col+sel.w>C) col=C-sel.w;
- let target=-1;
- for(let y=R-1;y>=0;y--){ let ok=true; for(let i=0;i<sel.w;i++) if(board[y][col+i]) ok=false; if(ok){target=y; break;} }
- if(target==-1){ document.getElementById("hint").innerText="Puno!"; return; }
- for(let i=0;i<sel.w;i++) board[target][col+i]=sel.col;
- tray=tray.filter(t=>t.id!=sel.id); sel=null; moves++; score+=10; hasPlaced=true;
- // CLEAR
- let clr=0; for(let y=0;y<R;y++) if(board[y].every(v=>v)){ board[y].fill(0); clr++; }
- if(clr) score+=clr*100;
- // GRAVITY
- for(let x=0;x<C;x++){ let stack=[]; for(let y=0;y<R;y++) if(board[y][x]) stack.push(board[y][x]); for(let y=0;y<R;y++) board[y][x]=0; for(let i=0;i<stack.length;i++) board[R-stack.length+i][x]=stack[i]; }
- // RISING - ETO YUNG UMAAKYAT BOSS!
- if(hasPlaced){
-   riseBoard();
-   hasPlaced=false;
+function tapCell(x,y){
+ if(board[y][x]){
+   // select block
+   sel={x,y,color:board[y][x]};
+   document.getElementById("hint").innerText="Block pinili! Tap empty cell para i-move!";
+   draw();
+ } else {
+   if(sel){
+     // move selected to empty - PARA MAPUNO LINE!
+     board[y][x]=sel.color;
+     board[sel.y][sel.x]=0;
+     sel=null;
+     score+=5;
+     checkLines();
+     draw(); upd();
+     document.getElementById("hint").innerText="Nice move! Buoin mo line para clear!";
+   }
  }
- if(tray.length<2) genTray(); else drawTray();
+}
+function checkLines(){
+ let cleared=0;
+ for(let y=0;y<ROWS;y++){
+   if(board[y].every(c=>c)){
+     board[y].fill(0);
+     cleared++;
+   }
+ }
+ if(cleared>0){
+   score+=cleared*100;
+   document.getElementById("hint").innerText="🔥 BOOM! "+cleared+" LINES CLEAR! +"+(cleared*100);
+   // gravity after clear
+   for(let x=0;x<COLS;x++){
+     let stack=[]; for(let yy=0;yy<ROWS;yy++) if(board[yy][x]) stack.push(board[yy][x]);
+     for(let yy=0;yy<ROWS;yy++) board[yy][x]=0;
+     for(let i=0;i<stack.length;i++) board[ROWS-stack.length+i][x]=stack[i];
+   }
+ }
+}
+function toggleAuto(){
+ auto=!auto;
+ document.getElementById("autoBtn").innerText=auto?"⏸️ PAUSE":"▶️ RESUME";
+ document.getElementById("hint").innerText=auto?"Auto umaakyat ulit!":"Naka-pause!";
+}
+function upd(){
+ document.getElementById("big").innerText=score;
+ document.getElementById("sc").innerText=score;
+ document.getElementById("best").innerText=best;
  if(score>best){best=score; localStorage.setItem("bbBest",best);}
- draw(); upd();
- if(board[0].some(c=>c)){ setTimeout(()=>{alert("GAME OVER! Naabot na taas! Score:"+score); newGame();},300); }
 }
-function riseBoard(){
- // UMAAKYAT - push up 1 row!
- for(let y=0;y<R-1;y++) board[y]=[...board[y+1]];
- let newRow=Array(C).fill(0);
- for(let x=0;x<C;x++) if(Math.random()<0.25) newRow[x]=COLORS[Math.floor(Math.random()*COLORS.length)];
- board[R-1]=newRow;
- document.getElementById("hint").innerText="⬆️ TUMAAS! Bilisan mo!";
-}
-function upd(){ document.getElementById("sc").innerText=score; document.getElementById("mv").innerText=moves; document.getElementById("best").innerText=best; }
 newGame();
 </script>
 </body>
