@@ -6,55 +6,34 @@
 <title>MGC Gaming Arena - Mazta Gaming</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;padding-bottom:70px}
-.header{background:linear-gradient(90deg,#06b6d4,#3b82f6);padding:20px;text-align:center}
+body{background:#0f172a;color:#fff;font-family:system-ui,sans-serif;padding-bottom:80px}
+.header{background:linear-gradient(90deg,#06b6d4,#3b82f6);padding:22px;text-align:center}
 .header h1{font-size:28px;font-weight:900}
 .games{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:20px;max-width:900px;margin:0 auto}
 .game-card{background:#1e293b;border-radius:16px;padding:12px;text-decoration:none;color:#fff;border:2px solid #334155;transition:0.2s;display:block}
 .game-card.live{border-color:#22d3ee}
-.game-card:hover{transform:translateY(-4px);border-color:#22d3ee}
+.game-card:hover{transform:translateY(-4px)}
 .game-card img{width:100%;height:120px;object-fit:cover;border-radius:12px;background:#0f172a}
 .game-card h3{margin:10px 0 4px;font-size:15px}
-.game-card .badge{background:#22d3ee;color:#000;font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px;display:inline-block}
-.mgc-banner{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:2px solid #22d3ee;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
-.mgc-banner .left{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer}
-.mgc-banner .ad-text{font-size:13px}.mgc-banner .ad-text span{color:#22d3ee;font-weight:bold}
-.mgc-banner .ad-btn{background:#22d3ee;color:#000;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:900;border:none;cursor:pointer}
-.mgc-banner .close-ad{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;margin-left:10px;opacity:0.6}
+.badge{background:#22d3ee;color:#000;font-size:10px;font-weight:900;padding:4px 10px;border-radius:20px;display:inline-block}
+#mgcBanner{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22d3ee;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999}
+.mgc-left{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer}
+.mgc-text{font-size:13px;line-height:1.2}.mgc-text b{color:#22d3ee}
+.mgc-btn{background:#22d3ee;color:#000;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;border:none;cursor:pointer}
+.mgc-x{background:none;border:none;color:#fff;font-size:20px;opacity:0.6;cursor:pointer;margin-left:12px}
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>🎮 MGC GAMING ARENA</h1>
-  <p>By Mazta010 - Free To Play No Ads On Start!</p>
-</div>
+<div class="header"><h1>🎮 MGC GAMING ARENA</h1><p>Free To Play - No Ads On Start!</p></div>
 <div class="games">
-  <a href="block-blast.html" class="game-card live">
-    <img src="https://placehold.co/300x200/06b6d4/000?text=BLOCK+BLAST" alt="Block Blast">
-    <h3>Block Blast</h3><span class="badge">▶ PLAY NOW</span>
-  </a>
-  <a href="tetris-battle.html" class="game-card live">
-    <img src="https://placehold.co/300x200/8b5cf6/fff?text=TETRIS" alt="Tetris">
-    <h3>Tetris Battle</h3><span class="badge">▶ PLAY NOW</span>
-  </a>
+  <a href="block-blast.html" class="game-card live"><img src="https://placehold.co/300x200/06b6d4/000?text=BLOCK+BLAST"><h3>Block Blast</h3><span class="badge">▶ PLAY NOW</span></a>
+  <a href="tetris-battle.html" class="game-card live"><img src="https://placehold.co/300x200/8b5cf6/fff?text=TETRIS"><h3>Tetris Battle</h3><span class="badge">▶ PLAY NOW</span></a>
 </div>
-
-<div class="mgc-banner" id="mgcBanner">
-  <div class="left" onclick="openAd()">
-    <div style="font-size:22px">💙</div>
-    <div class="ad-text"><span>Support MGC!</span> Click to support free games 🎮</div>
-  </div>
-  <button class="ad-btn" onclick="openAd()">SUPPORT</button>
-  <button class="close-ad" onclick="closeBanner()">✕</button>
+<div id="mgcBanner">
+  <div class="mgc-left" onclick="openAd()"><div style="font-size:22px">💙</div><div class="mgc-text"><b>Support MGC!</b><br>Free games forever</div></div>
+  <button class="mgc-btn" onclick="openAd()">SUPPORT</button>
+  <button class="mgc-x" onclick="document.getElementById('mgcBanner').style.display='none'">✕</button>
 </div>
-
-<script>
-const DIRECT_LINK = "https://omg10.com/4/11879270";
-function openAd(){ window.open(DIRECT_LINK,'_blank'); }
-function closeBanner(){
-  document.getElementById('mgcBanner').style.display='none';
-  setTimeout(()=>{document.getElementById('mgcBanner').style.display='flex'}, 180000);
-}
-</script>
+<script>const DIRECT_LINK="https://omg10.com/4/11879270"; function openAd(){window.open(DIRECT_LINK,'_blank');}</script>
 </body>
 </html>
