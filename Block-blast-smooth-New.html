@@ -3,46 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Block Blast - Final Working</title>
+<title>Block Blast - Smart + Music</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#2f5aa0;font-family:Arial,sans-serif;height:100vh;display:flex;flex-direction:column}
 .top{background:rgba(0,0,0,.2);padding:10px 12px;display:flex;justify-content:space-between;align-items:center;color:white}
-.btn{padding:6px 12px;border-radius:8px;border:none;font-weight:bold;background:#1a2d5a;color:white}
-.trophy-btn{display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.3);padding:6px 10px;border-radius:20px;cursor:pointer;color:white;font-weight:bold;font-size:13px}
+.btn{padding:6px 12px;border-radius:8px;border:none;font-weight:bold;background:#1a2d5a;color:white;cursor:pointer}
+.trophy-btn{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.3);padding:6px 12px;border-radius:20px;cursor:pointer;color:white;font-weight:bold;font-size:13px}
 .board{margin:10px auto;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:10px;border-radius:16px;width:92vw;max-width:360px;aspect-ratio:1}
-.cell{background:#243d6b;border-radius:6px;aspect-ratio:1}
-.cell.pre{background:#4a6aa0}
-.cell.on{background:#ffde59}
+.cell{background:#243d6b;border-radius:6px;aspect-ratio:1;transition:.1s}
+.cell.pre{background:#5a7ac0}
+.cell.on{box-shadow:inset 0 -3px 0 rgba(0,0,0,.3)}
 .tray{display:flex;justify-content:space-around;background:#3a7bd5;margin:10px;border-radius:16px;padding:12px;min-height:90px}
-.box{display:grid;gap:2px;padding:6px;border-radius:8px}
-.box.act{outline:3px solid yellow;transform:scale(1.1)}
+.box{display:grid;gap:2px;padding:6px;border-radius:8px;cursor:pointer;transition:.15s}
+.box.act{outline:3px solid yellow;transform:scale(1.15) translateY(-6px);box-shadow:0 6px 12px rgba(0,0,0,.3)}
 .box.out{opacity:.2;pointer-events:none}
 .b{width:22px;height:22px;border-radius:4px}
-.c1{background:#2ab8d8}.c2{background:#ffde59}.c3{background:#ff6b9d}.c4{background:#2ecc71}
-.score{text-align:center;color:white;padding:6px}
-.score h1{font-size:44px}
+.c1{background:#2ab8d8}.c2{background:#ffde59}.c3{background:#ff6b9d}.c4{background:#2ecc71}.c5{background:#ff9f43}.c6{background:#a55eea}
+.score{text-align:center;color:white;padding:4px}
+.score h1{font-size:44px;line-height:1}
 .pop{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100}
-.card{background:white;padding:20px;border-radius:16px;width:85%;max-width:320px;text-align:center}
+.card{background:white;padding:20px;border-radius:16px;width:88%;max-width:330px;text-align:center;color:#1e3a6b}
 .card input{width:100%;padding:12px;margin:10px 0;border:2px solid #2f5aa0;border-radius:10px;text-align:center;font-weight:bold;font-size:16px}
-.card button{width:100%;padding:12px;border:none;border-radius:10px;background:#2f5aa0;color:white;font-weight:bold;font-size:16px;margin-top:8px}
+.card button{width:100%;padding:12px;border:none;border-radius:10px;background:#2f5aa0;color:white;font-weight:bold;font-size:15px;margin-top:8px;cursor:pointer}
 .list{text-align:left;max-height:200px;overflow:auto;margin-top:10px}
-.list div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:14px}
+.list div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:14px}
+.music-bar{font-size:10px;color:rgba(255,255,255,.7);text-align:center;padding:2px}
 </style>
 </head>
 <body>
 <div class="top">
 <button class="btn" onclick="location.href='index.html'">◀ Arena</button>
-<div class="trophy-btn" onclick="showLB()">
-<span id="showName">Player</span> 🏆 <span id="showBest">0</span>
+<div style="display:flex;gap:8px;align-items:center">
+<div class="trophy-btn" onclick="showLB()"><span id="showName">Player</span> 🏆 <span id="showBest">0</span></div>
+<button class="btn" onclick="openSet()">⚙️</button>
 </div>
 </div>
-
-<div class="score">
-<h1 id="sc">0</h1>
-<div style="font-size:12px">👆 TAP BLOCK THEN TAP BOARD TO DROP</div>
-</div>
-
+<div class="score"><h1 id="sc">0</h1><div style="font-size:11px">👆 CLICK BLOCK THEN CLICK BOARD</div><div class="music-bar" id="musicBar">🔊 Tap to enable music</div></div>
 <div class="board" id="board"></div>
 <div class="tray" id="tray"></div>
 
@@ -54,19 +51,52 @@ body{background:#2f5aa0;font-family:Arial,sans-serif;height:100vh;display:flex;f
 </div>
 </div>
 
+<div class="pop" id="setPop" style="display:none">
+<div class="card">
+<h2>⚙️ Settings</h2>
+<button id="sndBtn" onclick="toggleSound()">🔊 Sound: ON</button>
+<button id="musBtn" onclick="toggleMusic()">🎵 Music: ON</button>
+<button onclick="document.getElementById('setPop').style.display='none'" style="background:#eee;color:#333">CLOSE</button>
+</div>
+</div>
+
 <div class="pop" id="lbPop" style="display:none">
 <div class="card">
-<h2>🏆 Leaderboard</h2>
+<h2>🏆 Leaderboard Top 10</h2>
 <div class="list" id="lbList"></div>
 <button onclick="document.getElementById('lbPop').style.display='none'">CLOSE</button>
 </div>
 </div>
 
 <script>
-let grid = Array(8).fill().map(()=>Array(8).fill(0));
-let score=0;
-let best = parseInt(localStorage.getItem('bb_best')||'0');
-let pname = localStorage.getItem('bb_name')||'';
+let audioCtx=null, soundOn=true, musicOn=true, musicTimer=null;
+function initAudio(){
+ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ if(audioCtx.state==='suspended') audioCtx.resume();
+}
+function beep(f,d,type='sine',v=0.35){
+ if(!soundOn||!audioCtx) return;
+ try{
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type=type; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(v,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+d);
+  o.start(); o.stop(audioCtx.currentTime+d);
+ }catch(e){}
+}
+function startMusic(){
+ if(!musicOn||!audioCtx) return;
+ if(musicTimer) clearInterval(musicTimer);
+ const notes=[261,329,392,523,392,329,261,294,330,392,440,392,330,294];
+ let i=0;
+ musicTimer=setInterval(()=>{
+  if(!musicOn) return;
+  beep(notes[i%notes.length],0.35,'sine',0.08);
+  i++;
+ },380);
+}
+
+let grid=Array(8).fill().map(()=>Array(8).fill(0));
+let score=0, best=parseInt(localStorage.getItem('bb_best')||'0'), pname=localStorage.getItem('bb_name')||'';
 let sel=null, selIdx=null, tray=[];
 document.getElementById('showBest').innerText=best;
 if(pname){ document.getElementById('showName').innerText=pname; document.getElementById('namePop').style.display='none'; }
@@ -76,123 +106,131 @@ const SHAPES=[
  {cells:[[0,0],[0,1],[1,0],[1,1]], col:'c2'},
  {cells:[[0,0],[1,0],[2,0],[1,1]], col:'c3'},
  {cells:[[0,0],[1,0],[0,1]], col:'c4'},
+ {cells:[[0,0],[1,0],[2,0]], col:'c5'},
+ {cells:[[0,0],[0,1],[0,2],[1,1]], col:'c6'},
+ {cells:[[0,0]], col:'c2'},
+ {cells:[[0,0],[1,0]], col:'c1'},
 ];
+
+function canPlace(r,c,sh){
+ for(let [x,y] of sh.cells){ let nr=r+y,nc=c+x; if(nr>=8||nc>=8||grid[nr][nc]) return false; }
+ return true;
+}
+function hasAnyFit(sh){
+ for(let r=0;r<8;r++) for(let c=0;c<8;c++) if(canPlace(r,c,sh)) return true;
+ return false;
+}
+
+// SMART GENERATION - Tulad sa pic mo boss - mag fit lagi!
+function genSmartTray(){
+ let attempts=0;
+ while(attempts<100){
+  let candidate=[];
+  for(let i=0;i<3;i++) candidate.push(SHAPES[Math.floor(Math.random()*SHAPES.length)]);
+  // Check kung may at least 1 na mag fit sa board
+  if(candidate.some(sh=>hasAnyFit(sh))){
+   tray=candidate; renderTray(); return;
+  }
+  attempts++;
+ }
+ // fallback - bigyan ng small blocks para sure fit
+ tray=[SHAPES[6], SHAPES[7], SHAPES[6]]; renderTray();
+}
 
 function drawBoard(){
  let b=document.getElementById('board'); b.innerHTML='';
  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
   let d=document.createElement('div'); d.className='cell';
-  if(grid[r][c]){ d.classList.add('on'); d.classList.add(grid[r][c]); }
+  if(grid[r][c]){ d.classList.add('on',grid[r][c]); }
   d.onclick=()=>clickBoard(r,c);
   d.onmouseenter=()=>hoverBoard(r,c);
   b.appendChild(d);
  }
 }
-
-function drawTray(){
- let t=document.getElementById('tray'); t.innerHTML=''; tray=[];
- for(let i=0;i<3;i++){
-  let sh=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-  tray.push(sh);
+function renderTray(){
+ let t=document.getElementById('tray'); t.innerHTML='';
+ tray.forEach((sh,i)=>{
   let box=document.createElement('div'); box.className='box';
   sh.cells.forEach(([x,y])=>{
    let e=document.createElement('div'); e.className='b '+sh.col;
-   e.style.gridColumn=x+1; e.style.gridRow=y+1;
-   box.appendChild(e);
+   e.style.gridColumn=x+1; e.style.gridRow=y+1; box.appendChild(e);
   });
   box.onclick=()=>clickBox(i);
   t.appendChild(box);
- }
+ });
 }
-
 function clickBox(i){
+ initAudio();
  if(tray[i]===null) return;
  if(selIdx===i){ clearSel(); return; }
- clearSel();
- sel=tray[i]; selIdx=i;
+ clearSel(); sel=tray[i]; selIdx=i;
  document.querySelectorAll('.box')[i].classList.add('act');
+ beep(600,0.1,'sine',0.4);
+ document.getElementById('musicBar').innerText='Selected! Tap board to drop';
 }
-
 function clearSel(){
  document.querySelectorAll('.box').forEach(x=>x.classList.remove('act'));
  document.querySelectorAll('.cell').forEach(x=>x.classList.remove('pre'));
  sel=null; selIdx=null;
 }
-
-function canPlace(r,c,sh){
- for(let [x,y] of sh.cells){
-  let nr=r+y, nc=c+x;
-  if(nr>=8||nc>=8||grid[nr][nc]) return false;
- }
- return true;
-}
-
 function hoverBoard(r,c){
  document.querySelectorAll('.cell').forEach(x=>x.classList.remove('pre'));
- if(!sel) return;
- if(!canPlace(r,c,sel)) return;
+ if(!sel||!canPlace(r,c,sel)) return;
  for(let [x,y] of sel.cells){
   let idx=(r+y)*8+(c+x);
   let el=document.getElementById('board').children[idx];
   if(el) el.classList.add('pre');
  }
 }
-
 function clickBoard(r,c){
+ initAudio();
  if(!sel) return;
- if(!canPlace(r,c,sel)) return;
+ if(!canPlace(r,c,sel)){ beep(150,0.15,'square',0.2); return; }
  for(let [x,y] of sel.cells) grid[r+y][c+x]=sel.col;
- tray[selIdx]=null;
- document.querySelectorAll('.box')[selIdx].classList.add('out');
- document.querySelectorAll('.box')[selIdx].classList.remove('act');
+ beep(900,0.12,'sine',0.5);
+ tray[selIdx]=null; document.querySelectorAll('.box')[selIdx].classList.add('out');
  clearSel();
- // clear lines
  let cleared=0;
  for(let rr=0;rr<8;rr++) if(grid[rr].every(v=>v)){ grid[rr]=Array(8).fill(0); cleared++; }
  for(let cc=0;cc<8;cc++) if(grid.every(row=>row[cc])){ for(let rr=0;rr<8;rr++) grid[rr][cc]=0; cleared++; }
- if(cleared) score+=cleared*100; else score+=10;
+ if(cleared){ beep(1200,0.2,'sine',0.5); setTimeout(()=>beep(1500,0.25,'sine',0.6),100); score+=cleared*100; } else score+=10;
  document.getElementById('sc').innerText=score;
  drawBoard();
- if(tray.every(v=>v===null)) drawTray();
+ if(tray.every(v=>v===null)) genSmartTray();
  if(isOver()) setTimeout(gameOver,200);
 }
-
 function isOver(){
- for(let sh of tray){ if(!sh) continue; for(let r=0;r<8;r++) for(let c=0;c<8;c++) if(canPlace(r,c,sh)) return false; }
- return true;
+ for(let sh of tray){ if(!sh) continue; if(hasAnyFit(sh)) return false; } return true;
 }
-
 function gameOver(){
+ beep(200,0.4,'sawtooth',0.3);
  let lbs=JSON.parse(localStorage.getItem('bb_lb')||'[]');
- lbs.push({name:pname, score:score, date:new Date().toLocaleDateString()});
- lbs.sort((a,b)=>b.score-a.score); lbs=lbs.slice(0,10);
+ lbs.push({name:pname, score:score}); lbs.sort((a,b)=>b.score-a.score); lbs=lbs.slice(0,10);
  localStorage.setItem('bb_lb',JSON.stringify(lbs));
  if(score>best){ best=score; localStorage.setItem('bb_best',best); document.getElementById('showBest').innerText=best; }
  alert('Game Over '+pname+'! Score: '+score);
- score=0; document.getElementById('sc').innerText=0;
- grid=Array(8).fill().map(()=>Array(8).fill(0));
- drawBoard(); drawTray();
- showLB();
+ score=0; document.getElementById('sc').innerText=0; grid=Array(8).fill().map(()=>Array(8).fill(0)); drawBoard(); genSmartTray(); showLB();
 }
-
 function doSaveName(){
- let n=document.getElementById('nameIn').value.trim();
- if(!n){ alert('Lagay ka name boss!'); return; }
- pname=n; localStorage.setItem('bb_name',n);
- document.getElementById('showName').innerText=n;
+ let n=document.getElementById('nameIn').value.trim(); if(!n){ alert('Lagay name boss!'); return; }
+ pname=n; localStorage.setItem('bb_name',n); document.getElementById('showName').innerText=n;
  document.getElementById('namePop').style.display='none';
- drawBoard(); drawTray();
+ initAudio(); startMusic();
+ document.getElementById('musicBar').innerText='🎵 Music ON - Click trophy for leaderboard';
+ drawBoard(); genSmartTray();
 }
-
+function openSet(){ document.getElementById('setPop').style.display='flex'; }
+function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 Sound: ON':'🔇 Sound: OFF'; if(soundOn){ initAudio(); beep(700,0.1);} }
+function toggleMusic(){ musicOn=!musicOn; document.getElementById('musBtn').innerText=musicOn?'🎵 Music: ON':'🎵 Music: OFF'; if(musicOn){ initAudio(); startMusic(); } else { clearInterval(musicTimer); } }
 function showLB(){
  let lbs=JSON.parse(localStorage.getItem('bb_lb')||'[]');
  let html=lbs.length?lbs.map((e,i)=>`<div><span>${i+1}. ${e.name}</span><b>${e.score}</b></div>`).join(''):'<div>No scores yet</div>';
- document.getElementById('lbList').innerHTML=html;
- document.getElementById('lbPop').style.display='flex';
+ document.getElementById('lbList').innerHTML=html; document.getElementById('lbPop').style.display='flex';
 }
 
 drawBoard();
-if(pname) drawTray();
+if(pname) genSmartTray();
+document.body.addEventListener('click',()=>{ initAudio(); }, {once:true});
 </script>
 </body>
 </html>
