@@ -18,11 +18,16 @@
     .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
     .header p { opacity: 0.9; }
     .games { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-    .game-card { background: #1e1e2f; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #333; transition: 0.3s; }
+    .game-card { background: #1e1e2f; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #333; transition: 0.3s; position:relative; overflow:hidden; }
     .game-card:hover { transform: translateY(-5px); border-color: #667eea; }
     .game-card h3 { margin: 15px 0 10px; }
     .play-btn { background: #667eea; color: white; padding: 12px 25px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 10px; }
     .play-btn:hover { background: #5568d3; }
+    .new-badge { position:absolute; top:12px; right:12px; background:#ffb31a; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; box-shadow:0 2px 0 #c47d00; }
+    .smooth-card { background: linear-gradient(135deg, #1e3a6b 0%, #2f5aa0 100%); border-color: #3a6bc5; }
+    .smooth-card .play-btn { background: #ffb31a; color:#fff; box-shadow:0 3px 0 #c47d00; }
+    .smooth-card .play-btn:hover { background:#ff9f00; }
+    .feature { font-size:12px; color:#8ec2ff; margin-top:8px; }
   </style>
 </head>
 <body>
@@ -41,6 +46,14 @@
       <h3>💥 Block Blast</h3>
       <p>Drag & Drop - Brain Teaser!</p>
       <a href="block-blast.html" class="play-btn">PLAY NOW</a>
+    </div>
+    <!-- NEW SMOOTH PRO - BAGONG GAWA -->
+    <div class="game-card smooth-card">
+      <div class="new-badge">🆕 NEW • SMOOTH</div>
+      <h3>💎 Block Smooth Pro</h3>
+      <p>Super Smooth - Gaya sa Video! + Leaderboard + Pause</p>
+      <div class="feature">✨ Smooth Drag • 🏆 Leaderboard • ⏸️ Pause/Resume</div>
+      <a href="block-blast-smooth-NEW.html" class="play-btn">PLAY SMOOTH PRO</a>
     </div>
   </div>
 </body>
