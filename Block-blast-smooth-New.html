@@ -1,268 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Block Blast Smooth - MGC Gaming</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Block Blast Smooth - Click to Drop</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2f5aa0;font-family:'Fredoka',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center}
-.top{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;padding:12px 14px 4px}
-.left{display:flex;gap:8px;align-items:center}
-.btn{border:none;border-radius:18px;padding:6px 12px;font-family:Fredoka;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.25)}
-.btn-back{background:#162a52;font-size:13px}
-.btn-pause{background:#fff;color:#2f5aa0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
-.trophy{display:flex;align-items:center;gap:5px;background:#ffb31a;border-radius:20px;padding:4px 12px;color:#fff;font-weight:700;box-shadow:0 2px 0 #c47d00;font-size:13px}
-.score-main{color:#fff;font-size:44px;font-weight:700;letter-spacing:1px;margin-top:2px;text-shadow:0 2px 0 rgba(0,0,0,.2)}
-.board-wrap{width:92%;max-width:380px;aspect-ratio:1/1.15;background:#162a52;border-radius:16px;padding:10px;box-shadow:inset 0 0 0 3px #1e3a6b, 0 8px 0 #122040;margin-top:6px;position:relative}
-.grid{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:4px;width:100%;height:100%}
-.cell{background:#1e3a6b;border-radius:6px;transition:all.18s ease}
-.cell.filled{border-radius:6px;box-shadow:inset 0 2px 0 rgba(255,255,255,.35), inset 0 -3px 0 rgba(0,0,0,.25)}
-.cell.pop{animation:pop.22s ease}
-@keyframes pop{0%{transform:scale(.8)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
-.cell.clear-anim{animation:clearLine.35s ease forwards}
-@keyframes clearLine{0%{transform:scale(1);opacity:1}30%{transform:scale(1.1);filter:brightness(1.6)}100%{transform:scale(0);opacity:0}}
-.tray{display:flex;justify-content:space-around;align-items:center;width:92%;max-width:380px;background:#162a52;border-radius:14px;padding:12px 8px;margin-top:12px;min-height:86px;box-shadow:0 4px 0 #122040}
-.block-opt{cursor:grab;display:flex;gap:2px;transition:transform.15s;flex-wrap:wrap;max-width:80px;justify-content:center}
-.block-opt:active{transform:scale(1.08)}
-.b{width:20px;height:20px;border-radius:5px;box-shadow:inset 0 2px 0 rgba(255,255,255,.4), inset 0 -2px 0 rgba(0,0,0,.25)}
-.progress{width:92%;max-width:380px;height:10px;background:#122040;border-radius:10px;margin-top:10px;overflow:hidden;display:flex;gap:3px;padding:2px}
-.progress i{flex:1;background:#2ee5ff;border-radius:10px;box-shadow:0 0 8px #2ee5ff;transition:width.3s}
-.fx{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font-size:34px;font-weight:800;color:#ffde59;text-shadow:0 3px 0 #000;pointer-events:none;opacity:0;z-index:10}
-.fx.show{animation:fxPop.8s ease forwards}
-@keyframes fxPop{0%{opacity:0;transform:translate(-50%,-20%) scale(.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-80%) scale(1)}}
-.drag-ghost{position:fixed;pointer-events:none;z-index:9999;display:flex;flex-direction:column;gap:2px;opacity:.92;filter:drop-shadow(0 8px 12px rgba(0,0,0,.45))}
-.overlay{position:fixed;inset:0;background:rgba(10,20,50,.88);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff}
-.overlay.show{display:flex}
-.o-btn{border:none;padding:12px 28px;border-radius:12px;font-family:Fredoka;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3)}
-.o-primary{background:#ffb31a;color:#fff}
-.o-secondary{background:#fff;color:#2f5aa0}
-.lb{width:90%;max-width:340px;background:#1e3a6b;border-radius:14px;padding:14px;max-height:60vh;overflow:auto}
-.lb h3{color:#ffde59;text-align:center;margin-bottom:10px}
-.lb-row{display:flex;justify-content:space-between;padding:8px 10px;background:#162a52;border-radius:8px;margin-bottom:6px;font-size:14px}
-.banner-area{width:100%;max-width:420px;height:50px;background:#fff;margin-top:auto;display:flex;align-items:center;justify-content:center;font-size:11px;color:#888;border-top:2px solid #ddd}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#2f5aa0;font-family:'Fredoka',sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;user-select:none}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(0,0,0,.15)}
+.arena-btn{background:#1a2d5a;color:white;border:none;padding:8px 16px;border-radius:12px;font-family:'Fredoka';font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer}
+.trophy{display:flex;align-items:center;gap:6px;color:white;font-size:20px;font-weight:700}
+.pause{width:44px;height:44px;background:white;border-radius:50%;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.score-wrap{text-align:center;padding:10px}
+.score-big{font-size:64px;color:white;font-weight:700;line-height:1}
+.score-label{background:rgba(0,0,0,.2);color:rgba(255,255,255,.8);font-size:12px;padding:2px 10px;border-radius:20px;display:inline-block}
+.board-wrap{flex:1;display:flex;justify-content:center;align-items:center;padding:10px}
+.board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:12px;border-radius:20px;width:92vw;max-width:380px;aspect-ratio:1}
+.cell{background:#243d6b;border-radius:8px;aspect-ratio:1;transition:.15s}
+.cell.preview{background:#3a5aa0!important}
+.cell.filled{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.cell.pop{animation:pop.2s}
+@keyframes pop{0%{transform:scale(.8)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.tray{display:flex;justify-content:space-around;align-items:center;background:#3a7bd5;margin:12px;border-radius:20px;padding:16px;min-height:110px}
+.block-group{display:grid;gap:3px;cursor:pointer;transition:.2s;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2))}
+.block-group.selected{transform:scale(1.15) translateY(-10px);filter:drop-shadow(0 10px 20px rgba(0,0,0,.4))}
+.block-group.used{opacity:.15;pointer-events:none}
+.b{width:28px;height:28px;border-radius:6px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.cyan{background:#2ab8d8}.yellow{background:#ffde59}.pink{background:#ff6b9d}.green{background:#2ecc71}.orange{background:#ff9f43}.purple{background:#a55eea}
+.banner{height:60px;background:white;display:flex;align-items:center;justify-content:center;color:#666;font-size:11px;position:relative}
+.banner.x{position:absolute;top:4px;right:8px;background:black;color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pause-menu{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99}
+.menu-box{background:white;border-radius:20px;padding:24px;width:80%;max-width:300px;text-align:center}
+.menu-btn{width:100%;padding:12px;margin:6px 0;border:none;border-radius:12px;font-family:'Fredoka';font-weight:700;cursor:pointer}
+.resume{background:#2f5aa0;color:white}.arena{background:#eee}
 </style>
 </head>
 <body>
 <div class="top">
-<div class="left">
-<button class="btn btn-back" onclick="location.href='index.html'">⬅ Arena</button>
+<button class="arena-btn" onclick="location.href='index.html'">◀ Arena</button>
 <div class="trophy">🏆 <span id="best">0</span></div>
+<button class="pause" onclick="openPause()">⏸️</button>
 </div>
-<button class="btn btn-pause" id="pauseBtn">⏸️</button>
-</div>
-<div class="score-main" id="score">0</div>
-<div class="board-wrap">
-<div class="grid" id="grid"></div>
-<div class="fx" id="fx"></div>
-</div>
-<div class="progress" id="prog"><i></i><i></i><i></i></div>
+<div class="score-wrap"><div class="score-big" id="score">0</div><div class="score-label">SCORE</div></div>
+<div class="board-wrap"><div class="board" id="board"></div></div>
 <div class="tray" id="tray"></div>
-<div class="banner-area">
-<!-- BANNER ONLY - CHILL - MAY X - Monetag Vignette Only ilagay dito bukas -->
-Banner Ads - Chill - May Close X
+<div class="banner" id="banner">Advertisement • Chill Banner
+<div class="x" onclick="document.getElementById('banner').style.display='none'">X</div>
 </div>
-<div class="overlay" id="pauseOverlay">
-<h2 style="font-size:32px">⏸️ Paused</h2>
-<button class="o-btn o-primary" id="resumeBtn">▶ Resume</button>
-<button class="o-btn o-secondary" onclick="document.getElementById('lbOverlay').classList.add('show')">🏆 Leaderboard</button>
-<button class="o-btn o-secondary" onclick="location.href='index.html'">⬅ Back to Arena</button>
-</div>
-<div class="overlay" id="lbOverlay">
-<div class="lb">
-<h3>🏆 Leaderboard</h3>
-<div id="lbList"></div>
-<button class="o-btn o-primary" style="width:100%;margin-top:10px" onclick="document.getElementById('lbOverlay').classList.remove('show')">Close</button>
-<button class="o-btn o-secondary" style="width:100%;margin-top:6px" onclick="location.href='index.html'">⬅ Back to Arena</button>
+<div class="pause-menu" id="pauseMenu">
+<div class="menu-box">
+<h3 style="margin-bottom:12px;color:#1e3a6b">PAUSED</h3>
+<button class="menu-btn resume" onclick="closePause()">▶️ Resume</button>
+<button class="menu-btn arena" onclick="location.href='index.html'">⬅️ Back to Arena</button>
+<p style="margin-top:12px;font-size:12px;color:#666">🏆 Best: <span id="best2">0</span></p>
 </div>
 </div>
-<div class="overlay" id="overOverlay">
-<h2 style="font-size:28px">Game Over!</h2>
-<div style="font-size:22px">Score: <span id="finalScore">0</span></div>
-<div style="font-size:14px;color:#ffde59" id="newBestMsg"></div>
-<button class="o-btn o-primary" onclick="restartGame()">🔄 Play Again</button>
-<button class="o-btn o-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
-<button class="o-btn o-secondary" onclick="location.href='index.html'">⬅ Back to Arena</button>
-</div>
+
 <script>
-const COLS=8, ROWS=8;
-const COLORS=["#FFBE0B","#06D6A0","#118AB2","#EF476F","#FF9F1C","#9D4EDD","#48CAE4","#F94144","#43AA8B","#2ec4b6"];
-let board=Array(ROWS).fill(0).map(()=>Array(COLS).fill(null));
-let score=0, isPaused=false;
-let dragData=null, ghost=null;
-const gridEl=document.getElementById('grid'), trayEl=document.getElementById('tray'), scoreEl=document.getElementById('score'), fxEl=document.getElementById('fx');
-const bestEl=document.getElementById('best'), lbList=document.getElementById('lbList');
-function getBest(){ return parseInt(localStorage.getItem('bb_best')||'0'); }
-function getLB(){ try{return JSON.parse(localStorage.getItem('bb_lb')||'[]')}catch{return []} }
-function saveLB(s){
- let lb=getLB(); lb.push({score:s,date:new Date().toLocaleDateString()}); lb.sort((a,b)=>b.score-a.score); lb=lb.slice(0,10);
- localStorage.setItem('bb_lb',JSON.stringify(lb));
- if(s>getBest()) localStorage.setItem('bb_best',s);
+// SOUNDS - WebAudio
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function playSound(freq,dur,type='sine',vol=0.3){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type=type; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime+dur);
+  o.start(); o.stop(audioCtx.currentTime+dur);
 }
-function initGrid(){
- gridEl.innerHTML='';
- for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
-   let d=document.createElement('div'); d.className='cell'; d.dataset.r=r; d.dataset.c=c; gridEl.appendChild(d);
- }
- bestEl.textContent=getBest();
+const sounds = {
+  select: ()=>playSound(500,0.1,'sine',0.4),
+  place: ()=>playSound(800,0.15,'sine',0.5),
+  clear: ()=>{playSound(600,0.1,'sine',0.4); setTimeout(()=>playSound(900,0.2,'sine',0.5),80)},
+  fail: ()=>playSound(200,0.2,'square',0.2),
+  gameover: ()=>{playSound(400,0.3,'sawtooth',0.3); setTimeout(()=>playSound(250,0.5,'sawtooth',0.3),150)}
+};
+
+const boardEl=document.getElementById('board');
+const trayEl=document.getElementById('tray');
+const scoreEl=document.getElementById('score');
+let grid=Array(8).fill().map(()=>Array(8).fill(0));
+let score=0, best=localStorage.getItem('blockBest')||0;
+let selectedBlock=null, selectedIndex=null;
+document.getElementById('best').innerText=best;
+document.getElementById('best2').innerText=best;
+
+const shapes=[
+  {cells:[[0,0],[1,0],[2,0],[1,1]], color:'cyan'},
+  {cells:[[0,0],[0,1],[1,0],[1,1]], color:'yellow'},
+  {cells:[[0,0],[1,0],[2,0],[1,1]], color:'pink'},
+  {cells:[[0,0],[1,0],[2,0]], color:'orange'},
+  {cells:[[0,0],[0,1],[0,2],[1,1]], color:'purple'},
+  {cells:[[0,0],[1,0],[0,1]], color:'green'}
+];
+let trayBlocks=[];
+
+function createBoard(){
+  boardEl.innerHTML='';
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const cell=document.createElement('div');
+    cell.className='cell'; cell.dataset.r=r; cell.dataset.c=c;
+    cell.onclick=()=>onBoardClick(r,c);
+    cell.onmouseenter=()=>onBoardHover(r,c);
+    boardEl.appendChild(cell);
+  }
 }
-function randBlock(){
- const shapes=[[[1]],[[1,1]],[[1,1,1]],[[1,1,1,1]],[[1,1],[1,1]],[[1,1],[1,0]],[[1,0],[1,1]],[[1,0,0],[1,1,1]]];
- let s=shapes[Math.floor(Math.random()*shapes.length)];
- let color=COLORS[Math.floor(Math.random()*COLORS.length)];
- return {shape:s,color};
+
+function genTray(){
+  trayBlocks=[]; trayEl.innerHTML='';
+  for(let i=0;i<3;i++){
+    const shape=shapes[Math.floor(Math.random()*shapes.length)];
+    trayBlocks.push(shape);
+    const g=document.createElement('div');
+    g.className='block-group'; g.dataset.i=i;
+    g.style.gridTemplateColumns=`repeat(3,28px)`;
+    shape.cells.forEach(([x,y])=>{
+      const b=document.createElement('div'); b.className='b '+shape.color;
+      b.style.gridColumn=x+1; b.style.gridRow=y+1; g.appendChild(b);
+    });
+    g.onclick=()=>selectBlock(i);
+    trayEl.appendChild(g);
+  }
 }
-function renderTray(){
- if(isPaused) return;
- trayEl.innerHTML='';
- for(let i=0;i<3;i++){
-   let b=randBlock();
-   let wrap=document.createElement('div'); wrap.className='block-opt';
-   b.shape.forEach(row=>{
-     let line=document.createElement('div'); line.style.display='flex'; line.style.gap='2px';
-     row.forEach(v=>{
-       if(!v){ let sp=document.createElement('div'); sp.style.width='20px'; sp.style.height='20px'; line.appendChild(sp); return; }
-       let el=document.createElement('div'); el.className='b'; el.style.background=b.color; el.style.backgroundImage='linear-gradient(180deg, rgba(255,255,255,.35), transparent)'; line.appendChild(el);
-     });
-     wrap.appendChild(line);
-   });
-   wrap._data=b;
-   wrap.addEventListener('touchstart',startDrag,{passive:false});
-   wrap.addEventListener('mousedown',startDrag);
-   trayEl.appendChild(wrap);
- }
- if(!hasAnyMove()){ setTimeout(()=>gameOver(),400); }
+
+function selectBlock(i){
+  if(trayBlocks[i]==null) return;
+  // Deselect previous
+  document.querySelectorAll('.block-group').forEach(el=>el.classList.remove('selected'));
+  if(selectedIndex===i){selectedBlock=null; selectedIndex=null; return;} // click ulit to deselect
+  selectedIndex=i; selectedBlock=trayBlocks[i];
+  trayEl.children[i].classList.add('selected');
+  sounds.select();
+  // unlock audio on first click
+  if(audioCtx.state==='suspended') audioCtx.resume();
 }
-function hasAnyMove(){
- let opts=[...trayEl.children].filter(o=>o.style.visibility!=='hidden').map(o=>o._data);
- if(!opts.length) return true;
- for(let data of opts){
-   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(canPlace(data.shape,r,c)) return true;
- }
- return false;
+
+function onBoardHover(r,c){
+  if(!selectedBlock) return;
+  clearPreview();
+  if(canPlace(selectedBlock,r,c)) showPreview(selectedBlock,r,c);
 }
-function startDrag(e){
- if(isPaused) return;
- e.preventDefault();
- const opt=e.currentTarget; const data=opt._data; dragData=data;
- if(ghost) ghost.remove();
- ghost=document.createElement('div'); ghost.className='drag-ghost';
- data.shape.forEach(row=>{
-   let line=document.createElement('div'); line.style.display='flex'; line.style.gap='2px';
-   row.forEach(v=>{
-     if(!v){ let sp=document.createElement('div'); sp.style.width='28px'; sp.style.height='28px'; line.appendChild(sp); return;}
-     let el=document.createElement('div'); el.style.width='28px'; el.style.height='28px'; el.style.borderRadius='6px'; el.style.background=data.color; el.style.boxShadow='inset 0 2px 0 rgba(255,255,255,.4), inset 0 -2px 0 rgba(0,0,0,.25)'; line.appendChild(el);
-   });
-   ghost.appendChild(line);
- });
- document.body.appendChild(ghost);
- moveGhost(e);
- window.addEventListener('touchmove',moveGhost,{passive:false});
- window.addEventListener('mousemove',moveGhost);
- window.addEventListener('touchend',endDrag);
- window.addEventListener('mouseup',endDrag);
+
+function onBoardClick(r,c){
+  if(!selectedBlock){sounds.fail(); return;}
+  if(!canPlace(selectedBlock,r,c)){sounds.fail(); return;}
+  placeBlock(selectedBlock,r,c);
+  trayBlocks[selectedIndex]=null;
+  trayEl.children[selectedIndex].classList.add('used');
+  trayEl.children[selectedIndex].classList.remove('selected');
+  selectedBlock=null; selectedIndex=null;
+  clearPreview();
+  sounds.place();
+  const cleared=checkClear();
+  if(cleared>0){score+=cleared*30; if(cleared>1) score+= (cleared-1)*30; sounds.clear();}
+  scoreEl.innerText=score;
+  if(trayBlocks.every(b=>b===null)) genTray();
+  if(isGameOver()){setTimeout(()=>gameOver(),300)}
 }
-function moveGhost(e){
- if(!ghost) return;
- let x=e.touches?e.touches[0].clientX:e.clientX;
- let y=e.touches?e.touches[0].clientY:e.clientY;
- ghost.style.left=(x-40)+'px'; ghost.style.top=(y-30)+'px';
- let el=document.elementFromPoint(x,y);
- if(el && el.classList.contains('cell')){
-   clearPreview();
-   let r=+el.dataset.r, c=+el.dataset.c;
-   if(canPlace(dragData.shape,r,c)) previewPlace(dragData.shape,r,c,dragData.color);
- }
-}
-function clearPreview(){ document.querySelectorAll('.cell.preview').forEach(c=>{c.classList.remove('preview'); c.style.background=''; c.style.opacity=''}); }
-function previewPlace(shape,r,c,color){
- for(let sr=0;sr<shape.length;sr++) for(let sc=0;sc<shape[sr].length;sc++) if(shape[sr][sc]){
-   let rr=r+sr, cc=c+sc; if(rr>=ROWS||cc>=COLS) continue;
-   let cell=gridEl.children[rr*COLS+cc];
-   if(!board[rr][cc]){ cell.classList.add('preview'); cell.style.background=color; cell.style.opacity='.5'; }
- }
-}
+
 function canPlace(shape,r,c){
- for(let sr=0;sr<shape.length;sr++) for(let sc=0;sc<shape[sr].length;sc++) if(shape[sr][sc]){
-   let rr=r+sr, cc=c+sc; if(rr<0||rr>=ROWS||cc<0||cc>=COLS) return false; if(board[rr][cc]) return false;
- } return true;
+  for(let [x,y] of shape.cells){
+    let nr=r+y, nc=c+x;
+    if(nr<0||nr>=8||nc<0||nc>=8||grid[nr][nc]!==0) return false;
+  }
+  return true;
 }
-function endDrag(e){
- window.removeEventListener('touchmove',moveGhost); window.removeEventListener('mousemove',moveGhost);
- window.removeEventListener('touchend',endDrag); window.removeEventListener('mouseup',endDrag);
- clearPreview();
- if(ghost){ ghost.remove(); ghost=null; }
- if(!dragData || isPaused) return;
- let x=e.changedTouches?e.changedTouches[0].clientX:e.clientX;
- let y=e.changedTouches?e.changedTouches[0].clientY:e.clientY;
- let el=document.elementFromPoint(x,y);
- if(el && el.classList.contains('cell')){
-   let r=+el.dataset.r, c=+el.dataset.c;
-   if(canPlace(dragData.shape,r,c)){
-     placeBlock(dragData.shape,r,c,dragData.color);
-     [...trayEl.children].find(o=>o._data===dragData).style.visibility='hidden';
-     if([...trayEl.children].every(o=>o.style.visibility==='hidden')) setTimeout(renderTray,350);
-     else if(!hasAnyMove()) setTimeout(()=>gameOver(),400);
-   }
- }
- dragData=null;
+function showPreview(shape,r,c){
+  for(let [x,y] of shape.cells){
+    let el=document.querySelector(`.cell[data-r=\"${r+y}\"][data-c=\"${c+x}\"]`);
+    if(el) el.classList.add('preview');
+  }
 }
-function placeBlock(shape,r,c,color){
- for(let sr=0;sr<shape.length;sr++) for(let sc=0;sc<shape[sr].length;sc++) if(shape[sr][sc]) board[r+sr][c+sc]=color;
- renderBoard(); checkLines();
+function clearPreview(){document.querySelectorAll('.cell.preview').forEach(el=>el.classList.remove('preview'))}
+function placeBlock(shape,r,c){
+  for(let [x,y] of shape.cells){
+    grid[r+y][c+x]=shape.color;
+    let el=document.querySelector(`.cell[data-r=\"${r+y}\"][data-c=\"${c+x}\"]`);
+    el.className='cell filled '+shape.color; el.classList.add('pop');
+  }
 }
-function renderBoard(){
- for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
-   let idx=r*COLS+c; let cell=gridEl.children[idx]; let col=board[r][c];
-   if(col){ cell.className='cell filled pop'; cell.style.background=col; cell.style.backgroundImage='linear-gradient(180deg, rgba(255,255,255,.35), transparent)'; }
-   else{ cell.className='cell'; cell.style.background=''; }
- }
+function checkClear(){
+  let clearRows=[], clearCols=[];
+  for(let r=0;r<8;r++) if(grid[r].every(v=>v!==0)) clearRows.push(r);
+  for(let c=0;c<8;c++) if(grid.every(row=>row[c]!==0)) clearCols.push(c);
+  clearRows.forEach(r=>{for(let c=0;c<8;c++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r=\"${r}\"][data-c=\"${c}\"]`); el.className='cell';}});
+  clearCols.forEach(c=>{for(let r=0;r<8;r++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r=\"${r}\"][data-c=\"${c}\"]`); el.className='cell';}});
+  return clearRows.length+clearCols.length;
 }
-function checkLines(){
- let clearRows=[], clearCols=[];
- for(let r=0;r<ROWS;r++) if(board[r].every(v=>v)) clearRows.push(r);
- for(let c=0;c<COLS;c++) if(board.every(row=>row[c])) clearCols.push(c);
- if(!clearRows.length &&!clearCols.length) return;
- let pts=(clearRows.length+clearCols.length)*30; if(clearRows.length && clearCols.length) pts+=30;
- clearRows.forEach(r=>{ for(let c=0;c<COLS;c++) gridEl.children[r*COLS+c].classList.add('clear-anim'); });
- clearCols.forEach(c=>{ for(let r=0;r<ROWS;r++) gridEl.children[r*COLS+c].classList.add('clear-anim'); });
- setTimeout(()=>{
-   clearRows.forEach(r=>{ for(let c=0;c<COLS;c++) board[r][c]=null; });
-   clearCols.forEach(c=>{ for(let r=0;r<ROWS;r++) board[r][c]=null; });
-   score+=pts; scoreEl.textContent=score; showFx(pts>=60?'Good!':'+'+pts); renderBoard();
-   if(!hasAnyMove()) gameOver();
- },300);
+function isGameOver(){
+  for(let block of trayBlocks){ if(!block) continue;
+    for(let r=0;r<8;r++)for(let c=0;c<8;c++) if(canPlace(block,r,c)) return false;
+  }
+  return true;
 }
-function showFx(txt){ fxEl.textContent=txt; fxEl.classList.remove('show'); void fxEl.offsetWidth; fxEl.classList.add('show'); }
-function togglePause(){
- isPaused=!isPaused;
- document.getElementById('pauseOverlay').classList.toggle('show',isPaused);
- document.getElementById('pauseBtn').textContent=isPaused?'▶️':'⏸️';
-}
-document.getElementById('pauseBtn').onclick=togglePause;
-document.getElementById('resumeBtn').onclick=togglePause;
 function gameOver(){
- saveLB(score);
- document.getElementById('finalScore').textContent=score;
- document.getElementById('newBestMsg').textContent=score>=getBest() && score>0? '🎉 New Best!' : 'Best: '+getBest();
- document.getElementById('overOverlay').classList.add('show');
- renderLB();
+  sounds.gameover();
+  if(score>best){best=score; localStorage.setItem('blockBest',best); document.getElementById('best').innerText=best;}
+  alert('Game Over! Score: '+score+'\\nBest: '+best);
+  grid=Array(8).fill().map(()=>Array(8).fill(0));
+  score=0; scoreEl.innerText=0; createBoard(); genTray();
 }
-function restartGame(){
- board=Array(ROWS).fill(0).map(()=>Array(COLS).fill(null)); score=0; scoreEl.textContent=0;
- document.getElementById('overOverlay').classList.remove('show');
- document.getElementById('pauseOverlay').classList.remove('show');
- isPaused=false; document.getElementById('pauseBtn').textContent='⏸️';
- renderBoard(); renderTray(); bestEl.textContent=getBest();
-}
-function showLeaderboard(){ renderLB(); document.getElementById('lbOverlay').classList.add('show'); }
-function renderLB(){
- let lb=getLB(); lbList.innerHTML='';
- if(!lb.length) lbList.innerHTML='<div style="text-align:center;color:#aaa">No scores yet</div>';
- else lb.forEach((e,i)=>{ let d=document.createElement('div'); d.className='lb-row'; d.innerHTML=`<span>#${i+1} 🏆 ${e.score}</span><span style="color:#aaa;font-size:12px">${e.date}</span>`; lbList.appendChild(d); });
-}
-initGrid(); renderBoard(); renderTray();
+function openPause(){document.getElementById('pauseMenu').style.display='flex'; document.getElementById('best2').innerText=best;}
+function closePause(){document.getElementById('pauseMenu').style.display='none';}
+
+createBoard(); genTray();
 </script>
 </body>
 </html>
