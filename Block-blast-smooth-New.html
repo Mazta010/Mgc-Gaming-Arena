@@ -3,206 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Block Blast Smooth - Click to Drop</title>
+<title>Block Smooth Pro - Sound + Settings</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:#2f5aa0;font-family:'Fredoka',sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;user-select:none}
+body{background:#2f5aa0;font-family:'Fredoka',sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;user-select:none;touch-action:none}
 .top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(0,0,0,.15)}
+.icon-btn{width:44px;height:44px;background:white;border-radius:50%;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .arena-btn{background:#1a2d5a;color:white;border:none;padding:8px 16px;border-radius:12px;font-family:'Fredoka';font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer}
-.trophy{display:flex;align-items:center;gap:6px;color:white;font-size:20px;font-weight:700}
-.pause{width:44px;height:44px;background:white;border-radius:50%;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.score-wrap{text-align:center;padding:10px}
-.score-big{font-size:64px;color:white;font-weight:700;line-height:1}
-.score-label{background:rgba(0,0,0,.2);color:rgba(255,255,255,.8);font-size:12px;padding:2px 10px;border-radius:20px;display:inline-block}
-.board-wrap{flex:1;display:flex;justify-content:center;align-items:center;padding:10px}
-.board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:12px;border-radius:20px;width:92vw;max-width:380px;aspect-ratio:1}
-.cell{background:#243d6b;border-radius:8px;aspect-ratio:1;transition:.15s}
-.cell.preview{background:#3a5aa0!important}
+.score-wrap{text-align:center;padding:8px}
+.score-big{font-size:60px;color:white;font-weight:700;line-height:1}
+.board-wrap{flex:1;display:flex;justify-content:center;align-items:center;padding:8px}
+.board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:12px;border-radius:20px;width:92vw;max-width:380px;aspect-ratio:1;position:relative}
+.cell{background:#243d6b;border-radius:8px;aspect-ratio:1}
+.cell.preview{background:#5a7ac0!important;opacity:.7}
 .cell.filled{box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
-.cell.pop{animation:pop.2s}
-@keyframes pop{0%{transform:scale(.8)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
-.tray{display:flex;justify-content:space-around;align-items:center;background:#3a7bd5;margin:12px;border-radius:20px;padding:16px;min-height:110px}
-.block-group{display:grid;gap:3px;cursor:pointer;transition:.2s;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2))}
-.block-group.selected{transform:scale(1.15) translateY(-10px);filter:drop-shadow(0 10px 20px rgba(0,0,0,.4))}
+.tray{display:flex;justify-content:space-around;background:#3a7bd5;margin:12px;border-radius:20px;padding:16px;min-height:110px}
+.block-group{display:grid;gap:3px;cursor:grab;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2));touch-action:none}
+.block-group.selected{outline:3px solid #ffde59;outline-offset:4px;border-radius:8px;transform:scale(1.1)}
+.block-group.dragging{opacity:.3}
 .block-group.used{opacity:.15;pointer-events:none}
-.b{width:28px;height:28px;border-radius:6px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.b{width:26px;height:26px;border-radius:6px}
 .cyan{background:#2ab8d8}.yellow{background:#ffde59}.pink{background:#ff6b9d}.green{background:#2ecc71}.orange{background:#ff9f43}.purple{background:#a55eea}
+.drag-ghost{position:fixed;pointer-events:none;z-index:100;display:grid;gap:3px;transform:translate(-50%,-50%);filter:drop-shadow(0 8px 16px rgba(0,0,0,.4))}
+.settings{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:200}
+.set-box{background:white;border-radius:20px;padding:24px;width:85%;max-width:320px;color:#1e3a6b}
+.set-row{display:flex;justify-content:space-between;align-items:center;margin:14px 0;font-weight:700}
+.switch{width:50px;height:28px;background:#ccc;border-radius:20px;position:relative;cursor:pointer;transition:.3s}
+.switch.on{background:#2ecc71}
+.switch::after{content:'';width:22px;height:22px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
+.switch.on::after{left:25px}
+.menu-btn{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;font-family:'Fredoka';font-weight:700;cursor:pointer}
 .banner{height:60px;background:white;display:flex;align-items:center;justify-content:center;color:#666;font-size:11px;position:relative}
 .banner.x{position:absolute;top:4px;right:8px;background:black;color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.pause-menu{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99}
-.menu-box{background:white;border-radius:20px;padding:24px;width:80%;max-width:300px;text-align:center}
-.menu-btn{width:100%;padding:12px;margin:6px 0;border:none;border-radius:12px;font-family:'Fredoka';font-weight:700;cursor:pointer}
-.resume{background:#2f5aa0;color:white}.arena{background:#eee}
 </style>
 </head>
 <body>
 <div class="top">
 <button class="arena-btn" onclick="location.href='index.html'">◀ Arena</button>
-<div class="trophy">🏆 <span id="best">0</span></div>
-<button class="pause" onclick="openPause()">⏸️</button>
+<div style="display:flex;gap:8px">
+<button class="icon-btn" onclick="openSet()">⚙️</button>
+<button class="icon-btn" onclick="openPause()">⏸️</button>
 </div>
-<div class="score-wrap"><div class="score-big" id="score">0</div><div class="score-label">SCORE</div></div>
+</div>
+<div class="score-wrap"><div class="score-big" id="score">0</div><div style="background:rgba(0,0,0,.2);display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;color:#fff">SCORE • 🏆 <span id="best">0</span></div></div>
 <div class="board-wrap"><div class="board" id="board"></div></div>
 <div class="tray" id="tray"></div>
-<div class="banner" id="banner">Advertisement • Chill Banner
-<div class="x" onclick="document.getElementById('banner').style.display='none'">X</div>
+<div class="banner">Banner • Chill <div class="x" onclick="this.parentElement.style.display='none'">X</div></div>
+
+<div class="settings" id="setMenu">
+<div class="set-box">
+<h3>⚙️ Settings</h3>
+<div class="set-row"><span>🔊 Sound</span><div class="switch on" id="soundSwitch" onclick="toggleSound()"></div></div>
+<div class="set-row"><span>🎯 Mode</span><span style="font-size:11px">Click + Drag Both Works!</span></div>
+<p style="font-size:11px;color:#888;margin-top:8px">Tip: Click block para ma-select, tapos click board kung saan idrop. Or Hold & Drag mo din!</p>
+<button class="menu-btn" style="background:#2f5aa0;color:white" onclick="closeSet()">Close</button>
 </div>
-<div class="pause-menu" id="pauseMenu">
-<div class="menu-box">
-<h3 style="margin-bottom:12px;color:#1e3a6b">PAUSED</h3>
-<button class="menu-btn resume" onclick="closePause()">▶️ Resume</button>
-<button class="menu-btn arena" onclick="location.href='index.html'">⬅️ Back to Arena</button>
-<p style="margin-top:12px;font-size:12px;color:#666">🏆 Best: <span id="best2">0</span></p>
+</div>
+
+<div class="settings" id="pauseMenu">
+<div class="set-box" style="text-align:center">
+<h3>Paused</h3>
+<button class="menu-btn" style="background:#2f5aa0;color:white" onclick="closePause()">▶️ Resume</button>
+<button class="menu-btn" style="background:#eee" onclick="location.href='index.html'">⬅️ Arena</button>
 </div>
 </div>
 
 <script>
-// SOUNDS - WebAudio
-const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-function playSound(freq,dur,type='sine',vol=0.3){
-  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-  o.type=type; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination);
-  g.gain.setValueAtTime(vol, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime+dur);
-  o.start(); o.stop(audioCtx.currentTime+dur);
+let audioCtx, soundOn = localStorage.getItem('bb_sound')!=='off';
+function initAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }
+function playTone(f,d,t='sine',v=0.35){
+ if(!soundOn||!audioCtx) return;
+ const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+ o.type=t; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
+ g.gain.setValueAtTime(v, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime+d);
+ o.start(); o.stop(audioCtx.currentTime+d);
 }
-const sounds = {
-  select: ()=>playSound(500,0.1,'sine',0.4),
-  place: ()=>playSound(800,0.15,'sine',0.5),
-  clear: ()=>{playSound(600,0.1,'sine',0.4); setTimeout(()=>playSound(900,0.2,'sine',0.5),80)},
-  fail: ()=>playSound(200,0.2,'square',0.2),
-  gameover: ()=>{playSound(400,0.3,'sawtooth',0.3); setTimeout(()=>playSound(250,0.5,'sawtooth',0.3),150)}
-};
+const SFX={select:()=>{playTone(600,0.12);}, place:()=>{playTone(900,0.15,'sine',0.5);}, clear:()=>{playTone(700,0.1); setTimeout(()=>playTone(1100,0.18,'sine',0.5),90);}, bad:()=>playTone(180,0.18,'square',0.25), over:()=>{playTone(350,0.25,'sawtooth',0.3); setTimeout(()=>playTone(200,0.4,'sawtooth',0.3),160);}};
 
-const boardEl=document.getElementById('board');
-const trayEl=document.getElementById('tray');
-const scoreEl=document.getElementById('score');
-let grid=Array(8).fill().map(()=>Array(8).fill(0));
-let score=0, best=localStorage.getItem('blockBest')||0;
-let selectedBlock=null, selectedIndex=null;
-document.getElementById('best').innerText=best;
-document.getElementById('best2').innerText=best;
+const boardEl=document.getElementById('board'), trayEl=document.getElementById('tray'), scoreEl=document.getElementById('score');
+let grid=Array(8).fill().map(()=>Array(8).fill(0)), score=0, best=localStorage.getItem('blockBest')||0;
+let selected=null, selIdx=null, dragGhost=null, isDragging=false;
+document.getElementById('best').innerText=best; document.getElementById('soundSwitch').className='switch '+(soundOn?'on':'');
 
 const shapes=[
-  {cells:[[0,0],[1,0],[2,0],[1,1]], color:'cyan'},
-  {cells:[[0,0],[0,1],[1,0],[1,1]], color:'yellow'},
-  {cells:[[0,0],[1,0],[2,0],[1,1]], color:'pink'},
-  {cells:[[0,0],[1,0],[2,0]], color:'orange'},
-  {cells:[[0,0],[0,1],[0,2],[1,1]], color:'purple'},
-  {cells:[[0,0],[1,0],[0,1]], color:'green'}
+ {cells:[[0,0],[1,0],[2,0],[1,1]], color:'cyan'},
+ {cells:[[0,0],[0,1],[1,0],[1,1]], color:'yellow'},
+ {cells:[[0,0],[1,0],[2,0],[1,1]], color:'pink'},
+ {cells:[[0,0],[1,0],[2,0]], color:'orange'},
+ {cells:[[0,0],[0,1],[0,2],[1,1]], color:'purple'},
+ {cells:[[0,0],[1,0],[0,1]], color:'green'}
 ];
-let trayBlocks=[];
+let tray=[];
 
-function createBoard(){
-  boardEl.innerHTML='';
-  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
-    const cell=document.createElement('div');
-    cell.className='cell'; cell.dataset.r=r; cell.dataset.c=c;
-    cell.onclick=()=>onBoardClick(r,c);
-    cell.onmouseenter=()=>onBoardHover(r,c);
-    boardEl.appendChild(cell);
-  }
+function buildBoard(){
+ boardEl.innerHTML='';
+ for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+  const d=document.createElement('div'); d.className='cell'; d.dataset.r=r; d.dataset.c=c;
+  d.addEventListener('pointerenter',()=>{if(selected&&!isDragging) preview(selected,r,c);});
+  d.addEventListener('pointerdown',(e)=>{e.preventDefault(); if(selected) tryPlace(r,c);});
+  boardEl.appendChild(d);
+ }
 }
-
 function genTray(){
-  trayBlocks=[]; trayEl.innerHTML='';
-  for(let i=0;i<3;i++){
-    const shape=shapes[Math.floor(Math.random()*shapes.length)];
-    trayBlocks.push(shape);
-    const g=document.createElement('div');
-    g.className='block-group'; g.dataset.i=i;
-    g.style.gridTemplateColumns=`repeat(3,28px)`;
-    shape.cells.forEach(([x,y])=>{
-      const b=document.createElement('div'); b.className='b '+shape.color;
-      b.style.gridColumn=x+1; b.style.gridRow=y+1; g.appendChild(b);
-    });
-    g.onclick=()=>selectBlock(i);
-    trayEl.appendChild(g);
-  }
+ tray=[]; trayEl.innerHTML='';
+ for(let i=0;i<3;i++){
+  const sh=shapes[Math.floor(Math.random()*shapes.length)];
+  tray.push(sh);
+  const g=document.createElement('div'); g.className='block-group'; g.dataset.i=i;
+  sh.cells.forEach(([x,y])=>{const b=document.createElement('div'); b.className='b '+sh.color; b.style.gridColumn=x+1; b.style.gridRow=y+1; g.appendChild(b);});
+  g.addEventListener('pointerdown', (e)=>startDrag(e,i));
+  g.addEventListener('click', (e)=>{ if(!isDragging){ e.stopPropagation(); initAudio(); pickBlock(i);} });
+  trayEl.appendChild(g);
+ }
 }
+function pickBlock(i){
+ if(tray[i]==null) return;
+ if(selIdx===i){ // deselect
+  clearSel(); return;
+ }
+ clearSel(); selIdx=i; selected=tray[i];
+ trayEl.children[i].classList.add('selected');
+ SFX.select();
+}
+function clearSel(){
+ document.querySelectorAll('.block-group').forEach(el=>el.classList.remove('selected'));
+ selected=null; selIdx=null; clearPreview();
+}
+function startDrag(e,i){
+ if(tray[i]==null) return;
+ initAudio();
+ e.preventDefault();
+ isDragging=true;
+ pickBlock(i);
+ const g=tray[i];
+ // create ghost
+ dragGhost=document.createElement('div'); dragGhost.className='drag-ghost';
+ g.cells.forEach(([x,y])=>{const b=document.createElement('div'); b.className='b '+g.color; b.style.gridColumn=x+1; b.style.gridRow=y+1; dragGhost.appendChild(b);});
+ document.body.appendChild(dragGhost);
+ moveGhost(e);
+ const onMove=(ev)=>{moveGhost(ev); const cell=document.elementFromPoint(ev.clientX,ev.clientY); if(cell&&cell.classList.contains('cell')){ const r=+cell.dataset.r, c=+cell.dataset.c; preview(selected,r,c);} };
+ const onUp=(ev)=>{
+  document.removeEventListener('pointermove',onMove); document.removeEventListener('pointerup',onUp);
+  isDragging=false; if(dragGhost){dragGhost.remove(); dragGhost=null;}
+  const cell=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(cell&&cell.classList.contains('cell')){ tryPlace(+cell.dataset.r,+cell.dataset.c); } else { /* keep selected for click mode */ }
+ };
+ document.addEventListener('pointermove',onMove); document.addEventListener('pointerup',onUp);
+}
+function moveGhost(e){ if(dragGhost){ dragGhost.style.left=e.clientX+'px'; dragGhost.style.top=e.clientY+'px'; } }
 
-function selectBlock(i){
-  if(trayBlocks[i]==null) return;
-  // Deselect previous
-  document.querySelectorAll('.block-group').forEach(el=>el.classList.remove('selected'));
-  if(selectedIndex===i){selectedBlock=null; selectedIndex=null; return;} // click ulit to deselect
-  selectedIndex=i; selectedBlock=trayBlocks[i];
-  trayEl.children[i].classList.add('selected');
-  sounds.select();
-  // unlock audio on first click
-  if(audioCtx.state==='suspended') audioCtx.resume();
+function canPlace(sh,r,c){ for(let [x,y] of sh.cells){ let nr=r+y,nc=c+x; if(nr<0||nr>=8||nc<0||nc>=8||grid[nr][nc]!==0) return false;} return true; }
+function preview(sh,r,c){
+ clearPreview(); if(!canPlace(sh,r,c)) return;
+ for(let [x,y] of sh.cells){ let el=document.querySelector(`.cell[data-r="${r+y}"][data-c="${c+x}"]`); if(el) el.classList.add('preview'); }
 }
-
-function onBoardHover(r,c){
-  if(!selectedBlock) return;
-  clearPreview();
-  if(canPlace(selectedBlock,r,c)) showPreview(selectedBlock,r,c);
+function clearPreview(){ document.querySelectorAll('.cell.preview').forEach(el=>el.classList.remove('preview')); }
+function tryPlace(r,c){
+ if(!selected) return;
+ if(!canPlace(selected,r,c)){ SFX.bad(); return;}
+ // place
+ for(let [x,y] of selected.cells){ grid[r+y][c+x]=selected.color; let el=document.querySelector(`.cell[data-r="${r+y}"][data-c="${c+x}"]`); el.className='cell filled '+selected.color; }
+ tray[selIdx]=null; trayEl.children[selIdx].classList.add('used'); trayEl.children[selIdx].classList.remove('selected');
+ clearPreview(); SFX.place();
+ let cleared=doClear(); if(cleared){ SFX.clear(); score+=cleared*30 + (cleared>1?(cleared-1)*30:0); } else score+=10;
+ scoreEl.innerText=score;
+ if(tray.every(b=>b===null)) genTray();
+ clearSel();
+ if(checkOver()){ setTimeout(gameOver,250); }
 }
-
-function onBoardClick(r,c){
-  if(!selectedBlock){sounds.fail(); return;}
-  if(!canPlace(selectedBlock,r,c)){sounds.fail(); return;}
-  placeBlock(selectedBlock,r,c);
-  trayBlocks[selectedIndex]=null;
-  trayEl.children[selectedIndex].classList.add('used');
-  trayEl.children[selectedIndex].classList.remove('selected');
-  selectedBlock=null; selectedIndex=null;
-  clearPreview();
-  sounds.place();
-  const cleared=checkClear();
-  if(cleared>0){score+=cleared*30; if(cleared>1) score+= (cleared-1)*30; sounds.clear();}
-  scoreEl.innerText=score;
-  if(trayBlocks.every(b=>b===null)) genTray();
-  if(isGameOver()){setTimeout(()=>gameOver(),300)}
+function doClear(){
+ let rows=[],cols=[];
+ for(let r=0;r<8;r++) if(grid[r].every(v=>v!==0)) rows.push(r);
+ for(let c=0;c<8;c++) if(grid.every(row=>row[c]!==0)) cols.push(c);
+ rows.forEach(r=>{for(let c=0;c<8;c++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); el.className='cell';}});
+ cols.forEach(c=>{for(let r=0;r<8;r++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); el.className='cell';}});
+ return rows.length+cols.length;
 }
-
-function canPlace(shape,r,c){
-  for(let [x,y] of shape.cells){
-    let nr=r+y, nc=c+x;
-    if(nr<0||nr>=8||nc<0||nc>=8||grid[nr][nc]!==0) return false;
-  }
-  return true;
-}
-function showPreview(shape,r,c){
-  for(let [x,y] of shape.cells){
-    let el=document.querySelector(`.cell[data-r=\"${r+y}\"][data-c=\"${c+x}\"]`);
-    if(el) el.classList.add('preview');
-  }
-}
-function clearPreview(){document.querySelectorAll('.cell.preview').forEach(el=>el.classList.remove('preview'))}
-function placeBlock(shape,r,c){
-  for(let [x,y] of shape.cells){
-    grid[r+y][c+x]=shape.color;
-    let el=document.querySelector(`.cell[data-r=\"${r+y}\"][data-c=\"${c+x}\"]`);
-    el.className='cell filled '+shape.color; el.classList.add('pop');
-  }
-}
-function checkClear(){
-  let clearRows=[], clearCols=[];
-  for(let r=0;r<8;r++) if(grid[r].every(v=>v!==0)) clearRows.push(r);
-  for(let c=0;c<8;c++) if(grid.every(row=>row[c]!==0)) clearCols.push(c);
-  clearRows.forEach(r=>{for(let c=0;c<8;c++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r=\"${r}\"][data-c=\"${c}\"]`); el.className='cell';}});
-  clearCols.forEach(c=>{for(let r=0;r<8;r++){grid[r][c]=0; let el=document.querySelector(`.cell[data-r=\"${r}\"][data-c=\"${c}\"]`); el.className='cell';}});
-  return clearRows.length+clearCols.length;
-}
-function isGameOver(){
-  for(let block of trayBlocks){ if(!block) continue;
-    for(let r=0;r<8;r++)for(let c=0;c<8;c++) if(canPlace(block,r,c)) return false;
-  }
-  return true;
+function checkOver(){
+ for(let sh of tray){ if(!sh) continue; for(let r=0;r<8;r++)for(let c=0;c<8;c++) if(canPlace(sh,r,c)) return false; } return true;
 }
 function gameOver(){
-  sounds.gameover();
-  if(score>best){best=score; localStorage.setItem('blockBest',best); document.getElementById('best').innerText=best;}
-  alert('Game Over! Score: '+score+'\\nBest: '+best);
-  grid=Array(8).fill().map(()=>Array(8).fill(0));
-  score=0; scoreEl.innerText=0; createBoard(); genTray();
+ SFX.over();
+ if(score>best){best=score; localStorage.setItem('blockBest',best); document.getElementById('best').innerText=best;}
+ alert('Game Over! Score:'+score+' Best:'+best);
+ grid=Array(8).fill().map(()=>Array(8).fill(0)); score=0; scoreEl.innerText=0; buildBoard(); genTray();
 }
-function openPause(){document.getElementById('pauseMenu').style.display='flex'; document.getElementById('best2').innerText=best;}
+function openSet(){initAudio(); document.getElementById('setMenu').style.display='flex';}
+function closeSet(){document.getElementById('setMenu').style.display='none';}
+function openPause(){document.getElementById('pauseMenu').style.display='flex';}
 function closePause(){document.getElementById('pauseMenu').style.display='none';}
+function toggleSound(){initAudio(); soundOn=!soundOn; localStorage.setItem('bb_sound',soundOn?'on':'off'); document.getElementById('soundSwitch').className='switch '+(soundOn?'on':''); if(soundOn) SFX.select();}
 
-createBoard(); genTray();
+buildBoard(); genTray();
+// unlock audio on first tap anywhere
+window.addEventListener('pointerdown',()=>initAudio(),{once:true});
 </script>
 </body>
 </html>
