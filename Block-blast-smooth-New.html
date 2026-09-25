@@ -3,54 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Block Blast Click Drop</title>
+<title>Block Blast - Name + Leaderboard + Click Drop</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#2f5aa0;font-family:sans-serif;height:100vh;display:flex;flex-direction:column;touch-action:manipulation}
-.top{padding:12px;display:flex;justify-content:space-between;background:rgba(0,0,0,.15)}
-.top button{padding:8px 14px;border-radius:10px;border:none;font-weight:bold}
-.board{margin:10px auto;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:10px;border-radius:16px;width:92vw;max-width:360px;aspect-ratio:1}
+body{background:#2f5aa0;font-family:sans-serif;height:100vh;display:flex;flex-direction:column}
+.top{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.15);color:white}
+.top button{padding:7px 12px;border-radius:10px;border:none;font-weight:bold;cursor:pointer}
+.board{margin:8px auto;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;background:#1e3a6b;padding:10px;border-radius:16px;width:92vw;max-width:360px;aspect-ratio:1}
 .cell{background:#243d6b;border-radius:6px}
 .cell.sel{background:#4a6aa0}
 .cell.filled{box-shadow:inset 0 -3px 0 rgba(0,0,0,.3)}
-.tray{display:flex;justify-content:space-around;background:#3a7bd5;margin:10px;border-radius:16px;padding:14px}
-.box{display:grid;gap:2px;padding:6px;border-radius:8px}
+.tray{display:flex;justify-content:space-around;background:#3a7bd5;margin:10px;border-radius:16px;padding:12px}
+.box{display:grid;gap:2px;padding:6px;border-radius:8px;cursor:pointer}
 .box.active{outline:3px solid yellow;transform:scale(1.1)}
 .box.done{opacity:.2;pointer-events:none}
 .b{width:24px;height:24px;border-radius:4px}
 .c1{background:#2ab8d8}.c2{background:#ffde59}.c3{background:#ff6b9d}.c4{background:#2ecc71}.c5{background:#ff9f43}
-.score{text-align:center;color:white;font-size:50px;font-weight:bold}
-.set{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center}
-.setbox{background:white;padding:20px;border-radius:16px;width:80%;text-align:center}
+.score{color:white;text-align:center}
+.score b{font-size:48px;display:block}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:99}
+.card{background:white;padding:20px;border-radius:16px;width:85%;max-width:320px;text-align:center;color:#1e3a6b}
+.card input{width:100%;padding:10px;margin:10px 0;border:2px solid #2f5aa0;border-radius:10px;font-weight:bold;text-align:center}
+.card button{width:100%;padding:12px;border:none;border-radius:10px;background:#2f5aa0;color:white;font-weight:bold;margin-top:6px;cursor:pointer}
+.lb{max-height:160px;overflow:auto;text-align:left;margin-top:10px;font-size:13px}
+.lb div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}
 </style>
 </head>
 <body>
 <div class="top">
 <button onclick="location.href='index.html'">◀ Arena</button>
-<button onclick="document.getElementById('set').style.display='flex'">⚙️ SETTINGS</button>
+<div style="display:flex;gap:6px;align-items:center">
+<span style="font-size:12px">👤 <span id="pname">Player</span> 🏆 <span id="bst">0</span></span>
+<button onclick="openLB()">🏆</button>
+<button onclick="openSet()">⚙️</button>
 </div>
-<div class="score" id="sc">0</div>
-<div style="text-align:center;color:white;font-size:12px">🏆 Best <span id="bst">0</span> • <span id="sndStatus">Sound ON - Tap once to enable</span></div>
+</div>
+<div class="score"><b id="sc">0</b><span style="font-size:12px;opacity:.8">SCORE - Tap block then tap board</span><br><span style="font-size:11px" id="sndStatus">Tap anywhere to enable sound</span></div>
 <div class="board" id="board"></div>
 <div class="tray" id="tray"></div>
 
-<div class="set" id="set">
-<div class="setbox">
-<h3>Settings</h3>
-<p style="margin:12px 0"><button onclick="toggleSound()" id="sndBtn" style="padding:10px 20px;border-radius:10px;border:none;background:#2f5aa0;color:white;font-weight:bold">🔊 Sound: ON</button></p>
-<p style="font-size:12px;color:#666">Para gumana sound: i-tap muna kahit saan sa game. Naka-block ng phone pag walang tap.</p>
-<button onclick="document.getElementById('set').style.display='none'" style="margin-top:10px;padding:8px 16px">Close</button>
+<div class="overlay" id="nameBox">
+<div class="card">
+<h3>🎮 Enter Name</h3>
+<input id="nameInput" placeholder="Your name" maxlength="12" value="">
+<button onclick="saveName()">PLAY - CLICK TO DROP</button>
+<p style="font-size:10px;color:#666;margin-top:8px">Sound: tap once after start to enable</p>
+</div>
+</div>
+
+<div class="overlay" id="setBox" style="display:none">
+<div class="card">
+<h3>⚙️ Settings</h3>
+<button onclick="toggleSound()" id="sndBtn" style="background:#2ecc71">🔊 Sound ON</button>
+<button onclick="closeSet()" style="background:#eee;color:#333">Close</button>
+</div>
+</div>
+
+<div class="overlay" id="lbBox" style="display:none">
+<div class="card">
+<h3>🏆 Leaderboard Top 10</h3>
+<div class="lb" id="lbList"></div>
+<button onclick="closeLB()" style="background:#2f5aa0">Close</button>
+<button onclick="clearLB()" style="background:#ff4757">Clear</button>
 </div>
 </div>
 
 <script>
-let ctx=null; let soundOn=true;
+let ctx=null, soundOn=true;
 function getCtx(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
-function beep(f,d,v=0.3){ if(!soundOn) return; try{ const c=getCtx(); const o=c.createOscillator(); const g=c.createGain(); o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v,c.currentTime); g.gain.linearRampToValueAtTime(0.01,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }catch(e){} }
+function beep(f,d,v=0.3){ if(!soundOn) return; try{ const c=getCtx(); const o=c.createOscillator(), g=c.createGain(); o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v,c.currentTime); g.gain.linearRampToValueAtTime(0.01,c.currentTime+d); o.start(); o.stop(c.currentTime+d);}catch(e){} }
 
 let grid=Array(8).fill().map(()=>Array(8).fill(0));
-let score=0; let best=localStorage.getItem('bbBest')||0; document.getElementById('bst').innerText=best;
+let score=0, best=localStorage.getItem('bbBest')||0, pname=localStorage.getItem('bbName')||'';
 let sel=null, selIdx=null;
+document.getElementById('bst').innerText=best;
+if(pname){ document.getElementById('pname').innerText=pname; document.getElementById('nameBox').style.display='none'; }
 
 const SHAPES=[
  {cells:[[0,0],[1,0],[2,0],[1,1]], col:'c1'},
@@ -59,80 +86,76 @@ const SHAPES=[
  {cells:[[0,0],[1,0],[0,1]], col:'c4'},
  {cells:[[0,0],[1,0],[2,0]], col:'c5'},
 ];
+let trayData=[];
 
 function drawBoard(){
  const b=document.getElementById('board'); b.innerHTML='';
  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
-  const d=document.createElement('div'); d.className='cell'; d.dataset.r=r; d.dataset.c=c;
-  if(grid[r][c]){ d.classList.add('filled', grid[r][c]); }
-  d.onclick=()=>boardClick(r,c);
+  const d=document.createElement('div'); d.className='cell'; if(grid[r][c]) d.classList.add('filled',grid[r][c]); d.dataset.r=r; d.dataset.c=c;
+  d.onclick=()=>boardClick(r,c); d.onmouseenter=()=>preview(r,c);
   b.appendChild(d);
  }
 }
-let trayData=[];
 function drawTray(){
  const t=document.getElementById('tray'); t.innerHTML=''; trayData=[];
  for(let i=0;i<3;i++){
-  const sh=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-  trayData.push(sh);
+  const sh=SHAPES[Math.floor(Math.random()*SHAPES.length)]; trayData.push(sh);
   const box=document.createElement('div'); box.className='box'; box.dataset.i=i;
   sh.cells.forEach(([x,y])=>{ const e=document.createElement('div'); e.className='b '+sh.col; e.style.gridColumn=x+1; e.style.gridRow=y+1; box.appendChild(e); });
-  box.onclick=()=>selectBox(i);
-  t.appendChild(box);
+  box.onclick=()=>selectBox(i); t.appendChild(box);
  }
 }
-
 function selectBox(i){
- getCtx(); // unlock sound
- if(trayData[i]===null) return;
+ getCtx(); if(trayData[i]===null) return;
  if(selIdx===i){ clearSel(); return; }
- clearSel();
- selIdx=i; sel=trayData[i];
- document.querySelectorAll('.box')[i].classList.add('active');
- beep(600,0.12,0.4);
- document.getElementById('sndStatus').innerText='Selected - now tap board where to drop';
+ clearSel(); selIdx=i; sel=trayData[i];
+ document.querySelectorAll('.box')[i].classList.add('active'); beep(600,0.1,0.4);
+ document.getElementById('sndStatus').innerText='Selected - tap board to drop!';
 }
-function clearSel(){
- document.querySelectorAll('.box').forEach(x=>x.classList.remove('active'));
- document.querySelectorAll('.cell').forEach(x=>x.classList.remove('sel'));
- sel=null; selIdx=null;
-}
-function can(r,c,sh){
- for(let [x,y] of sh.cells){ let nr=r+y, nc=c+x; if(nr>=8||nc>=8||grid[nr][nc]) return false; }
- return true;
-}
+function clearSel(){ document.querySelectorAll('.box').forEach(x=>x.classList.remove('active')); document.querySelectorAll('.cell').forEach(x=>x.classList.remove('sel')); sel=null; selIdx=null; }
+function can(r,c,sh){ for(let [x,y] of sh.cells){ let nr=r+y,nc=c+x; if(nr>=8||nc>=8||grid[nr][nc]) return false;} return true; }
 function preview(r,c){
- document.querySelectorAll('.cell').forEach(x=>x.classList.remove('sel'));
- if(!sel) return;
- if(!can(r,c,sel)) return;
+ document.querySelectorAll('.cell').forEach(x=>x.classList.remove('sel')); if(!sel||!can(r,c,sel)) return;
  for(let [x,y] of sel.cells){ const el=document.querySelector(`.cell[data-r="${r+y}"][data-c="${c+x}"]`); if(el) el.classList.add('sel'); }
 }
 function boardClick(r,c){
- getCtx();
- if(!sel){ beep(150,0.2,0.2); document.getElementById('sndStatus').innerText='Select block first!'; return; }
- if(!can(r,c,sel)){ beep(150,0.2,0.2); return; }
- // place
- for(let [x,y] of sel.cells){ grid[r+y][c+x]=sel.col; }
- beep(900,0.15,0.5);
- // clear
- let cleared=0;
- for(let rr=0;rr<8;rr++) if(grid[rr].every(v=>v)) { grid[rr]=Array(8).fill(0); cleared++; }
- for(let cc=0;cc<8;cc++) if(grid.every(row=>row[cc])) { for(let rr=0;rr<8;rr++) grid[rr][cc]=0; cleared++; }
- if(cleared){ beep(1200,0.2,0.5); score+=cleared*100; } else score+=10;
+ getCtx(); if(!sel){ beep(150,0.2,0.2); return; } if(!can(r,c,sel)){ beep(150,0.2,0.2); return; }
+ for(let [x,y] of sel.cells) grid[r+y][c+x]=sel.col;
+ beep(900,0.12,0.5);
+ let cleared=0; for(let rr=0;rr<8;rr++) if(grid[rr].every(v=>v)){ grid[rr]=Array(8).fill(0); cleared++; }
+ for(let cc=0;cc<8;cc++) if(grid.every(row=>row[cc])){ for(let rr=0;rr<8;rr++) grid[rr][cc]=0; cleared++; }
+ if(cleared){ beep(1200,0.18,0.5); score+=cleared*100; } else score+=10;
  document.getElementById('sc').innerText=score;
- trayData[selIdx]=null; document.querySelectorAll('.box')[selIdx].classList.add('done'); document.querySelectorAll('.box')[selIdx].classList.remove('active');
+ trayData[selIdx]=null; document.querySelectorAll('.box')[selIdx].classList.add('done');
  clearSel(); drawBoard();
  if(trayData.every(v=>v===null)) drawTray();
- if(isOver()){ beep(200,0.5,0.3); setTimeout(()=>{ alert('Game Over! Score '+score); if(score>best){best=score; localStorage.setItem('bbBest',best); document.getElementById('bst').innerText=best;} grid=Array(8).fill().map(()=>Array(8).fill(0)); score=0; document.getElementById('sc').innerText=0; drawBoard(); drawTray(); },200); }
+ if(isOver()) gameOver();
 }
-function isOver(){
- for(let sh of trayData){ if(!sh) continue; for(let r=0;r<8;r++)for(let c=0;c<8;c++) if(can(r,c,sh)) return false; } return true;
+function isOver(){ for(let sh of trayData){ if(!sh) continue; for(let r=0;r<8;r++)for(let c=0;c<8;c++) if(can(r,c,sh)) return false; } return true; }
+function gameOver(){
+ beep(200,0.4,0.3);
+ let lbs=JSON.parse(localStorage.getItem('bbLB')||'[]');
+ lbs.push({name:pname||'Player', score:score, date:new Date().toLocaleDateString()});
+ lbs.sort((a,b)=>b.score-a.score); lbs=lbs.slice(0,10); localStorage.setItem('bbLB',JSON.stringify(lbs));
+ if(score>best){ best=score; localStorage.setItem('bbBest',best); document.getElementById('bst').innerText=best; }
+ setTimeout(()=>{ alert('Game Over '+pname+'! Score:'+score+' Best:'+best); score=0; document.getElementById('sc').innerText=0; grid=Array(8).fill().map(()=>Array(8).fill(0)); drawBoard(); drawTray(); openLB(); },300);
 }
-function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 Sound: ON':'🔇 Sound: OFF'; document.getElementById('sndStatus').innerText=soundOn?'Sound ON':'Sound OFF'; if(soundOn){ getCtx(); beep(600,0.12);} }
+function saveName(){
+ let n=document.getElementById('nameInput').value.trim(); if(!n){ alert('Lagay name boss!'); return; }
+ pname=n; localStorage.setItem('bbName',n); document.getElementById('pname').innerText=n; document.getElementById('nameBox').style.display='none'; getCtx(); beep(800,0.15); drawBoard(); drawTray();
+}
+function openSet(){ document.getElementById('setBox').style.display='flex'; }
+function closeSet(){ document.getElementById('setBox').style.display='none'; }
+function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').innerText=soundOn?'🔊 Sound ON':'🔇 Sound OFF'; if(soundOn){ getCtx(); beep(600,0.1); } }
+function openLB(){
+ let lbs=JSON.parse(localStorage.getItem('bbLB')||'[]'); const list=document.getElementById('lbList');
+ list.innerHTML=lbs.length?lbs.map((e,i)=>`<div><span>${i+1}. ${e.name}</span><b>${e.score}</b></div>`).join(''):'<div>No scores yet</div>';
+ document.getElementById('lbBox').style.display='flex';
+}
+function closeLB(){ document.getElementById('lbBox').style.display='none'; }
+function clearLB(){ localStorage.removeItem('bbLB'); openLB(); }
 
-document.getElementById('board').addEventListener('mouseover', (e)=>{ if(e.target.classList.contains('cell')){ const r=+e.target.dataset.r, c=+e.target.dataset.c; preview(r,c); }});
-
-drawBoard(); drawTray();
+if(pname){ drawBoard(); drawTray(); }
 document.body.addEventListener('click',()=>{ try{getCtx();}catch(e){} }, {once:true});
 </script>
 </body>
