@@ -2,55 +2,41 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MGC BAR - FINAL NO REDIRECT V2</title>
+<title>MGC BAR</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:110px}
-#top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-weight:900;background:#1a2a5a;font-size:13px;z-index:9999;position:relative}
-#trophyBtn{background:#16264a;padding:8px 14px;border-radius:20px;border:2px solid #ffeb3b;cursor:pointer;z-index:10000}
-#controls{position:fixed;bottom:90px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:9999;padding:8px;background:rgba(26,42,90,.95)}
-#controls button{background:#22d3ee;color:#000;border:none;padding:12px 18px;border-radius:20px;font-weight:900;cursor:pointer;font-size:13px;min-width:70px}
-#grid{width:96%;max-width:360px;height:500px;margin:0 auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
-.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 3px 6px rgba(0,0,0,.6);border:2px solid rgba(0,0,0,.25);transition:top .18s,left .1s}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
+#top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#1a2a5a;font-weight:900;font-size:13px}
+#trophy{cursor:pointer;background:#16264a;padding:7px 14px;border-radius:20px;border:2px solid #ffeb3b}
+#grid{width:96%;max-width:360px;height:520px;margin:8px auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
+.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;border:2px solid rgba(0,0,0,.25);transition:top .18s,left .1s}
 .c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
-.full{box-shadow:0 0 22px #ffeb3b!important;border-color:#ffeb3b!important;animation:flash .25s infinite}@keyframes flash{50%{filter:brightness(2)}}
-#nextBox{width:96%;max-width:360px;margin:8px auto;background:#0f1c3a;border:2px dashed #ffeb3b;border-radius:10px;padding:8px;font-size:11px;color:#ffeb3b;font-weight:900}
-#nextPreview{height:30px;position:relative;margin-top:6px;background:rgba(0,0,0,.3);border-radius:6px}
-.mini{position:absolute;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:9px}
-#adFrame{position:fixed;bottom:0;left:0;right:0;width:100%;height:80px;border:none;z-index:9998;background:#0f1c3a}
-#over,#lbModal,#profileModal,#pauseModal{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:10000;padding:16px}
-.inner{background:#1e2f5a;padding:18px;border-radius:16px;width:95%;max-width:360px;border:3px solid #22d3ee;max-height:85vh;overflow-y:auto}
+#controls{display:flex;justify-content:center;gap:8px;padding:10px}
+#controls button{background:#22d3ee;color:#000;border:none;padding:12px 18px;border-radius:22px;font-weight:900;cursor:pointer}
+#ad{width:100%;height:70px;border:none;position:fixed;bottom:0;left:0;background:#0f1c3a}
+body{padding-bottom:75px}
 </style>
 <script>
-// ULTRA BLOCK
-(function(){
-  window._allowAd=false;
-  const _open=window.open;
-  window.open=function(){ if(!window._allowAd) return null; return _open.apply(this,arguments); };
-  const observer=new MutationObserver(m=>{m.forEach(x=>{x.addedNodes.forEach(n=>{if(n.nodeType===1 && n.tagName==='A' && n.style.position==='fixed'){n.remove();}})})});
-  observer.observe(document.documentElement,{childList:true,subtree:true});
-})();
-function safe(e){if(e){e.preventDefault();e.stopPropagation();}}
+window._allowOpen=false;
+window.open=function(){ if(!window._allowOpen) return null; return window.open.apply(this,arguments); };
 </script>
 </head>
 <body>
 <div id="top">
-<div id="trophyBtn" onclick="safe(event);showLB();">🏆 <span id="best">0</span></div>
-<div id="profileBtn" onclick="safe(event);showProfile();" style="flex:1;text-align:center;background:#0f1c3a;padding:6px;border-radius:20px;margin:0 6px;cursor:pointer">👤 <span id="pName">Mazta</span></div>
+<div id="trophy" onclick="showLB()">🏆 <span id="best">0</span></div>
+<div id="profile" onclick="showProfile()">👤 <span id="pName">Mazta</span></div>
 <div id="moves">Moves:0</div>
-<div id="pauseTop" onclick="safe(event);togglePause();" style="background:#334155;padding:6px 12px;border-radius:10px;margin-left:6px;cursor:pointer">⏸️</div>
+<div onclick="togglePause()">⏸️</div>
 </div>
-<div id="score">0</div>
-<div id="msg">NO REDIRECT ✅ 4-BLOCKS ✅</div>
+<div style="font-size:54px;font-weight:900" id="score">0</div>
 <div id="grid"></div>
-<div id="nextBox">NEXT LINE 👇 KITA NA!<div id="nextPreview"></div></div>
 <div id="controls">
-<button onclick="safe(event);start()">🔄 NEW</button>
-<button onclick="safe(event);toggleSound()" id="sndBtn">🔊 ON</button>
-<button onclick="safe(event);togglePause()" id="pauseBtn2">⏸️ PAUSE</button>
-<button onclick="safe(event);location.href='index.html'" style="background:#334155;color:#fff">⬅️ ARENA</button>
+<button onclick="start()">🔄 NEW</button>
+<button onclick="toggleSound()" id="sndBtn">🔊 ON</button>
+<button onclick="togglePause()" id="pauseBtn">⏸️ PAUSE</button>
+<button onclick="location.href='index.html'" style="background:#334155;color:#fff">⬅️ ARENA</button>
 </div>
-<iframe id="adFrame" srcdoc="<html><body style='margin:0;background:#0f1c3a;color:#ffeb3b;display:flex;align-items:center;justify-content:center;height:100vh;font-size:11px'><div>Monetag 286000<br><script src='https://quge5.com/88/tag.min.js' data-zone='286000'><\/script>BANNER ONLY</div></body></html>"></iframe>
-<!-- MODALS + FULL JS NASA FILE MGC_BAR_FINAL_V2_FIXED_BUTTONS.html -->
+<iframe id="ad" srcdoc="<body style='margin:0;background:#0f1c3a;display:flex;align-items:center;justify-content:center;color:#ffeb3b;font-size:11px'><div>Monetag 286000 Banner<script src=https://quge5.com/88/tag.min.js data-zone=286000></script></div></body>"></iframe>
+<!-- FULL JS NASA FILE MGC_BAR_CLEAN_TITLE_ONLY.html -->
 </body>
 </html>
