@@ -5,37 +5,27 @@
 <title>MGC BAR</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
-body{background:#2a437c;color:#fff;font-family:Arial;text-align:center;padding-bottom:80px}
-#top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#1a2a5a;font-weight:900;font-size:13px}
+body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
+#top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#1a2a5a;font-weight:900}
 #trophy{background:#16264a;padding:7px 14px;border-radius:20px;border:2px solid #ffeb3b;cursor:pointer}
-#profile{flex:1;margin:0 6px;background:#0f1c3a;padding:6px;border-radius:20px;cursor:pointer}
 #grid{width:96%;max-width:360px;height:520px;margin:8px auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
-.bar{position:absolute;height:44px;border-radius:8px;cursor:grab;border:2px solid rgba(0,0,0,.25);box-shadow:inset 0 3px 0 rgba(255,255,255,.5);transition:top.18s,left.1s}
-.bar.drag{transition:none!important;z-index:99;transform:scale(1.12)}
-.c1{background:linear-gradient(180deg,#7ee8fa,#0ebfd3)}.c2{background:linear-gradient(180deg,#8ea8ff,#4b62e0)}.c3{background:linear-gradient(180deg,#ffe07a,#d69e00)}.c4{background:linear-gradient(180deg,#6ee7b7,#059669)}.c5{background:linear-gradient(180deg,#f9a8d4,#db2777)}.c6{background:linear-gradient(180deg,#fdba74,#ea580c)}.c7{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
-.full{box-shadow:0 0 20px #ffeb3b!important;border-color:#ffeb3b!important}
-.boom{animation:boom.3s forwards}@keyframes boom{50%{transform:scale(1.5)}100%{transform:scale(0);opacity:0}}
-#controls{display:flex;justify-content:center;gap:8px;padding:10px;flex-wrap:wrap}
-#controls button{background:#22d3ee;color:#000;border:none;padding:12px 18px;border-radius:22px;font-weight:900;cursor:pointer;font-size:13px}
+.bar{position:absolute;height:44px;border-radius:8px;border:2px solid rgba(0,0,0,.3);transition:top.18s,left.1s}
+.c1{background:#7ee8fa}.c2{background:#8ea8ff}.c3{background:#ffe07a}.c4{background:#6ee7b7}.c5{background:#f9a8d4}.c6{background:#fdba74}.c7{background:#c4b5fd}
+#controls{display:flex;justify-content:center;gap:8px;padding:10px}
+#controls button{background:#22d3ee;color:#000;border:none;padding:12px 18px;border-radius:22px;font-weight:900;cursor:pointer}
 #over,#lbModal,#profileModal,#pauseModal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}
-.inner{background:#1e2f5a;padding:18px;border-radius:16px;width:95%;max-width:340px;border:3px solid #22d3ee;max-height:80vh;overflow:auto}
-.lb-row{display:flex;justify-content:space-between;padding:6px 8px;background:#0f1c3a;margin:4px 0;border-radius:8px;font-size:12px}
-#ad{width:100%;height:70px;border:none;position:fixed;bottom:0;left:0;background:#0f1c3a;z-index:9998}
+.inner{background:#1e2f5a;padding:18px;border-radius:16px;width:95%;max-width:340px;border:3px solid #22d3ee}
+.lb-row{display:flex;justify-content:space-between;padding:6px 8px;background:#0f1c3a;margin:4px 0;border-radius:8px}
 </style>
-<script>
-window._allowOpen=false;
-const _realOpen=window.open;
-window.open=function(){ if(!window._allowOpen) return null; return _realOpen.apply(this,arguments); };
-</script>
 </head>
 <body>
 <div id="top">
 <div id="trophy" onclick="showLB()">🏆 <span id="best">0</span></div>
-<div id="profile" onclick="showProfile()">👤 <span id="pName">Mazta</span></div>
-<div id="moves" style="font-size:11px">Moves:0</div>
+<div id="profile" onclick="showProfile()" style="flex:1;margin:0 6px;background:#0f1c3a;padding:6px;border-radius:20px;cursor:pointer">👤 <span id="pName">Mazta</span></div>
+<div id="moves">Moves:0</div>
 <div style="background:#334155;padding:6px 10px;border-radius:10px;cursor:pointer" onclick="togglePause()">⏸️</div>
 </div>
-<div style="font-size:54px;font-weight:900;margin:4px 0" id="score">0</div>
+<div style="font-size:54px;font-weight:900" id="score">0</div>
 <div id="grid"></div>
 <div id="controls">
 <button onclick="start()">🔄 NEW</button>
@@ -43,39 +33,32 @@ window.open=function(){ if(!window._allowOpen) return null; return _realOpen.app
 <button onclick="togglePause()" id="pauseBtn">⏸️ PAUSE</button>
 <button onclick="location.href='index.html'" style="background:#334155;color:#fff">⬅️ ARENA</button>
 </div>
-<iframe id="ad" srcdoc="<body style='margin:0;background:#0f1c3a;display:flex;align-items:center;justify-content:center;color:#ffeb3b;font-family:Arial;font-size:11px'><div>Monetag 286000<br><script src=https://quge5.com/88/tag.min.js data-zone=286000><\/script></div></body>"></iframe>
-<div id="over"><div class="inner" style="text-align:center"><h2 style="color:#ff3b3b">PUNO NA!</h2><p>Score: <b id="finalS">0</b> | Moves: <b id="finalM">0</b></p><button onclick="window._allowOpen=true; _realOpen('https://omg10.com/4/11879270','_blank'); window._allowOpen=false; continueGame();" style="width:100%;background:#22d3ee;margin-top:12px;padding:12px;border-radius:20px;border:none;font-weight:900">▶ CONTINUE - Watch Ad</button><button onclick="start()" style="width:100%;background:#334155;color:#fff;margin-top:8px;padding:12px;border-radius:20px;border:none">🔄 ULIT</button></div></div>
+<div id="over"><div class="inner" style="text-align:center"><h2>PUNO NA!</h2><p>Score: <b id="finalS">0</b></p><button onclick="start()" style="width:100%;background:#22d3ee;padding:12px;border-radius:20px;border:none;font-weight:900;margin-top:10px">🔄 ULIT</button></div></div>
 <div id="lbModal"><div class="inner"><h2>TOP 100</h2><div id="lbList"></div><button onclick="closeAll()" style="width:100%;margin-top:10px;background:#334155;color:#fff;padding:10px;border-radius:12px;border:none">CLOSE</button></div></div>
 <div id="profileModal"><div class="inner"><h2>Profile</h2><div id="profileList"></div><button onclick="closeAll()" style="width:100%;margin-top:10px;background:#334155;color:#fff;padding:10px;border-radius:12px;border:none">CLOSE</button></div></div>
-<div id="pauseModal"><div class="inner" style="text-align:center"><h2>PAUSED</h2><p>Score: <b id="pauseScore">0</b></p><button onclick="togglePause()" style="width:100%;background:#22d3ee;margin-top:10px;padding:12px;border-radius:20px;border:none;font-weight:900">▶ RESUME</button><button onclick="start();closeAll()" style="width:100%;background:#334155;color:#fff;margin-top:8px;padding:12px;border-radius:20px;border:none">🔄 NEW</button></div></div>
+<div id="pauseModal"><div class="inner" style="text-align:center"><h2>PAUSED</h2><button onclick="togglePause()" style="width:100%;background:#22d3ee;padding:12px;border-radius:20px;border:none;font-weight:900">▶ RESUME</button></div></div>
 <script>
-let W=8,H=10,cellW,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,canContinue=true,isPaused=false;
+let W=8,H=10,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,isPaused=false;
 const cols=['c1','c2','c3','c4','c5','c6','c7'];
-let player=localStorage.getItem('mgcName')||'Mazta';
+let player='Mazta';
 let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
-if(lb.length&&typeof lb[0]==='number') lb=lb.map(s=>({name:player,score:s,moves:0,date:Date.now()}));
 best=lb[0]?.score||0;
-let actx=null;function initAudio(){if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)();}
-function beep(f,d){if(!soundOn)return;initAudio();let o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.connect(g);g.connect(actx.destination);g.gain.setValueAtTime(0.3,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}
-function showLB(){lb.sort((a,b)=>b.score-a.score);let h='';if(!lb.length) h='<p style=text-align:center>No scores</p>';else lb.slice(0,100).forEach((e,i)=>{h+=`<div class="lb-row ${e.name===player?'me':''}"><span>#${i+1} ${e.name}</span><span>${e.score}</span></div>`});document.getElementById('lbList').innerHTML=h;document.getElementById('lbModal').style.display='flex';}
-function showProfile(){let my=lb.filter(e=>e.name===player).sort((a,b)=>b.score-a.score);let h='';if(!my.length) h='<p style=text-align:center>No games</p>';else my.slice(0,30).forEach((e,i)=>{h+=`<div class="lb-row me"><span>${e.score}pts</span><span>${e.moves}m</span></div>`});document.getElementById('profileList').innerHTML=h;document.getElementById('profileModal').style.display='flex';}
-function closeAll(){document.getElementById('lbModal').style.display='none';document.getElementById('profileModal').style.display='none';document.getElementById('pauseModal').style.display='none';if(isPaused){isPaused=false;document.getElementById('pauseBtn').innerText='⏸️ PAUSE';lock=false;}}
-function togglePause(){if(document.getElementById('over').style.display==='flex') return;isPaused=!isPaused;if(isPaused){lock=true;document.getElementById('pauseScore').innerText=score;document.getElementById('pauseModal').style.display='flex';document.getElementById('pauseBtn').innerText='▶ RESUME';}else{closeAll();document.getElementById('pauseBtn').innerText='⏸️ PAUSE';lock=false;}}
+function showLB(){lb.sort((a,b)=>b.score-a.score);let h='';if(!lb.length)h='<p>No scores</p>';else lb.slice(0,100).forEach((e,i)=>{h+=`<div class="lb-row"><span>#${i+1} ${e.name}</span><span>${e.score}</span></div>`});document.getElementById('lbList').innerHTML=h;document.getElementById('lbModal').style.display='flex';}
+function showProfile(){let my=lb.filter(e=>e.name===player);let h='';if(!my.length)h='<p>No games</p>';else my.forEach(e=>{h+=`<div class="lb-row"><span>${e.score}</span></div>`});document.getElementById('profileList').innerHTML=h;document.getElementById('profileModal').style.display='flex';}
+function closeAll(){document.getElementById('lbModal').style.display='none';document.getElementById('profileModal').style.display='none';document.getElementById('pauseModal').style.display='none';if(isPaused){isPaused=false;lock=false;}}
+function togglePause(){if(document.getElementById('over').style.display==='flex')return;isPaused=!isPaused;if(isPaused){lock=true;document.getElementById('pauseModal').style.display='flex';}else{closeAll();lock=false;}}
 function toggleSound(){soundOn=!soundOn;document.getElementById('sndBtn').innerText=soundOn?'🔊 ON':'🔇 OFF';}
-function newRow(y){let arr=[],x=0;while(x<W){if(Math.random()<0.9){let len=Math.floor(Math.random()*4)+1;len=Math.min(len,W-x);if(len>=1) arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random().toString(36).slice(2)+Date.now()});x+=len;if(Math.random()<0.2) x++;}else x++;}if(arr.length==0) arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});return arr;}
-function start(){let g=document.getElementById('grid');cellW=g.clientWidth/W;blocks=[];score=0;moves=0;lock=false;canContinue=true;isPaused=false;closeAll();document.getElementById('over').style.display='none';document.getElementById('pauseBtn').innerText='⏸️ PAUSE';for(let y=H-3;y<H;y++) blocks=blocks.concat(newRow(y));gravity();autoClear();render();}
+function newRow(y){let arr=[],x=0;while(x<W){if(Math.random()<0.9){let len=Math.floor(Math.random()*4)+1;len=Math.min(len,W-x);if(len>=1)arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''});x+=len;if(Math.random()<0.2)x++;}else x++;}if(arr.length==0)arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});return arr;}
+function start(){let g=document.getElementById('grid');let cw=g.clientWidth/W;blocks=[];score=0;moves=0;lock=false;isPaused=false;closeAll();document.getElementById('over').style.display='none';for(let y=H-3;y<H;y++)blocks=blocks.concat(newRow(y));gravity();render();}
 function isColliding(b,ty){return blocks.some(o=>o.id!=b.id&&o.y==ty&&!(b.x+b.len<=o.x||b.x>=o.x+o.len));}
 function getDrop(b){let ny=b.y;for(let y=b.y+1;y<H;y++){if(isColliding(b,y))break;ny=y;}return ny;}
-function gravity(){let moved=true,loop=0;while(moved&&loop<40){moved=false;loop++;let s=[...blocks].sort((a,b)=>b.y-a.y);for(let b of s){let d=getDrop(b);if(d!=b.y){b.y=d;moved=true;}}}}
-function getFull(){let f=[];for(let y=0;y<H;y++){let row=blocks.filter(b=>b.y==y);if(!row.length)continue;let cov=Array(W).fill(0);row.forEach(o=>{for(let i=0;i<o.len;i++) if(o.x+i<W) cov[o.x+i]=1;});if(cov.every(v=>v)) f.push(y);}return f;}
-function autoClear(){let full=getFull();if(full.length){blocks=blocks.filter(b=>!full.includes(b.y));score+=full.length*30;gravity();return true;}return false;}
-function render(){let g=document.getElementById('grid');g.innerHTML='';cellW=g.clientWidth/W;let fullSet=new Set(getFull());blocks.forEach(b=>{if(b.y<0||b.y>=H) return;let d=document.createElement('div');d.className='bar '+b.c+(fullSet.has(b.y)?' full':'');d.dataset.id=b.id;d.style.left=(b.x*cellW+2)+'px';d.style.top=(b.y*48+2)+'px';d.style.width=(b.len*cellW-6)+'px';d.addEventListener('touchstart',s,{passive:false});d.addEventListener('mousedown',s);g.appendChild(d);});document.getElementById('score').innerText=score;document.getElementById('moves').innerText='Moves:'+moves;document.getElementById('best').innerText=best;document.getElementById('pName').innerText=player;}
+function gravity(){let m=true;let l=0;while(m&&l<40){m=false;l++;let s=[...blocks].sort((a,b)=>b.y-a.y);for(let b of s){let d=getDrop(b);if(d!=b.y){b.y=d;m=true;}}}}
+function getFull(){let f=[];for(let y=0;y<H;y++){let row=blocks.filter(b=>b.y==y);if(!row.length)continue;let cov=Array(W).fill(0);row.forEach(o=>{for(let i=0;i<o.len;i++)if(o.x+i<W)cov[o.x+i]=1;});if(cov.every(v=>v))f.push(y);}return f;}
+function render(){let g=document.getElementById('grid');g.innerHTML='';let cw=g.clientWidth/W;blocks.forEach(b=>{if(b.y<0||b.y>=H)return;let d=document.createElement('div');d.className='bar '+b.c;d.dataset.id=b.id;d.style.left=(b.x*cw+2)+'px';d.style.top=(b.y*48+2)+'px';d.style.width=(b.len*cw-6)+'px';d.addEventListener('touchstart',s,{passive:false});d.addEventListener('mousedown',s);g.appendChild(d);});document.getElementById('score').innerText=score;document.getElementById('moves').innerText='Moves:'+moves;document.getElementById('best').innerText=best;document.getElementById('pName').innerText=player;}
 let drag=null;
-function s(e){if(lock||isPaused) return;e.preventDefault();let b=blocks.find(o=>o.id==e.currentTarget.dataset.id);if(!b) return;let t=e.touches?e.touches[0]:e;drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*cellW,_last:null,origX:b.x};e.currentTarget.classList.add('drag');window.addEventListener('touchmove',m,{passive:false});window.addEventListener('mousemove',m);window.addEventListener('touchend',eD);window.addEventListener('mouseup',eD);}
-function m(e){if(!drag) return;e.preventDefault();let t=e.touches?e.touches[0]:e;let dx=t.clientX-drag.sx;let nl=drag.startLeft+dx;let min=0,max=(W-drag.b.len)*cellW;nl=Math.max(min,Math.min(max,nl));let px=Math.round(nl/cellW);let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);for(let o of others){if(!(px+drag.b.len<=o.x||px>=o.x+o.len)){if(dx>0) nl=(o.x-drag.b.len)*cellW-2;else nl=(o.x+o.len)*cellW+2;break;}}drag.el.style.left=nl+'px';drag._last=nl;}
-function eD(e){if(e) e.preventDefault();if(!drag) return;let b=drag.b;let fl=drag._last!==null?drag._last:drag.startLeft;let nx=Math.round(fl/cellW);nx=Math.max(0,Math.min(W-b.len,nx));let others=blocks.filter(o=>o.y==b.y&&o.id!=b.id);let can=!others.some(o=>!(nx+b.len<=o.x||nx>=o.x+o.len));if(can) b.x=nx;drag.el.classList.remove('drag');let moved=b.x!==drag.origX||getDrop(b)!==b.y;b.y=getDrop(b);drag=null;window.removeEventListener('touchmove',m);window.removeEventListener('mousemove',m);window.removeEventListener('touchend',eD);window.removeEventListener('mouseup',eD);if(moved){gravity();moves++;if(autoClear()) beep(600,.2);render();setTimeout(afterMove,100);}else render();}
-function afterMove(){if(lock||isPaused) return;let full=getFull();if(full.length){lock=true;document.querySelectorAll('.bar').forEach(el=>{let b=blocks.find(o=>o.id==el.dataset.id);if(b&&full.includes(b.y)) el.classList.add('boom');});setTimeout(()=>{blocks=blocks.filter(b=>!full.includes(b.y));let add=full.length*30;score+=add;if(score>best) best=score;lb.push({name:player,score,moves,date:Date.now()});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcLB',JSON.stringify(lb));gravity();lock=false;render();setTimeout(afterMove,200);},280);}else{if(blocks.some(b=>b.y<=0)){document.getElementById('finalS').innerText=score;document.getElementById('finalM').innerText=moves;document.getElementById('over').style.display='flex';return;}blocks.forEach(b=>b.y--);blocks=blocks.concat(newRow(H-1));gravity();autoClear();render();}}
-function continueGame(){blocks=blocks.filter(b=>b.y<H-2);gravity();document.getElementById('over').style.display='none';lock=false;render();}
+function s(e){if(lock||isPaused)return;e.preventDefault();let b=blocks.find(o=>o.id==e.currentTarget.dataset.id);if(!b)return;let t=e.touches?e.touches[0]:e;drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*360/8,_last:null,origX:b.x};e.currentTarget.style.zIndex=99;window.addEventListener('touchmove',m,{passive:false});window.addEventListener('mousemove',m);window.addEventListener('touchend',eD);window.addEventListener('mouseup',eD);}
+function m(e){if(!drag)return;e.preventDefault();let t=e.touches?e.touches[0]:e;let dx=t.clientX-drag.sx;let cw=360/8;let nl=drag.startLeft+dx;nl=Math.max(0,Math.min((W-drag.b.len)*cw,nl));let px=Math.round(nl/cw);let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);for(let o of others){if(!(px+drag.b.len<=o.x||px>=o.x+o.len)){if(dx>0)nl=(o.x-drag.b.len)*cw-2;else nl=(o.x+o.len)*cw+2;break;}}drag.el.style.left=nl+'px';drag._last=nl;}
+function eD(e){if(!drag)return;let cw=360/8;let fl=drag._last!==null?drag._last:drag.startLeft;let nx=Math.round(fl/cw);nx=Math.max(0,Math.min(W-drag.b.len,nx));let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);let can=!others.some(o=>!(nx+drag.b.len<=o.x||nx>=o.x+o.len));if(can)drag.b.x=nx;drag.b.y=getDrop(drag.b);drag=null;window.removeEventListener('touchmove',m);window.removeEventListener('mousemove',m);window.removeEventListener('touchend',eD);window.removeEventListener('mouseup',eD);gravity();moves++;let full=getFull();if(full.length){blocks=blocks.filter(b=>!full.includes(b.y));score+=full.length*30;if(score>best)best=score;lb.push({name:player,score:score,moves:moves});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcLB',JSON.stringify(lb));gravity();}render();setTimeout(()=>{if(blocks.some(b=>b.y<=0)){document.getElementById('finalS').innerText=score;document.getElementById('over').style.display='flex';return;}blocks.forEach(b=>b.y--);blocks=blocks.concat(newRow(H-1));gravity();render();},100);}
 start();
 </script>
 </body>
