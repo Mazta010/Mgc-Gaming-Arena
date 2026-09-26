@@ -8,9 +8,13 @@
 body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 #top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#1a2a5a;font-weight:900}
 #trophy{background:#16264a;padding:7px 14px;border-radius:20px;border:2px solid #ffeb3b;cursor:pointer}
-#grid{width:96%;max-width:360px;height:520px;margin:8px auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
+#grid{width:96%;max-width:360px;height:500px;margin:8px auto;background:#16264a;border:4px solid #0e1a33;border-radius:12px;position:relative;overflow:hidden}
 .bar{position:absolute;height:44px;border-radius:8px;border:2px solid rgba(0,0,0,.3);transition:top.18s,left.1s}
 .c1{background:#7ee8fa}.c2{background:#8ea8ff}.c3{background:#ffe07a}.c4{background:#6ee7b7}.c5{background:#f9a8d4}.c6{background:#fdba74}.c7{background:#c4b5fd}
+.full{box-shadow:0 0 20px #ffeb3b!important;border-color:#ffeb3b!important}
+#nextBox{width:96%;max-width:360px;margin:6px auto;background:#0f1c3a;border:2px dashed #ffeb3b;border-radius:10px;padding:6px;font-size:11px;color:#ffeb3b;font-weight:900}
+#nextPreview{height:26px;position:relative;margin-top:4px;background:rgba(0,0,0,.3);border-radius:6px}
+.mini{position:absolute;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:9px}
 #controls{display:flex;justify-content:center;gap:8px;padding:10px}
 #controls button{background:#22d3ee;color:#000;border:none;padding:12px 18px;border-radius:22px;font-weight:900;cursor:pointer}
 #over,#lbModal,#profileModal,#pauseModal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}
@@ -27,6 +31,9 @@ body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 </div>
 <div style="font-size:54px;font-weight:900" id="score">0</div>
 <div id="grid"></div>
+<div id="nextBox">NEXT LINE 👇
+<div id="nextPreview"></div>
+</div>
 <div id="controls">
 <button onclick="start()">🔄 NEW</button>
 <button onclick="toggleSound()" id="sndBtn">🔊 ON</button>
@@ -38,7 +45,7 @@ body{background:#2a437c;color:#fff;font-family:Arial;text-align:center}
 <div id="profileModal"><div class="inner"><h2>Profile</h2><div id="profileList"></div><button onclick="closeAll()" style="width:100%;margin-top:10px;background:#334155;color:#fff;padding:10px;border-radius:12px;border:none">CLOSE</button></div></div>
 <div id="pauseModal"><div class="inner" style="text-align:center"><h2>PAUSED</h2><button onclick="togglePause()" style="width:100%;background:#22d3ee;padding:12px;border-radius:20px;border:none;font-weight:900">▶ RESUME</button></div></div>
 <script>
-let W=8,H=10,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,isPaused=false;
+let W=8,H=10,blocks=[],score=0,moves=0,lock=false,best=0,soundOn=true,isPaused=false,nextLine=[];
 const cols=['c1','c2','c3','c4','c5','c6','c7'];
 let player='Mazta';
 let lb=JSON.parse(localStorage.getItem('mgcLB')||'[]');
@@ -46,19 +53,61 @@ best=lb[0]?.score||0;
 function showLB(){lb.sort((a,b)=>b.score-a.score);let h='';if(!lb.length)h='<p>No scores</p>';else lb.slice(0,100).forEach((e,i)=>{h+=`<div class="lb-row"><span>#${i+1} ${e.name}</span><span>${e.score}</span></div>`});document.getElementById('lbList').innerHTML=h;document.getElementById('lbModal').style.display='flex';}
 function showProfile(){let my=lb.filter(e=>e.name===player);let h='';if(!my.length)h='<p>No games</p>';else my.forEach(e=>{h+=`<div class="lb-row"><span>${e.score}</span></div>`});document.getElementById('profileList').innerHTML=h;document.getElementById('profileModal').style.display='flex';}
 function closeAll(){document.getElementById('lbModal').style.display='none';document.getElementById('profileModal').style.display='none';document.getElementById('pauseModal').style.display='none';if(isPaused){isPaused=false;lock=false;}}
-function togglePause(){if(document.getElementById('over').style.display==='flex')return;isPaused=!isPaused;if(isPaused){lock=true;document.getElementById('pauseModal').style.display='flex';}else{closeAll();lock=false;}}
+function togglePause(){if(document.getElementById('over').style.display==='flex')return;isPaused=!isPaused;if(isPaused){lock=true;document.getElementById('pauseModal').style.display='flex';document.getElementById('pauseBtn').innerText='▶ RESUME';}else{closeAll();document.getElementById('pauseBtn').innerText='⏸️ PAUSE';lock=false;}}
 function toggleSound(){soundOn=!soundOn;document.getElementById('sndBtn').innerText=soundOn?'🔊 ON':'🔇 OFF';}
-function newRow(y){let arr=[],x=0;while(x<W){if(Math.random()<0.9){let len=Math.floor(Math.random()*4)+1;len=Math.min(len,W-x);if(len>=1)arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''});x+=len;if(Math.random()<0.2)x++;}else x++;}if(arr.length==0)arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});return arr;}
-function start(){let g=document.getElementById('grid');let cw=g.clientWidth/W;blocks=[];score=0;moves=0;lock=false;isPaused=false;closeAll();document.getElementById('over').style.display='none';for(let y=H-3;y<H;y++)blocks=blocks.concat(newRow(y));gravity();render();}
+function newRow(y){let arr=[],x=0;while(x<W){if(Math.random()<0.88){let len=Math.floor(Math.random()*4)+1;len=Math.min(len,W-x);if(len>=1)arr.push({x,y,len,c:cols[Math.floor(Math.random()*cols.length)],id:Math.random()+''});x+=len;if(Math.random()<0.2)x++;}else x++;}if(arr.length==0)arr.push({x:0,y,len:2,c:cols[0],id:Math.random()+''});return arr;}
+function previewNext(){let p=document.getElementById('nextPreview');p.innerHTML='';let cw=p.clientWidth/W;nextLine.forEach(b=>{let d=document.createElement('div');d.className='mini '+b.c;d.style.left=(b.x*cw+2)+'px';d.style.width=(b.len*cw-5)+'px';d.innerText=b.len;p.appendChild(d);});}
+function start(){let g=document.getElementById('grid');blocks=[];score=0;moves=0;lock=false;isPaused=false;closeAll();document.getElementById('over').style.display='none';document.getElementById('pauseBtn').innerText='⏸️ PAUSE';for(let y=H-3;y<H;y++)blocks=blocks.concat(newRow(y));nextLine=newRow(H);previewNext();gravity();render();}
 function isColliding(b,ty){return blocks.some(o=>o.id!=b.id&&o.y==ty&&!(b.x+b.len<=o.x||b.x>=o.x+o.len));}
 function getDrop(b){let ny=b.y;for(let y=b.y+1;y<H;y++){if(isColliding(b,y))break;ny=y;}return ny;}
-function gravity(){let m=true;let l=0;while(m&&l<40){m=false;l++;let s=[...blocks].sort((a,b)=>b.y-a.y);for(let b of s){let d=getDrop(b);if(d!=b.y){b.y=d;m=true;}}}}
+function gravity(){let m=true,l=0;while(m&&l<40){m=false;l++;let s=[...blocks].sort((a,b)=>b.y-a.y);for(let b of s){let d=getDrop(b);if(d!=b.y){b.y=d;m=true;}}}}
 function getFull(){let f=[];for(let y=0;y<H;y++){let row=blocks.filter(b=>b.y==y);if(!row.length)continue;let cov=Array(W).fill(0);row.forEach(o=>{for(let i=0;i<o.len;i++)if(o.x+i<W)cov[o.x+i]=1;});if(cov.every(v=>v))f.push(y);}return f;}
-function render(){let g=document.getElementById('grid');g.innerHTML='';let cw=g.clientWidth/W;blocks.forEach(b=>{if(b.y<0||b.y>=H)return;let d=document.createElement('div');d.className='bar '+b.c;d.dataset.id=b.id;d.style.left=(b.x*cw+2)+'px';d.style.top=(b.y*48+2)+'px';d.style.width=(b.len*cw-6)+'px';d.addEventListener('touchstart',s,{passive:false});d.addEventListener('mousedown',s);g.appendChild(d);});document.getElementById('score').innerText=score;document.getElementById('moves').innerText='Moves:'+moves;document.getElementById('best').innerText=best;document.getElementById('pName').innerText=player;}
+function render(){let g=document.getElementById('grid');g.innerHTML='';let cw=g.clientWidth/W;let fullSet=new Set(getFull());blocks.forEach(b=>{if(b.y<0||b.y>=H)return;let d=document.createElement('div');d.className='bar '+b.c+(fullSet.has(b.y)?' full':'');d.dataset.id=b.id;d.style.left=(b.x*cw+2)+'px';d.style.top=(b.y*48+2)+'px';d.style.width=(b.len*cw-6)+'px';d.addEventListener('touchstart',s,{passive:false});d.addEventListener('mousedown',s);g.appendChild(d);});document.getElementById('score').innerText=score;document.getElementById('moves').innerText='Moves:'+moves;document.getElementById('best').innerText=best;document.getElementById('pName').innerText=player;}
 let drag=null;
-function s(e){if(lock||isPaused)return;e.preventDefault();let b=blocks.find(o=>o.id==e.currentTarget.dataset.id);if(!b)return;let t=e.touches?e.touches[0]:e;drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*360/8,_last:null,origX:b.x};e.currentTarget.style.zIndex=99;window.addEventListener('touchmove',m,{passive:false});window.addEventListener('mousemove',m);window.addEventListener('touchend',eD);window.addEventListener('mouseup',eD);}
+function s(e){if(lock||isPaused)return;e.preventDefault();let b=blocks.find(o=>o.id==e.currentTarget.dataset.id);if(!b)return;let t=e.touches?e.touches[0]:e;drag={b,el:e.currentTarget,sx:t.clientX,startLeft:b.x*360/8,_last:null,origX:b.x,origY:b.y};e.currentTarget.style.zIndex=99;window.addEventListener('touchmove',m,{passive:false});window.addEventListener('mousemove',m);window.addEventListener('touchend',eD);window.addEventListener('mouseup',eD);}
 function m(e){if(!drag)return;e.preventDefault();let t=e.touches?e.touches[0]:e;let dx=t.clientX-drag.sx;let cw=360/8;let nl=drag.startLeft+dx;nl=Math.max(0,Math.min((W-drag.b.len)*cw,nl));let px=Math.round(nl/cw);let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);for(let o of others){if(!(px+drag.b.len<=o.x||px>=o.x+o.len)){if(dx>0)nl=(o.x-drag.b.len)*cw-2;else nl=(o.x+o.len)*cw+2;break;}}drag.el.style.left=nl+'px';drag._last=nl;}
-function eD(e){if(!drag)return;let cw=360/8;let fl=drag._last!==null?drag._last:drag.startLeft;let nx=Math.round(fl/cw);nx=Math.max(0,Math.min(W-drag.b.len,nx));let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);let can=!others.some(o=>!(nx+drag.b.len<=o.x||nx>=o.x+o.len));if(can)drag.b.x=nx;drag.b.y=getDrop(drag.b);drag=null;window.removeEventListener('touchmove',m);window.removeEventListener('mousemove',m);window.removeEventListener('touchend',eD);window.removeEventListener('mouseup',eD);gravity();moves++;let full=getFull();if(full.length){blocks=blocks.filter(b=>!full.includes(b.y));score+=full.length*30;if(score>best)best=score;lb.push({name:player,score:score,moves:moves});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcLB',JSON.stringify(lb));gravity();}render();setTimeout(()=>{if(blocks.some(b=>b.y<=0)){document.getElementById('finalS').innerText=score;document.getElementById('over').style.display='flex';return;}blocks.forEach(b=>b.y--);blocks=blocks.concat(newRow(H-1));gravity();render();},100);}
+function eD(e){
+  if(!drag)return;
+  let cw=360/8;
+  let fl=drag._last!==null?drag._last:drag.startLeft;
+  let nx=Math.round(fl/cw);nx=Math.max(0,Math.min(W-drag.b.len,nx));
+  let others=blocks.filter(o=>o.y==drag.b.y&&o.id!=drag.b.id);
+  let can=!others.some(o=>!(nx+drag.b.len<=o.x||nx>=o.x+o.len));
+  if(can)drag.b.x=nx;
+  let drop=getDrop(drag.b);
+  drag.b.y=drop;
+  let moved=(drag.b.x!==drag.origX)||(drop!==drag.origY);
+  drag=null;
+  window.removeEventListener('touchmove',m);window.removeEventListener('mousemove',m);window.removeEventListener('touchend',eD);window.removeEventListener('mouseup',eD);
+  if(moved){
+    moves++;
+    gravity();
+    let full=getFull();
+    if(full.length){
+      blocks=blocks.filter(b=>!full.includes(b.y));
+      score+=full.length*30;
+      if(score>best)best=score;
+      lb.push({name:player,score:score,moves:moves});lb.sort((a,b)=>b.score-a.score);lb=lb.slice(0,100);localStorage.setItem('mgcLB',JSON.stringify(lb));
+      gravity();
+    }
+    render();
+    // SURE AAKYAT AFTER EVERY MOVE
+    setTimeout(()=>{
+      if(blocks.some(b=>b.y<=0)){document.getElementById('finalS').innerText=score;document.getElementById('over').style.display='flex';return;}
+      blocks.forEach(b=>b.y--);
+      blocks=blocks.concat(nextLine);
+      nextLine=newRow(H);
+      previewNext();
+      gravity();
+      // auto clear pag puno baba
+      let f2=getFull();
+      if(f2.length){blocks=blocks.filter(b=>!f2.includes(b.y));score+=f2.length*30;gravity();}
+      render();
+    },120);
+  }else{
+    render();
+  }
+}
 start();
 </script>
 </body>
